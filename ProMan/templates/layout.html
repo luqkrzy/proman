@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}">
+	<!-- Font Awesome -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+	{#	<!-- Google Fonts -->#}
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+	<!-- MDB -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet"/>
+	<!-- MDB -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js" defer></script>
+	<title>{% block title %}{% endblock %} - ProMan</title>
+	<style></style>
+</head>
+<body>
+
+{# navbar #}
+{% include 'navbar.html' %}
+
+<div class="">
+	{# flash messages #}
+	<div class="container my-5">
+		{%- with messages = get_flashed_messages(with_categories=true) %}
+			{%- if messages %}
+				{%- for category, message in messages %}
+					<div class="row justify-content-center">
+						<div class="alert w-50 text-center alert-{{ category }} my-0 alert-dismissible fade show" id="alertExample" role="alert">
+							{{ message }}
+							<button type="button" class="btn-close ms-2 my-0" data-mdb-dismiss="alert" aria-label="Close"></button>
+						</div>
+					</div>
+				{%- endfor -%}
+			{% endif %}
+		{% endwith -%}
+	</div>
+	{# main content #}
+	{%- block content -%}{% endblock -%}
+</div>
+{% include 'footer.html' %}
+<script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
