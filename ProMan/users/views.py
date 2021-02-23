@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, request, flash, session, jsonify
+from flask import Blueprint, render_template, url_for, redirect, request, flash, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from ProMan import data_manager, bcrypt
 
@@ -36,7 +36,6 @@ def route_check_user_login_details():
     try:
         if user and bcrypt.check_password_hash(pw_hash=user.password, password=password):
             login_user(user)
-            print(dir(current_user))
             return jsonify(True)
         else:
             return jsonify(False)
