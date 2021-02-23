@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, request, flash, session, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-from ProMan import  data_manager, bcrypt
+from ProMan import data_manager, bcrypt
 
 
 users = Blueprint('users', __name__)

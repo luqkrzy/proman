@@ -1,5 +1,6 @@
 import os
 
+
 def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first
@@ -25,7 +26,6 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     USR_PIC_PATH = ''
     SQLALCHEMY_DATABASE_URI = get_connection_string()
-
 
 
 class ProductionConfig(Config):

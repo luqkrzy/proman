@@ -7,11 +7,12 @@ from ProMan.config import Config, DevelopmentConfig, ProductionConfig
 
 
 db = SQLAlchemy()
-ma =  Marshmallow()
+ma = Marshmallow()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 login_manager.login_view = 'users.route_login'
 login_manager.login_message_category = 'info'
+
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -21,8 +22,11 @@ def create_app(config_class=DevelopmentConfig):
 
     from ProMan.main.views import main
 
+    from ProMan.board.views import board
+
     app.register_blueprint(main)
     app.register_blueprint(users)
+    app.register_blueprint(board)
 
     db.init_app(app)
     ma.init_app(app)

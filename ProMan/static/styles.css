@@ -1,0 +1,4 @@
+.mask-custom {
+  backdrop-filter: blur(3px);
+  background-color: rgba(16, 15, 15, 0.55);
+}
