@@ -31,19 +31,7 @@ def register_new_user(new_user: dict) -> None:
 
 def find_user_by_email(email):
     user = Users.query.filter_by(email=email).first()
-    output = user_schema.dump(user)
-    return jsonify(output)
+    return user
 
 
-def check_password_match(data):
-    email = data.get('email')
-    password = data.get('password')
-    hashed_password = Users.query.with_entities(Users.password).filter_by(email=email).first()
-    print(hashed_password)
-    print(type(hashed_password))
-
-    if len(hashed_password) == 0 or not bcrypt.check_password_hash(hashed_password.password, password):
-        return False
-    else:
-        return True
 

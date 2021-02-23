@@ -1,65 +1,52 @@
 import {dataHandler, easyHandler} from "./data_handler.js";
 
-const forms = document.querySelectorAll('.needs-validation');
+const loginBtn = document.getElementById('login-btn')
 const emailInput = document.getElementById('emailInput');
 const passwordInput = document.getElementById('passwordInput');
-const emailMessage = document.querySelector('.email-message');
-const passwordMessage = document.querySelector('.password-message');
-emailMessage.style.fontSize = '10px'
-passwordMessage.style.fontSize = '10px'
+const emailFeedback = document.getElementById('email-feedback');
+const passwordFeedback = document.getElementById('password-feedback');
+emailFeedback.style.cssText = 'width: 100%; margin-top: 0.25rem; font-size: 0.675em; color: #dc3545;'
+passwordFeedback.style.cssText = 'width: 100%; margin-top: 0.25rem; font-size: 0.675em; color: #dc3545;'
 
-Array.prototype.slice.call(forms).forEach((form) => {
-	form.addEventListener('submit', (event) => {
-		if (!form.checkValidity()) {
-			event.preventDefault();
-			event.stopPropagation();
-		}
-
-		validateUser()
-
-		form.classList.add('was-validated');
-
-	}, false);
+loginBtn.addEventListener('click', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
+	validateUser();
 })
 
 function checkEmailInput() {
-	if (emailInput.value === '') {
-		emailMessage.innerText = 'filed cant be blank'
+	if (emailInput.value === '' || !emailInput.value.includes('@')) {
+		emailFeedback.innerHTML = '&nbsp; Not a valid email';
+		return false
 	}
 
-	if (!emailInput.value.includes('@')) {
-		emailMessage.innerText = 'not valid email address'
-
-	}
+	console.log('email true', emailInput.value)
+	return true
 }
 
 function checkPasswordInput() {
 	if (passwordInput.value === '') {
-		passwordMessage.innerText = 'wrong password'
-
+		passwordFeedback.innerHTML = '&nbsp Wrong email or password'
+		return false
 	}
+	console.log('password true', passwordInput.value)
+	return true
 }
 
 function validateUser() {
 
-	if (!checkEmailInput() && !checkPasswordInput()) {
+	if (checkEmailInput() && checkPasswordInput()) {
 
-		easyHandler.postJson('/check-user', {'email': emailInput.innerText, 'password': passwordInput.innerText}, (response) => {
+		easyHandler.postJson('/api/login', {'email': emailInput.value, 'password': passwordInput.value}, (response) => {
 			console.log(response)
 			if (response === true) {
 				document.location.href = "/";
+			} else {
+				passwordFeedback.innerHTML = '&nbsp Wrong email or password'
 			}
-
 		})
-
 	}
-
-
 }
-
-
-// const data = easyHandler._getData('/check', (json_data) => console.log(json_data.email))
-
 
 
 

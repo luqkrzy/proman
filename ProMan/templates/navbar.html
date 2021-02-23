@@ -14,17 +14,20 @@
 				</li>
 			</ul>
 			<div class="login-area">
-				<a href="{{ url_for('users.route_login') }}" class="navbar-text text-decoration-none">Login</a>
-				<ul class="navbar-nav d-flex flex-row">
-					<li class="nav-item me-3 me-lg-0 dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-							<i class="fas fa-user"></i>
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Logout</a></li>
-						</ul>
-					</li>
-				</ul>
+				{% if  current_user.is_authenticated %}
+					<ul class="navbar-nav d-flex flex-row">
+						<li class="nav-item me-3 me-lg-0 dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+								<i class="fas fa-user"></i>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" href="{{   url_for('users.route_logout')  }}">Logout</a></li>
+							</ul>
+						</li>
+					</ul>
+				{% else %}
+					<a href="{{ url_for('users.route_login') }}" class="navbar-text text-decoration-none">Login</a>
+				{% endif %}
 			</div>
 		</div>
 	</div>

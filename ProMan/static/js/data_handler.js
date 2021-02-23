@@ -58,6 +58,8 @@ export let dataHandler = {
 
 export const easyHandler = {
 
+	_user : {},
+
 	async _getData(url, callback) {
 		try {
 			let data = await fetch(url);
@@ -66,13 +68,11 @@ export const easyHandler = {
 
 			if (response !== undefined) {
 				callback(response)
-
 			}
 
 		} catch (err) {
 			console.log(err)
 		}
-
 	},
 
 	async postJson(url, data, callback) {
@@ -88,7 +88,6 @@ export const easyHandler = {
 		try {
 			let post = await fetch(url, settings);
 			let response = await post.json();
-			callback(response)
 
 			if (response !== undefined) {
 				callback(response)
