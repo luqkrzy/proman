@@ -1,29 +1,76 @@
 {% extends 'layout.html' %}
 {% block title %} Board {% endblock %}
-<head>
-    <link rel="stylesheet" href="../static/styles.css"></head>
+
 {% block content %}
-    <div class="d-flex justify-content-start">
-        <div class="container">
-            <div class="row">
-                <div class="col-md d-flex justify-content-center mask-custom me-3">
-                    One of four columns
-                </div>
-                <div class="col-md d-flex justify-content-center mask-custom me-3">
-                    One of four columns
-                </div>
-                <div class="col-md d-flex justify-content-center mask-custom me-3">
-                    One of four columns
-                </div>
-                <div class="col-md d-flex justify-content-center mask-custom me-3">
-                    One of four columns
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a tellus placerat metus venenatis tristique. Vivamus sagittis urna mi, in finibus ante vulputate suscipit. Integer auctor ante ut sem pellentesque vehicula. Etiam felis diam, lobortis vitae justo a, sodales luctus eros. Curabitur vel justo consequat, tincidunt purus sagittis, accumsan neque. Donec leo nulla, tempus ut rutrum quis, porta sed felis. Curabitur luctus diam ac tellus venenatis porttitor. Phasellus sodales viverra risus, nec commodo sem imperdiet bibendum.
+    <div class="bg">
+        <div class="d-flex justify-content-start">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md d-flex align-self-start flex-column mask-custom me-3 p-3">
+                        <h5 class="blue-text text-darken-2 p-1">New</h5>
+                            <div class="card p-1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Co ten front</h5>
+                                        <p class="card-text">
+                                            Bosz ale ten front męczy banie, help me please!
+                                        </p>
+                                    <a href="#" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Edit</a>
+                                </div>
+                            </div>
+                            <div class="card mt-3 p-1">
+                                <div class="card-body">
+                                    <h5 class="card-title">To boli</h5>
+                                        <p class="card-text">
+                                            Dosłownie. Powinno działać a nie działa:(
+                                        </p>
+                                    <a href="#" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Edit</a>
+                                </div>
+                            </div>
+                            <a href="#"><h6>+ Add another card</h6></a>
+                        </div>
 
-    Quisque at dui magna. Suspendisse viverra nibh ac quam convallis aliquam. Proin et congue nisl. Proin feugiat ipsum ultrices feugiat tempor. Donec placerat tincidunt rutrum. Aenean feugiat, nibh aliquet aliquam consequat, urna orci ullamcorper tortor, nec placerat purus tellus ac neque. Sed id luctus ligula, eu feugiat nibh.
+                    <div class="col-md d-flex align-self-start flex-column mask-custom me-3 p-3">
+                        <h5 class="blue-text text-darken-2 p-1">In Progress</h5>
+                            <div class="card p-1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Hmmm</h5>
+                                        <p class="card-text">
+                                            Najładniejsze to to nie jest ale chyba ujdzie
+                                        </p>
+                                    <a href="#" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Edit</a>
+                                </div>
+                            </div>
+                            <a href="#"><h6>+ Add another card</h6></a>
+                        </div>
 
-    Cras aliquet libero tincidunt orci sollicitudin consequat. Nam ornare leo at justo sagittis, vel vulputate felis porta. Sed ut massa dapibus, dapibus est quis, accumsan massa. Vivamus cursus leo venenatis dignissim feugiat. Fusce ut diam a enim auctor congue. Maecenas porta arcu vel nulla vulputate, in lobortis metus commodo. Morbi ultrices felis vitae felis luctus, nec venenatis eros sollicitudin.
+                    <div class="col-md d-flex align-self-start flex-column mask-custom me-3 p-3">
+                        <h5 class="blue-text text-darken-2 p-1">Testing</h5>
+                            <div class="card p-1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Wiadomo</h5>
+                                        <p class="card-text">
+                                            Wszystko będzie poprawiane i ulepszane w trakcie
+                                        </p>
+                                    <a href="#" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Edit</a>
+                                </div>
+                            </div>
+                            <a href="#"><h6>+ Add another card</h6></a>
+                        </div>
 
-    Sed elementum turpis id mi dictum sagittis. Vivamus bibendum faucibus tellus, non luctus purus consequat sed. Sed sit amet erat ac sem tristique rutrum id nec justo. Sed laoreet nisi risus, non vulputate eros porttitor vitae. Aenean id tincidunt mauris, sit amet fringilla justo. Quisque viverra dui metus, a fermentum ante dictum ac. Donec sed felis quis est venenatis posuere id a mauris. Phasellus mollis sollicitudin tincidunt. Aliquam id sollicitudin libero.
+                    <div class="col-md d-flex align-self-start flex-column mask-custom me-3 p-3">
+                        <h5 class="blue-text text-darken-2 p-1">Done</h5>
+                            <div class="card p-1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Myślmy Pozytywnie</h5>
+                                        <p class="card-text">
+                                            No bo po co inaczej
+                                        </p>
+                                    <a href="#" class="btn btn-outline-secondary" data-mdb-ripple-color="dark">Edit</a>
+                                </div>
+                            </div>
+                            <a href="#"><h6>+ Add another card</h6></a>
+                        </div>
+
                 </div>
             </div>
         </div>
