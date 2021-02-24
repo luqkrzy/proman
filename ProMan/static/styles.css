@@ -5,9 +5,12 @@
 
 .bg{
   background-image: url('colorfuljpeg.jpeg');
-  height: 100%;
-  background-position: center;
+  /*height: 100%;*/
+  background-position: center center;
   background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
 }
 body{
   color: black;
