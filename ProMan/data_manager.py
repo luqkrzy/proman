@@ -1,10 +1,11 @@
 from flask import jsonify
 from ProMan import db
-from ProMan.models import UsersSchema
-from ProMan.models import Users
+from ProMan.models import UsersSchema, BoardsSchema
+from ProMan.models import Users, Boards
 from ProMan import bcrypt
 
 user_schema = UsersSchema()
+board_schema = BoardsSchema()
 
 
 def commit_to_database(data) -> None:
@@ -34,4 +35,10 @@ def find_user_by_email(email):
     return user
 
 
+def get_boards():
+    boards = Boards.query.all()
+    print(boards)
+    output = board_schema.dump(boards)
+    print(output)
+    return output
 

@@ -1,9 +1,10 @@
 // It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import { dataHandler, easyHandler } from "./data_handler.js";
 
 export let dom = {
     init: function () {
-        // This function should run once, when the page is loaded.
+    this.loadBoards()
+        console.log(this)
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -14,23 +15,23 @@ export let dom = {
     showBoards: function (boards) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
-
-        let boardList = '';
-
-        for(let board of boards){
-            boardList += `
-                <li>${board.title}</li>
-            `;
-        }
-
-        const outerHtml = `
-            <ul class="board-container">
-                ${boardList}
-            </ul>
-        `;
-
-        let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        console.log(boards)
+        // let boardList = '';
+        //
+        // for(let board of boards){
+        //     boardList += `
+        //         <li>${board.title}</li>
+        //     `;
+        // }
+        //
+        // const outerHtml = `
+        //     <ul class="board-container">
+        //         ${boardList}
+        //     </ul>
+        // `;
+        //
+        // let boardsContainer = document.querySelector('#boards');
+        // boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called

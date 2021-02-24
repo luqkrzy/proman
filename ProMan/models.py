@@ -22,3 +22,22 @@ class Users(db.Model, UserMixin):
 class UsersSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Users
+
+
+def load_boards():
+    return Boards.query.get()
+
+
+class Boards(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    name = db.Column(db.String())
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    note = db.Column(db.String())
+
+    def __repr__(self):
+        return f'{self.id}, {self.name}, {self.owner_id}, {self.note}'
+
+
+class BoardsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Boards

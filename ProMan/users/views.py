@@ -40,6 +40,7 @@ def route_check_user_login_details():
         else:
             return jsonify(False)
     except Exception as e:
+        print(e)
         return jsonify(e)
 
 @users.route("/logout")

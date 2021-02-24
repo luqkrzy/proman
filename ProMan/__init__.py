@@ -18,11 +18,12 @@ def create_app(config_class=DevelopmentConfig):
     app.config.from_object(DevelopmentConfig)
     app.url_map.strict_slashes = False
     from ProMan.users.views import users
-
+    from ProMan.boards.views import boards
     from ProMan.main.views import main
 
     app.register_blueprint(main)
     app.register_blueprint(users)
+    app.register_blueprint(boards)
 
     db.init_app(app)
     ma.init_app(app)
