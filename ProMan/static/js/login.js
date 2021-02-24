@@ -1,12 +1,70 @@
 import {dataHandler, easyHandler} from "./data_handler.js";
 
-const loginBtn = document.getElementById('login-btn')
+const userForms = document.getElementById('userForms')
+const feedbackStyle = 'width: 100%; margin-top: 0.25rem; font-size: 0.675em; color: #dc3545;'
+const loginBtn = document.getElementById('loginBtn')
 const emailInput = document.getElementById('emailInput');
 const passwordInput = document.getElementById('passwordInput');
-const emailFeedback = document.getElementById('email-feedback');
-const passwordFeedback = document.getElementById('password-feedback');
-emailFeedback.style.cssText = 'width: 100%; margin-top: 0.25rem; font-size: 0.675em; color: #dc3545;'
-passwordFeedback.style.cssText = 'width: 100%; margin-top: 0.25rem; font-size: 0.675em; color: #dc3545;'
+const loginEmailFeedback = document.getElementById('loginEmailFeedback');
+const loginPasswordFeedback = document.getElementById('loginPasswordFeedback');
+const feedbackFields = document.querySelectorAll('.feedback')
+feedbackFields.forEach(field => field.style.cssText = feedbackStyle)
+
+const registerEmail = document.getElementById('registerEmail');
+const registerPassword = document.getElementById('registerPassword');
+const registerRepeatPassword = document.getElementById('registerRepeatPassword');
+const registerBtn = document.getElementById('registerBtn');
+const registerEmailFeedback = document.getElementById('registerEmailFeedback');
+const registerPasswordFeedback = document.getElementById('registerPasswordFeedback');
+
+
+registerBtn.addEventListener('click', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
+	registerUser()
+
+})
+
+
+registerEmail.addEventListener('change', checkEmailInDatabase)
+
+function checkEmailInDatabase() {
+	easyHandler._getData(`/api/user/${registerEmail.value}`, (response) => {
+		if (response === true) {
+			registerEmailFeedback.innerHTML = '&nbsp; Email already exists'
+		} else {
+			registerEmailFeedback.innerHTML = '&nbsp; Email not in database'
+			registerEmailFeedback.style.color = 'green'
+			registerBtn.classList.remove('disabled')
+
+			console.log('email not in data base')
+		}
+	})
+}
+
+
+function checkPasswordMatch() {
+	if (registerPassword.value === registerRepeatPassword.value) {
+		console.log('password OK')
+		return true
+	} else {
+		registerPasswordFeedback.innerHTML = '&nbsp; password doesn\'t match'
+		return false
+
+	}
+}
+
+function registerUser() {
+	if (checkPasswordMatch()) {
+		checkEmailInDatabase()
+		userForms.innerHTML = `
+		<div class="alert  text-center alert-success alert-dismissible fade show" role="alert">
+			Account sucsesluly created <a href="/login" class="alert-link">long in here</a>.
+			<button type="button" class="btn-close ms-2 my-0" data-mdb-dismiss="alert" aria-label="Close"></button>
+		</div>
+		`
+	}
+}
 
 loginBtn.addEventListener('click', (event) => {
 	event.preventDefault();
@@ -14,35 +72,34 @@ loginBtn.addEventListener('click', (event) => {
 	validateUser();
 })
 
-function checkEmailInput() {
-	if (emailInput.value === '' || !emailInput.value.includes('@')) {
-		emailFeedback.innerHTML = '&nbsp; Not a valid email';
-		return false
-	}
-
-	console.log('email true', emailInput.value)
-	return true
-}
-
-function checkPasswordInput() {
-	if (passwordInput.value === '') {
-		passwordFeedback.innerHTML = '&nbsp Wrong email or password'
-		return false
-	}
-	console.log('password true', passwordInput.value)
-	return true
-}
-
 function validateUser() {
 
-	if (checkEmailInput() && checkPasswordInput()) {
+	function checkEmailInput() {
+		if (emailInput.value === '' || !emailInput.value.includes('@')) {
+			loginEmailFeedback.innerHTML = '&nbsp Wrong email or password'
+			return false
+		}
 
+		console.log('email true', emailInput.value)
+		return true
+	}
+
+	function checkPasswordInput() {
+		if (passwordInput.value === '') {
+			loginPasswordFeedback.innerHTML = '&nbsp Wrong email or password'
+			return false
+		}
+		console.log('password true', passwordInput.value)
+		return true
+	}
+
+	if (checkEmailInput() && checkPasswordInput()) {
 		easyHandler.postJson('/api/login', {'email': emailInput.value, 'password': passwordInput.value}, (response) => {
 			console.log(response)
 			if (response === true) {
 				document.location.href = "/";
 			} else {
-				passwordFeedback.innerHTML = '&nbsp Wrong email or password'
+				loginPasswordFeedback.innerHTML = '&nbsp Wrong email or password'
 			}
 		})
 	}
