@@ -79,8 +79,6 @@ function registerUser() {
 		`
 			}
 		})
-
-
 	}
 }
 

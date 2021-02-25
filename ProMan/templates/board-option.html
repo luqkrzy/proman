@@ -1,0 +1,228 @@
+{% extends 'layout.html' %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+	<div class="container">
+
+		<!-- Tabs navs -->
+		<ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist"><!-- start board tab -->
+			<li class="nav-item" role="presentation">
+				<span class="nav-link  active d-flex justify-content-between align-items-center edit" id="ex2-tab-1" data-mdb-toggle="tab"
+				      href="#ex2-tabs-1" role="tab" aria-controls="ex2-tabs-1" aria-selected="true">Board 1<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="#">Edit</a></li>
+						<li><a class="dropdown-item" href="#">Delete</a></li>
+					</ul>
+				</span>
+			</li><!-- end board tab -->
+			<li class="nav-item" role="presentation"><!-- start board tab -->
+				<span class="nav-link d-flex justify-content-between align-items-center edit" id="ex2-tab-2" data-mdb-toggle="tab"
+				      href="#ex2-tabs-2" role="tab" aria-controls="ex2-tabs-2" aria-selected="false">Board 2<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="#">Edit</a></li>
+						<li><a class="dropdown-item" href="#">Delete</a></li>
+					</ul>
+				</span>
+			</li><!-- end board tab -->
+
+			<li class="nav-item d-inline" role="presentation"><!-- edit board name -->
+				<a class="nav-link justify-content-between align-items-center" id="ex2-tab-3" data-mdb-toggle="tab" href="#ex2-tabs-3" role="tab" aria-controls="ex2-tabs-3" aria-selected="false"><input type="text" maxlength="20" placeholder="Board 3"></a>
+
+			</li>
+			<li class="nav-item" role="presentation"><!-- add new board  -->
+				<a class="nav-link" id="ex2-tab-3" data-mdb-toggle="tab" href="#" role="tab" aria-controls="" aria-selected="false"><i class="fas fa-plus"></i></a>
+			</li>
+
+		</ul>
+		<div class="tab-content" id="ex2-content">
+			<div class="tab-pane fade show active" id="ex2-tabs-1" role="tabpanel" aria-labelledby="ex2-tab-1"><!-- start cards container -->
+
+				<div class="container">
+					<div class="row">
+						<div class="col-md"><!-- start card  -->
+							<ul class="list-group">
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center fw-bold">
+									Card Title<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Cras justo odio<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Dapibus ac facilisis in<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Morbi leo risus<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Porta ac consectetur ac<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									<input type="text" placeholder="edit task"></li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									MVestibulum at eros<<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									<input type="text" placeholder="new task"></li>
+							</ul>
+						</div><!-- end of card  -->
+						<div class="col-md"><!-- start card  -->
+							<ul class="list-group">
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center fw-bold">
+									Card Title<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Cras justo odio<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Dapibus ac facilisis in<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Morbi leo risus<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Porta ac consectetur ac<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									<input type="text" placeholder="edit task"></li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									MVestibulum at eros<<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									<input type="text" placeholder="new task"></li>
+							</ul>
+
+						</div><!-- end of card  -->
+						<div class="col-md"><!-- start card  -->
+							<ul class="list-group">
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center fw-bold">
+									Card Title<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Cras justo odio<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Dapibus ac facilisis in<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Morbi leo risus<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									Porta ac consectetur ac<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+									<ul class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									<input type="text" placeholder="edit task"></li>
+								<li class="edit list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									MVestibulum at eros<<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">Edit</a></li>
+										<li><a class="dropdown-item" href="#">Delete</a></li>
+									</ul>
+								</li>
+								<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+									<input type="text" placeholder="new task"></li>
+							</ul>
+						</div><!-- end of card  -->
+						<div class="col-md"><!-- start new card  -->
+							<ul class="list-group">
+								<li class="list-group-item list-group-item-action">
+									<a href="#"><i class="fas fa-plus"></i> Add new card</a>
+								</li>
+							</ul>
+						</div><!-- end of new card  -->
+
+					</div>
+				</div>
+			</div><!-- end cards container -->
+
+			<div class="tab-pane fade" id="ex2-tabs-2" role="tabpanel" aria-labelledby="ex2-tab-2">Tab 2 content</div>
+			<div class="tab-pane fade" id="ex2-tabs-3" role="tabpanel" aria-labelledby="ex2-tab-3">Tab 3 content</div>
+		</div>
+
+
+	</div>
+
+	<script>
+		const editableBtns = document.querySelectorAll('.edit')
+		const item = document.querySelector('.list-group-item')
+		console.log(editableBtns)
+
+		{#editableBtns.forEach(task => task.addEventListener('mouseover', () =>  task.childNodes[1].classList.toggle('d-none')))#}
+		{#editableBtns.forEach(task => task.addEventListener('mouseleave', () =>  task.childNodes[1].classList.toggle('d-none')))#}
+
+		const pens = document.querySelectorAll('.fa-pen');
+
+
+	</script>
+
+
+
+{% endblock %}
