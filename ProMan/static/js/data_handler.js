@@ -64,7 +64,6 @@ export const easyHandler = {
 		try {
 			let data = await fetch(url);
 			let response = await data.json();
-			console.log(response)
 
 			if (response !== undefined) {
 				callback(response)

@@ -1,8 +1,6 @@
-from flask import jsonify
 from ProMan import db
 from ProMan.models import UsersSchema
 from ProMan.models import Users
-from ProMan import bcrypt
 
 user_schema = UsersSchema()
 
@@ -33,5 +31,10 @@ def find_user_by_email(email):
     user = Users.query.filter_by(email=email).first()
     return user
 
+def find_all_users():
+    user = Users.query.all()
+    dict(Users.query.all())
+
+    return user
 
 
