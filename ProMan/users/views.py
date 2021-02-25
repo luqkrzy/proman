@@ -2,24 +2,8 @@ from flask import Blueprint, render_template, url_for, redirect, request, flash,
 from flask_login import current_user, login_user, logout_user, login_required
 from ProMan import data_manager, bcrypt
 from ProMan.models import UsersSchema
-
 users_schema = UsersSchema()
-
 users = Blueprint('users', __name__)
-
-
-@users.route("/register", methods=['GET', 'POST'])
-def route_register():
-    new_user = {'email': 'lusds@wp.pl', 'password': 'root', }
-    data_manager.register_new_user(new_user=new_user)
-
-    return 'register'
-
-
-@users.route("/check", methods=['GET', 'POST'])
-def route_check():
-    user = data_manager.find_user_by_email('laszlo@wp.pl')
-    return user
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -33,7 +17,7 @@ def route_logout():
     return redirect(url_for('main.route_home'))
 
 
-@users.route("/api/login", methods=['GET', 'POST'])
+@users.route("/api/login", methods=['POST'])
 def route_check_user_login_details():
     data = request.get_json()
     email = data.get('email')
@@ -49,6 +33,13 @@ def route_check_user_login_details():
         return jsonify(e)
 
 
+@users.route("/api/register", methods=['PUT'])
+def route_register():
+    data = request.get_json()
+    resp = data_manager.register_new_user(data)
+    return jsonify(resp)
+
+
 @users.route('/api/user/<email>', methods=['GET'])
 def api_check_user_in_database(email):
     try:
@@ -58,7 +49,7 @@ def api_check_user_in_database(email):
         else:
             return jsonify(False)
     except Exception as e:
-            return jsonify(e)
+        return jsonify(e)
 
 
 @users.route('/api/users/', methods=['GET'])
@@ -69,5 +60,3 @@ def api_find_all_users():
         return jsonify(dump_users)
     except Exception as e:
         return jsonify(e)
-
-

@@ -10,6 +10,7 @@ const loginPasswordFeedback = document.getElementById('loginPasswordFeedback');
 const feedbackFields = document.querySelectorAll('.feedback')
 feedbackFields.forEach(field => field.style.cssText = feedbackStyle)
 
+const registerUsername = document.getElementById('registerUsername')
 const registerEmail = document.getElementById('registerEmail');
 const registerPassword = document.getElementById('registerPassword');
 const registerRepeatPassword = document.getElementById('registerRepeatPassword');
@@ -17,7 +18,7 @@ const registerBtn = document.getElementById('registerBtn');
 const registerEmailFeedback = document.getElementById('registerEmailFeedback');
 const registerPasswordFeedback = document.getElementById('registerPasswordFeedback');
 
-
+// user registration
 registerBtn.addEventListener('click', (event) => {
 	event.preventDefault();
 	event.stopPropagation();
@@ -25,19 +26,21 @@ registerBtn.addEventListener('click', (event) => {
 
 })
 
-
 registerEmail.addEventListener('change', checkEmailInDatabase)
+
 
 function checkEmailInDatabase() {
 	easyHandler._getData(`/api/user/${registerEmail.value}`, (response) => {
 		if (response === true) {
-			registerEmailFeedback.innerHTML = '&nbsp; Email already exists'
+			registerEmailFeedback.style.color = 'red'
+			registerEmailFeedback.innerHTML = '&nbsp; Email already exists';
+			registerBtn.classList.add('disabled');
+			return true
 		} else {
-			registerEmailFeedback.innerHTML = '&nbsp; Email not in database'
-			registerEmailFeedback.style.color = 'green'
-			registerBtn.classList.remove('disabled')
-
-			console.log('email not in data base')
+			registerEmailFeedback.innerHTML = '&nbsp; Email not in database';
+			registerEmailFeedback.style.color = 'green';
+			registerBtn.classList.remove('disabled');
+			return false
 		}
 	})
 }
@@ -56,16 +59,32 @@ function checkPasswordMatch() {
 
 function registerUser() {
 	if (checkPasswordMatch()) {
-		checkEmailInDatabase()
-		userForms.innerHTML = `
+		checkEmailInDatabase();
+		easyHandler.postJson('PUT', '/api/register', {'email': registerEmail.value, 'name': registerUsername.value, 'password': registerPassword.value}, (response) => {
+			console.log(response);
+
+			if (response === true) {
+				userForms.innerHTML = `
 		<div class="alert  text-center alert-success alert-dismissible fade show" role="alert">
 			Account sucsesluly created <a href="/login" class="alert-link">long in here</a>.
 			<button type="button" class="btn-close ms-2 my-0" data-mdb-dismiss="alert" aria-label="Close"></button>
 		</div>
 		`
+			} else {
+				userForms.innerHTML = `
+		<div class="alert  text-center alert-danger alert-dismissible fade show" role="alert">
+			Some error ocurred - please try later.
+			<button type="button" class="btn-close ms-2 my-0" data-mdb-dismiss="alert" aria-label="Close"></button>
+		</div>
+		`
+			}
+		})
+
+
 	}
 }
 
+// user login
 loginBtn.addEventListener('click', (event) => {
 	event.preventDefault();
 	event.stopPropagation();
@@ -94,7 +113,7 @@ function validateUser() {
 	}
 
 	if (checkEmailInput() && checkPasswordInput()) {
-		easyHandler.postJson('/api/login', {'email': emailInput.value, 'password': passwordInput.value}, (response) => {
+		easyHandler.postJson('POST', '/api/login', {'email': emailInput.value, 'password': passwordInput.value}, (response) => {
 			console.log(response)
 			if (response === true) {
 				document.location.href = "/";

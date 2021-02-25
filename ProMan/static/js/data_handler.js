@@ -74,10 +74,10 @@ export const easyHandler = {
 		}
 	},
 
-	async postJson(url, data, callback) {
+	async postJson(type, url, data, callback) {
 
 		const settings = {
-			'method': 'POST', 'headers': {
+			'method': type, 'headers': {
 				'Content-Type': 'application/json', 'Accept': 'application/json'
 			},
 
