@@ -5,14 +5,11 @@ from ProMan import data_manager
 boards = Blueprint('boards', __name__)
 
 @boards.route("/boards", methods=['GET', 'POST'])
-def route_display_boards():
+def route_boards():
     return render_template('boards.html')
 
 
-
-@boards.route("/get-boards", methods=['GET', 'POST'])
-def route_get_boards():
+@boards.route("/api/get-boards", methods=['GET'])
+def api_get_boards():
     boards = data_manager.get_boards()
-    print(boards)
-
     return boards
