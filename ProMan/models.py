@@ -15,7 +15,7 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f'{self.id}, {self.email}, {self.name}, {self.password}'
+        return f'{self.id}, {self.email}, {self.name}'
 
 
 class UsersSchema(ma.SQLAlchemyAutoSchema):

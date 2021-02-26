@@ -21,7 +21,6 @@ def create_app(config_class=DevelopmentConfig):
     from ProMan.boards.views import boards
     from ProMan.main.views import main
     from ProMan.errors.handlers import errors
-
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(boards)
@@ -30,8 +29,6 @@ def create_app(config_class=DevelopmentConfig):
     ma.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
-
     return app
-
 
 from ProMan import data_manager

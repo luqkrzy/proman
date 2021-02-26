@@ -53,11 +53,14 @@ def api_check_user_in_database(email):
         return jsonify(e)
 
 
-@users.route('/api/users/', methods=['GET'])
-def api_find_all_users():
-    try:
-        all_users = data_manager.find_all_users()
-        dump_users = [users_schema.dump(user) for user in all_users]
-        return jsonify(dump_users)
-    except Exception as e:
-        return jsonify(e)
+
+@users.route('/api/current-user/', methods=['GET'])
+def api_get_current():
+    if current_user.is_authenticated:
+        return jsonify(users_schema.dump(current_user))
+    else:
+        return jsonify('anonymous')
+
+
+
+

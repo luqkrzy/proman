@@ -18,7 +18,6 @@
 		body {
 			font-size: 14px;
 		}
-
 	</style>
 </head>
 <body class="mx-5">
@@ -41,10 +40,9 @@
 	</div>
 {# main content #}
 {%- block content -%}{% endblock -%}
-
 {% include 'footer.html' %}
 <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script>{{ current_user }}</script>
+<script>const user = "{{ current_user }}"</script>
 
 </body>
 </html>

@@ -58,7 +58,20 @@ export let dataHandler = {
 
 export const easyHandler = {
 
-	_user : {},
+	async _returnData(url) {
+		try {
+			let data = await fetch(url);
+			let response = await data.json();
+
+			if (response !== undefined) {
+				return response
+			}
+
+		} catch (err) {
+			console.log(err)
+		}
+
+	},
 
 	async _getData(url, callback) {
 		try {
