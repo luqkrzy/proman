@@ -14,6 +14,5 @@ def route_display_boards():
 def route_get_boards():
     boards = data_manager.get_boards()
     print(boards)
-    return jsonify(boards)
 
-
+    return boards

@@ -36,9 +36,9 @@ def find_user_by_email(email):
 
 
 def get_boards():
-    boards = Boards.query.all()
-    print(boards)
-    output = board_schema.dump(boards)
-    print(output)
-    return output
-
+    try:
+        boards = Boards.query.all()
+        dump_boards = [board_schema.dump(board) for board in boards]
+        return jsonify(dump_boards)
+    except Exception as e:
+        return jsonify(e)
