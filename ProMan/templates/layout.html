@@ -13,61 +13,17 @@
 	<!-- MDB -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.js" defer></script>
 	<title>{% block title %}{% endblock %} - ProMan</title>
-    <link rel="stylesheet" href="../static/styles.css">
-	<style></style>
-</head>
-<body>
+	<link rel="stylesheet" href="../static/styles.css">
+	<style>
+		body {
+			font-size: 14px;
+		}
 
+	</style>
+</head>
+<body class="mx-5">
 {# navbar #}
 {% include 'navbar.html' %}
-<button
-        type="button"
-        class="btn btn-primary"
-        data-mdb-toggle="modal"
-        data-mdb-target="#exampleModal"
->
-    Add Board
-</button>
-<div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add new board</h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-mdb-dismiss="modal"
-                        aria-label="Close"
-                ></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <!-- Name input -->
-                    <div class="form-outline mb-4">
-                        <input type="text" id="name" class="form-control"/>
-                        <label class="form-label" for="name">Name</label>
-                    </div>
-
-                    <!-- Email input -->
-                    <div class="form-outline mb-4">
-                        <input type="note" id="note" class="form-control"/>
-                        <label class="form-label" for="note">Note</label>
-                    </div>
-                    <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-4" id="add_board">Save board</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="">
 	{# flash messages #}
 	<div class="container my-5">
 		{%- with messages = get_flashed_messages(with_categories=true) %}
@@ -83,9 +39,9 @@
 			{% endif %}
 		{% endwith -%}
 	</div>
-	{# main content #}
-	{%- block content -%}{% endblock -%}
-</div>
+{# main content #}
+{%- block content -%}{% endblock -%}
+
 {% include 'footer.html' %}
 <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script>{{ current_user }}</script>
