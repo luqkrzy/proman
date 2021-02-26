@@ -1,10 +1,15 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler, easyHandler} from "./data_handler.js";
 
+const name = document.getElementById('name')
+const note = document.getElementById('note')
+const button = document.getElementById('add_board')
+
+
 export let dom = {
     init: function () {
         this.loadBoards()
-        console.log(this)
+        this.addBoard()
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -45,5 +50,21 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
     },
-    // here comes more features
-};
+    addBoard: function () {
+
+        button.addEventListener('click', (event) => {
+            console.log(name.value)
+            console.log(note.value)
+            console.log('clicked')
+
+            easyHandler.postJson('PUT','/api/add_board', {
+                'name': name.value,
+                'owner_id': 1,
+                'note': note.value
+            }, (response) => console.log(response))
+        })
+
+
+    }
+
+}

@@ -13,3 +13,11 @@ def route_boards():
 def api_get_boards():
     boards = data_manager.get_boards()
     return boards
+
+
+@boards.route("/api/add_board", methods=['PUT'])
+def api_add_board():
+    new_board = request.get_json()
+    print(new_board)
+    pass
+
