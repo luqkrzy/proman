@@ -64,7 +64,6 @@ export const easyHandler = {
 		try {
 			let data = await fetch(url);
 			let response = await data.json();
-			console.log(response)
 
 			if (response !== undefined) {
 				callback(response)
@@ -75,10 +74,10 @@ export const easyHandler = {
 		}
 	},
 
-	async postJson(url, data, callback) {
+	async postJson(type, url, data, callback) {
 
 		const settings = {
-			'method': 'POST', 'headers': {
+			'method': type, 'headers': {
 				'Content-Type': 'application/json', 'Accept': 'application/json'
 			},
 
