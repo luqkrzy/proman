@@ -18,6 +18,6 @@ def api_get_boards():
 @boards.route("/api/add_board", methods=['PUT'])
 def api_add_board():
     new_board = request.get_json()
-    print(new_board)
-    pass
+    resp = data_manager.add_new_board(new_board)
+    return jsonify(resp)
 

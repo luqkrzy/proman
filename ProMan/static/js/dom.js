@@ -53,11 +53,19 @@ export let dom = {
     addBoard: function () {
 
         button.addEventListener('click', (event) => {
+
             easyHandler.postJson('PUT','/api/add_board', {
                 'name': name.value,
                 'owner_id': 1,
                 'note': note.value
             }, (response) => console.log(response))
+            if (response == True){
+                alert('Board Added')
+            }
+            else{
+                alert('Failed')
+            }
+
         })
 
 

@@ -42,3 +42,11 @@ def get_boards():
         return jsonify(dump_boards)
     except Exception as e:
         return jsonify(e)
+
+
+def add_new_board(data):
+    name = data.get('name')
+    note = data.get('note')
+    owner_id = data.get('owner_id')
+    board = Boards(name=name, owner_id=owner_id, note=note)
+    return commit_to_database(board)
