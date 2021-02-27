@@ -1,3 +1,13 @@
+
+
+// Zignorujcie ten plik jak i main.js -  kod dotyczacy wszystkich Boards - w pliku index.js,
+// natomiad odnośnie poczczegolnej Board  w pliku board.js
+
+
+
+
+
+
 // It uses data_handler.js to visualize elements
 import {easyHandler} from "./data_handler.js";
 

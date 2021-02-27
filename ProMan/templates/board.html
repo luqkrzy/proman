@@ -162,51 +162,7 @@
 		<div class="col-md"><!-- start new card  -->
 			<span class="text-primary btn" href="#"><i class="fas fa-plus"></i> Add new card</span>
 		</div><!-- end of new card  -->
-
 	</div>
-	{#	</div>#}
 
-
-
-
-	<script>
-		{#const editFields = document.querySelectorAll('a[edit="true"]')#}
-
-
-		{#editCardTitleLink.addEventListener('click', changeCardName)#}
-		{##}
-		{#function changeCardName() {#}
-		{#	const editCartTitleName = editCardTitleLink.getAttribute('name');#}
-		{#	const cardTitleTag = document.getElementById(editCartTitleName);#}
-		{#	cardTitleTag.innerHTML = `<input type="text" placeholder="">`#}
-		{##}
-
-		document.addEventListener('dblclick', (event) => {
-
-			let target = event.target;
-			const isClickInside = target.contains(event.target);
-
-
-			if (target.getAttribute('edit') === "true") {
-				target.innerHTML = `<input type="text" placeholder=${target.innerText}>`;
-
-				document.addEventListener('click', (secondEvent) => {
-
-					if (secondEvent.target === target) {
-						console.log('to samo')
-					} else {
-						console.log('otuside', target.value)
-
-					}
-
-				})
-
-			}
-		})
-
-
-	</script>
-
-
-
+	<script type="module" src="{{ url_for('static', filename='./js/board.js') }}"></script>
 {% endblock %}

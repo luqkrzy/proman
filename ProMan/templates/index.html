@@ -2,8 +2,6 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-
-
 	<button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal">Add Board</button>
 	<div
 			class="modal fade"
@@ -43,5 +41,7 @@
 			</div>
 		</div>
 	</div>
+
+	<script type="module" src="{{ url_for('static', filename='./js/index.js') }}"></script>
 
 {% endblock %}
