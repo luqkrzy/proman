@@ -1,9 +1,7 @@
 from flask import render_template, request, Blueprint, jsonify, session, flash, redirect, url_for
 from ProMan import data_manager
 
-
 boards = Blueprint('boards', __name__)
-
 
 @boards.route("/api/get-boards", methods=['GET'])
 def api_get_boards():
@@ -21,8 +19,3 @@ def api_add_board():
 @boards.route("/board", methods=["GET", "POST"])
 def route_board():
     return render_template('board.html')
-
-
-@boards.route("/sortable", methods=["GET", "POST"])
-def route_sortable():
-    return render_template('sortable.html')
