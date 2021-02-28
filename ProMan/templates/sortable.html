@@ -1,0 +1,138 @@
+{% extends 'layout.html' %}
+{% block title %} Board {% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-10 text-center"><h2 class="text-center mb-3">Board Name </h2></div>
+		<div class="col-md-2">
+			<div class="col-md d-inline-flex align-content-end"><!-- start new card  -->
+				<span class="text-primary btn" href="#"><i class="fas fa-plus"></i> Add new card</span>
+			</div><!-- end of new card  -->
+		</div>
+	</div>
+	<div class="allCards  row align-items-start">
+		<div class="col-md-auto rounded-3 p-1 alert-dark me-3 mb-3"><!-- start card  -->
+			<div edit="true" class="bg-transparent border-0 edit list-group-item d-flex justify-content-between fw-bold mb-1">
+				To do<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+				<div class="dropdown-menu">
+					<span class="dropdown-item">Edit</span>
+					<span class="dropdown-item">Delete</span>
+				</div>
+			</div>
+			<div class="cardBody">
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Cras justo odio<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Dapibus ac facilisis in<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Morbi leo risus<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Porta ac consectetur ac<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					MVestibulum at eros<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+					<div class="dropdown-menu">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item list-group-item-action d-flex justify-content-between">
+				<input type="text" class='w-100' placeholder=" + new item"></div>
+		</div><!-- end of card  -->
+
+		<div class="col-md-auto rounded-3 p-1 alert-dark me-3 mb-3"><!-- start card  -->
+			<div edit="true" class="bg-transparent border-0 edit list-group-item d-flex justify-content-between fw-bold mb-1">
+				In progress <i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+				<div class="dropdown-menu">
+					<span class="dropdown-item">Edit</span>
+					<span class="dropdown-item">Delete</span>
+				</div>
+			</div>
+			<div class="cardBody">
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Cras justo odio<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Dapibus ac facilisis in<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Morbi leo risus<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Porta ac consectetur ac<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					MVestibulum at eros<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+					<div class="dropdown-menu">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item list-group-item-action d-flex justify-content-between">
+				<input type="text" class='w-100' placeholder=" + new item"></div>
+		</div><!-- end of card  -->
+
+
+		<div class="col-md-auto rounded-3 p-1 alert-dark me-3 mb-3"><!-- start card  -->
+			<div edit="true" class="bg-transparent border-0 edit list-group-item d-flex justify-content-between fw-bold mb-1">
+				Done<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+				<div class="dropdown-menu">
+					<span class="dropdown-item">Edit</span>
+					<span class="dropdown-item">Delete</span>
+				</div>
+			</div>
+			<div class="cardBody">
+				<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" name="card">
+					Cras justo odio<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+					<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+						<span class="dropdown-item">Edit</span>
+						<span class="dropdown-item">Delete</span>
+					</div>
+				</div>
+
+			</div>
+			<div class="list-group-item list-group-item-action d-flex justify-content-between">
+				<input type="text" class='w-100' placeholder=" + new item"></div>
+		</div><!-- end of card  -->
+
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.10.2/Sortable.min.js" integrity="sha512-ELgdXEUQM5x+vB2mycmnSCsiDZWQYXKwlzh9+p+Hff4f5LA+uf0w2pOp3j7UAuSAajxfEzmYZNOOLQuiotrt9Q==" crossorigin="anonymous"></script>
+	<script type="module" src="{{ url_for('static', filename='./js/board.js') }}"></script>
+{% endblock %}

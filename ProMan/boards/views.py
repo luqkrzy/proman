@@ -21,3 +21,8 @@ def api_add_board():
 @boards.route("/board", methods=["GET", "POST"])
 def route_board():
     return render_template('board.html')
+
+
+@boards.route("/sortable", methods=["GET", "POST"])
+def route_sortable():
+    return render_template('sortable.html')
