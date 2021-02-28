@@ -42,6 +42,30 @@
 		</div>
 	</div>
 
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#deleteBoardModal">
+      Delete board
+    </button>
+
+    <!-- Modal -->
+    <div class="modal top fade" id="deleteBoardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog modal-sm ">
+            <div class="modal-content text-center">
+                <div class="modal-header bg-danger text-white d-flex justify-content-center">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                </div>
+                <div class="modal-body"><i class="fas fa-times fa-3x text-danger"></i></div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger ripple-surface">No</button>
+                    <button type="button" class="btn btn-outline-danger ripple-surface" data-mdb-dismiss="modal" id="deleteBoard">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 	<script type="module" src="{{ url_for('static', filename='./js/index.js') }}"></script>
 
 {% endblock %}

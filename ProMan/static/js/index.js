@@ -3,6 +3,7 @@ import {easyHandler} from "./data_handler.js";
 const name = document.getElementById('name');
 const note = document.getElementById('note');
 const addNewBoardBtn = document.getElementById('add_board');
+const deleteBoardButton = document.getElementById('deleteBoard')
 
 function getCurrentUser() {
 	let current = ''
@@ -56,8 +57,21 @@ class Boards {
 		})
 	}
 
-}
+	deleteBoard() {
+		deleteBoardButton.addEventListener('click', (event) =>{
+			event.preventDefault();
+			easyHandler.postJson('DELETE', '/api/delete_board', {
+				'board_id': 1
+			}, (response) => console.log(response))
+			if (response === true) {
+				alert('Board deleted')
+			} else {
+				alert('Failed')
+			}
+		})
+	}
 
+}
 
 const boards = new Boards()
 

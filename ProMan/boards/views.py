@@ -16,6 +16,15 @@ def api_add_board():
     return jsonify(resp)
 
 
+@boards.route("/api/board/<board_id>", methods=["DELETE"])
+def api_delete_board(board_id):
+    #tutaj chyba musi dostać board id i przekazać dalej
+    id = board_id
+    print(id)
+    # resp = data_manager.delete_board(id)
+    # return jsonify(resp)
+
+
 @boards.route("/board", methods=["GET", "POST"])
 def route_board():
     return render_template('board.html')
