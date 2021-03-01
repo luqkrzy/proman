@@ -2,16 +2,16 @@
 {% block title %} Board {% endblock %}
 
 {% block content %}
-	<div class="row">
+	<div class="row"><!-- start row -->
 		<div class="col-md-10 text-center"><h2 class="text-center mb-3">Board Name </h2></div>
-		<div class="col-md-2">
+		<div class="col-auto mb-3">
 			<div class="col-md d-inline-flex align-content-end"><!-- start new card  -->
 				<span class="text-primary btn"><i class="fas fa-plus"></i> Add new card</span>
 			</div><!-- end of new card  -->
 		</div>
-	</div>
+	</div><!-- end row -->
 	<div class="allCards row align-items-start">
-		<div class="col-md-auto rounded-3 p-1 alert-dark me-3 mb-3"><!-- start card  -->
+		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3"><!-- start card  -->
 			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
 				To do<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 				<div class="dropdown-menu">
@@ -30,7 +30,7 @@
 				<input type="text" class='w-100' placeholder=" + new item"></div>
 		</div><!-- end of card  -->
 
-		<div class="col-md-auto rounded-3 p-1 alert-dark me-3 mb-3"><!-- start card  -->
+		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3"><!-- start card  -->
 			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
 				In progress<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 				<div class="dropdown-menu">
@@ -49,7 +49,7 @@
 				<input type="text" class='w-100' placeholder=" + new item"></div>
 		</div><!-- end of card  -->
 
-		<div class="col-md-auto rounded-3 p-1 alert-dark me-3 mb-3"><!-- start card  -->
+		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3"><!-- start card  -->
 			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
 				Done<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 				<div class="dropdown-menu">

@@ -11,3 +11,11 @@ def route_home():
 
     return render_template('index.html')
 
+
+
+@main.route("/board-list", methods=['GET', 'POST'])
+def route_board_list():
+    # flash('some message', 'danger')
+
+    return render_template('index-board-list.html')
+

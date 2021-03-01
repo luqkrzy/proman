@@ -27,10 +27,10 @@ class Boards {
 
 	init() {
 		const path = window.location.pathname;
-		if (path === '/') {
-			this.loadBoards()
-			this.addBoard();
-		}
+		// if (path === '/') {
+		this.loadBoards()
+		this.addBoard();
+		// }
 	}
 
 	loadBoards() {
@@ -44,21 +44,25 @@ class Boards {
 
 	addBoard() {
 		addNewBoardBtn.addEventListener('click', (event) => {
-			event.preventDefault();
+			// event.preventDefault();
 			// event.stopPropagation();
 			easyHandler.postJson('PUT', '/api/add_board', {
 				'name': name.value, 'owner_id': 1, 'note': note.value
-			}, (response) => console.log(response))
-			if (response === true) {
-				alert('Board Added')
-			} else {
-				alert('Failed')
-			}
+			}, (response) => {
+				console.log(response)
+				if (response === true) {
+					alert('Board Added')
+				} else {
+					alert('Failed')
+				}
+
+			})
+
 		})
 	}
 
 	deleteBoard() {
-		deleteBoardButton.addEventListener('click', (event) =>{
+		deleteBoardButton.addEventListener('click', (event) => {
 			event.preventDefault();
 			easyHandler.postJson('DELETE', '/api/delete_board', {
 				'board_id': 1
