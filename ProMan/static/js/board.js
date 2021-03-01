@@ -33,12 +33,9 @@ class Cards {
 
 	}
 
-
 	createDropdownMenu(event) {
 		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
 	}
-
-
 
 
 	removeMenu(event) {
@@ -98,18 +95,18 @@ class Cards {
 		});
 	}
 
-
 	addNewItemToCard(event) {
-
 		if (event.key === 'Enter') {
+			const value = event.target.value
 			const cardBody = event.target.previousSibling.parentElement.previousSibling.previousSibling;
 			const newItem = `<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
-			cardBody.insertAdjacentHTML('beforeend', newItem);
-			event.target.value = '';
+			if (value !== '') {
+				cardBody.insertAdjacentHTML('beforeend', newItem);
+				event.target.value = '';
+			}
 		}
 	}
 }
-
 
 const cards = new Cards();
 cards.init()
