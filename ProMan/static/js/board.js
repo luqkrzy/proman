@@ -1,6 +1,7 @@
 class Cards {
 	constructor() {
-		this.editFields = document.querySelectorAll('div[edit="true"]')
+		this.editFields = document.querySelectorAll('div[edit="true"]');
+		this.newItemField = document.querySelectorAll('.new-item');
 
 	}
 
@@ -11,10 +12,11 @@ class Cards {
 			</div>`
 
 	init() {
-		this.initChangeNameListener()
-		this.initDragAndDrop()
-		this.initDropdownMenuListener()
-		this.initRemoveMenuListener()
+		this.initChangeNameListener();
+		this.initDragAndDrop();
+		this.initDropdownMenuListener();
+		this.initRemoveMenuListener();
+		this.initAddNewItemToCardListener();
 
 	}
 
@@ -22,14 +24,21 @@ class Cards {
 		this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu))
 	}
 
+	initRemoveMenuListener() {
+		this.editFields.forEach(field => field.addEventListener('mouseleave', this.removeMenu))
+	}
+
+	initAddNewItemToCardListener() {
+		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard))
+
+	}
+
+
 	createDropdownMenu(event) {
 		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
 	}
 
 
-	initRemoveMenuListener() {
-		this.editFields.forEach(field => field.addEventListener('mouseleave', this.removeMenu))
-	}
 
 
 	removeMenu(event) {
@@ -73,6 +82,7 @@ class Cards {
 		})
 	}
 
+
 	initDragAndDrop() {
 		const cardsBody = document.querySelectorAll('.cardBody');
 		const allCards = document.querySelector('.allCards');
@@ -87,45 +97,20 @@ class Cards {
 			swapThreshold: 1, animation: 150, ghostClass: 'bg-warning'
 		});
 	}
+
+
+	addNewItemToCard(event) {
+
+		if (event.key === 'Enter') {
+			const cardBody = event.target.previousSibling.parentElement.previousSibling.previousSibling;
+			const newItem = `<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
+			cardBody.insertAdjacentHTML('beforeend', newItem);
+			event.target.value = '';
+		}
+	}
 }
+
 
 const cards = new Cards();
 cards.init()
 
-
-const new_item = document.getElementById('new-item')
-
-document.addEventListener('keydown', (event) => {
-	const target = event.target;
-	console.log(target)
-	if (event.key === 'Enter'){
-
-		let addCard = document.createElement('div')
-		addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
-		addCard.setAttribute('edit', 'true')
-		addCard.innerText = target.value
-
-		let event_id = event.target
-		console.log(event_id.id)
-		let sp2 = document.getElementById(event_id.id).parentElement
-		// let sp2 = document.getElementById(sp1).parentElement
-		console.log('halooo')
-		let parentDiv = sp2.parentNode
-		console.log(sp2)
-		console.log(parentDiv)
-		parentDiv.insertBefore(addCard, sp2)
-		target.value = ''
-
-		// let addCard = document.createElement('div')
-		// addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
-		// addCard.setAttribute('edit', 'true')
-		// addCard.innerText = new_item.value
-		// // document.getElementById('column').appendChild(addCard)
-		//
-		// let sp2 = document.getElementById('new-item-div')
-		// let parentDiv = sp2.parentNode
-		// parentDiv.insertBefore(addCard, sp2)
-		// new_item.value = ''
-
-	}
-})
