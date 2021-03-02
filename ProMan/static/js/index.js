@@ -1,7 +1,7 @@
 import {easyHandler} from "./data_handler.js";
 
 const name = document.getElementById('name');
-const note = document.getElementById('note');
+const note = document.getElementById('textAreaExample');
 const addNewBoardBtn = document.getElementById('add_board');
 const deleteBoardButton = document.getElementById('deleteBoard')
 
@@ -22,26 +22,25 @@ const testUser = 1
 class Boards {
 
 
-	constructor() {
-		this.user = currentUser
+    constructor() {
+        this.user = currentUser
 
-	}
+    }
 
-	init() {
-		const path = window.location.pathname;
-		// if (path === '/') {
-		this.loadBoards()
-		this.addBoard();
-		// }
-	}
+    init() {
+        const path = window.location.pathname;
+        // if (path === '/') {
+        this.loadBoards()
+        this.addBoard();
+        // }
+    }
 
-	loadBoards() {
-		easyHandler._getData(`/api/get-boards/${testUser}`, (boards) => this.showBoards(boards))
-	}
+    loadBoards() {
+        easyHandler._getData(`/api/get-boards/${testUser}`, (boards) => this.showBoards(boards))
+    }
 
-  showBoards(boards) {
+    showBoards(boards) {
         console.log(this.user)
-        console.log(boards)
         for (let i = 0; i < boards.length; i++) {
             let outerHtml =
                 `
@@ -70,39 +69,43 @@ class Boards {
         }
     }
 
-	addBoard() {
-		addNewBoardBtn.addEventListener('click', (event) => {
-			// event.preventDefault();
-			// event.stopPropagation();
-			easyHandler.postJson('PUT', '/api/add_board', {
-				'name': name.value, 'owner_id': 1, 'note': note.value
-			}, (response) => {
-				console.log(response)
-				if (response === true) {
-					alert('Board Added')
-				} else {
-					alert('Failed')
-				}
+    addBoard() {
+        addNewBoardBtn.addEventListener('click', (event) => {
+            let text = name.value
+            if (text == '') {
+                console.log('name = null')
+            } else {
+                event.preventDefault();
+                easyHandler.postJson('PUT', '/api/add_board', {
+                    'name': name.value, 'owner_id': 1, 'note': note.value
+                }, (response) => {
+                    if(response == true){
+                        document.location.href = "/";
+                    } else{
+                        document.location.href = "/";
+                        alert('Failed')
+                    }
 
-			})
 
-		})
-	}
+                })
+            }
 
-	deleteBoard() {
-		deleteBoardButton.addEventListener('click', (event) => {
-			event.preventDefault();
-			easyHandler.postJson('DELETE', '/api/delete_board', {
-				'board_id': 1
-			}, (response) => console.log(response))
-			if (response === true) {
-				alert('Board deleted')
-			} else {
-				alert('Failed')
-			}
-		})
-	}
+        })
+    }
 
+    deleteBoard() {
+        deleteBoardButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            easyHandler.postJson('DELETE', '/api/delete_board', {
+                'board_id': 1
+            }, (response) => console.log(response))
+            if (response === true) {
+                alert('Board deleted')
+            } else {
+                alert('Failed')
+            }
+        })
+    }
 
 
 }
