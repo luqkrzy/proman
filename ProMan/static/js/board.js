@@ -15,7 +15,7 @@ class Cards {
 			</div>`
 
 	init() {
-    this.displayItems()
+    	this.displayItems()
 		this.initChangeNameListener();
 		this.initDragAndDrop();
 		this.initDropdownMenuListener();
@@ -112,7 +112,8 @@ class Cards {
 				event.target.value = '';
 			}
 		}
-    
+	}
+
     displayItems() {
         const path = window.location.pathname;
         let board_id = path.split('/')[2];
@@ -121,7 +122,7 @@ class Cards {
         // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
         // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
     }
-	}
+
 
 }
 
@@ -190,5 +191,5 @@ document.addEventListener('keydown', (event) => {
         // new_item.value = ''
 
     }
-})
+})}
 

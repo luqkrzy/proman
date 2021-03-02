@@ -36,7 +36,7 @@ class Boards {
 	}
 
 	loadBoards() {
-		easyHandler._getData('/api/get-boards', (boards) => this.showBoards(boards))
+		easyHandler._getData(`/api/get-boards/${testUser}`, (boards) => this.showBoards(boards))
 	}
 
   showBoards(boards) {

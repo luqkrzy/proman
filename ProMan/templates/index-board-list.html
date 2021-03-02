@@ -20,19 +20,19 @@
 				</div>
 				<div class="modal-body">
 					<form>
-						<!-- Name input -->
-						<div class="form-outline mb-4">
-							<input type="text" id="name" class="form-control"/>
-							<label class="form-label" for="name">Name</label>
-						</div>
-						<!-- Email input -->
-						<div class="form-outline mb-4">
-							<input type="note" id="note" class="form-control"/>
-							<label class="form-label" for="note">Note</label>
-						</div>
-						<!-- Submit button -->
-						<button type="submit" class="btn btn-primary btn-block mb-4" id="add_board">Save board</button>
-					</form>
+                        <!-- Name input -->
+                        <div class="form-outline mb-4">
+                            <input type="text" id="name" class="form-control" pattern="[A-Za-z]{2,99}" required/>
+                            <label class="form-label" for="name">Name</label>
+                        </div>
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <textarea class="form-control" id="textAreaExample" rows="4" name="note"></textarea>
+                            <label class="form-label" for="textAreaExample" name="note">Note</label>
+                        </div>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary btn-block mb-4" id="add_board">Save board</button>
+                    </form>
 				</div>
 			</div>
 		</div>
