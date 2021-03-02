@@ -23,7 +23,6 @@ class Cards {
 		this.getAllEditFields().forEach(field => field.addEventListener('mouseleave', this.removeMenu))
 	}
 
-
 	initAddNewItemToCardListener() {
 		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard.bind(this)))
 
@@ -37,7 +36,6 @@ class Cards {
 		return document.querySelectorAll('div[edit="true"]');
 	}
 
-
 	removeMenu(event) {
 		const itemText = event.target.innerText;
 
@@ -47,7 +45,6 @@ class Cards {
 			event.target.innerHTML = itemText;
 		}
 	}
-
 
 	initChangeNameListener() {
 		document.addEventListener('dblclick', (event) => {
@@ -79,7 +76,6 @@ class Cards {
 		})
 	}
 
-
 	initDragAndDrop() {
 		const cardsBody = document.querySelectorAll('.cardBody');
 		const allCards = document.querySelector('.allCards');
@@ -100,18 +96,18 @@ class Cards {
 			const value = event.target.value
 			const cardBody = event.path[1].previousElementSibling;
 			const newItem = document.createElement('div');
-			newItem.className = "edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1"
-			newItem.innerText = `${event.target.value}`
-			newItem.setAttribute('edit', 'true')
+			newItem.className = "rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1";
+			newItem.innerText = `${event.target.value}`;
+			newItem.setAttribute('edit', 'true');
+			newItem.addEventListener('mouseenter', this.createDropdownMenu);
+			newItem.addEventListener('mouseleave', this.removeMenu);
 
 			if (value !== '') {
-				cardBody.appendChild(newItem)
-
+				cardBody.appendChild(newItem);
 				event.target.value = '';
 			}
 		}
 	}
-
 }
 
 const cards = new Cards();
