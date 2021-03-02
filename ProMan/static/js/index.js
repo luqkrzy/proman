@@ -21,25 +21,25 @@ const testUser = 1
 
 class Boards {
 
-    constructor() {
-        this.user = currentUser
 
-    }
+	constructor() {
+		this.user = currentUser
 
-    init() {
-        const path = window.location.pathname;
-        if (path === '/') {
-            this.loadBoards()
-            this.addBoard();
+	}
 
-        }
-    }
+	init() {
+		const path = window.location.pathname;
+		// if (path === '/') {
+		this.loadBoards()
+		this.addBoard();
+		// }
+	}
 
-    loadBoards() {
-        easyHandler._getData(`/api/get-boards/${testUser}`, (boards) => this.showBoards(boards))
-    }
+	loadBoards() {
+		easyHandler._getData('/api/get-boards', (boards) => this.showBoards(boards))
+	}
 
-    showBoards(boards) {
+  showBoards(boards) {
         console.log(this.user)
         console.log(boards)
         for (let i = 0; i < boards.length; i++) {
@@ -68,40 +68,41 @@ class Boards {
             let parent = document.getElementById("board_section")
             parent.insertAdjacentHTML("beforeend", outerHtml);
         }
-        // boardDetails()
     }
 
-    addBoard() {
-        addNewBoardBtn.addEventListener('click', (event) => {
-            // event.preventDefault();
-            // event.stopPropagation();
-            easyHandler.postJson('PUT', '/api/add_board', {
-                    'name': name.value, 'owner_id': 1, 'note': note.value
-                }, (response) => {
-                    console.log(response);
-                    if (response === true) {
-                        document.location.href = "/";
-                    } else {
-                        alert('false')
-                    }
-                }
-            )
-        })
-    }
+	addBoard() {
+		addNewBoardBtn.addEventListener('click', (event) => {
+			// event.preventDefault();
+			// event.stopPropagation();
+			easyHandler.postJson('PUT', '/api/add_board', {
+				'name': name.value, 'owner_id': 1, 'note': note.value
+			}, (response) => {
+				console.log(response)
+				if (response === true) {
+					alert('Board Added')
+				} else {
+					alert('Failed')
+				}
 
-    deleteBoard() {
-        deleteBoardButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            easyHandler.postJson('DELETE', '/api/delete_board', {
-                'board_id': 1
-            }, (response) => console.log(response))
-            if (response === true) {
-                alert('Board deleted')
-            } else {
-                alert('Failed')
-            }
-        })
-    }
+			})
+
+		})
+	}
+
+	deleteBoard() {
+		deleteBoardButton.addEventListener('click', (event) => {
+			event.preventDefault();
+			easyHandler.postJson('DELETE', '/api/delete_board', {
+				'board_id': 1
+			}, (response) => console.log(response))
+			if (response === true) {
+				alert('Board deleted')
+			} else {
+				alert('Failed')
+			}
+		})
+	}
+
 
 
 }
@@ -154,51 +155,3 @@ Array
             ;
         })
 ;
-
-
-// class Cards {
-//     init() {
-//         const path_board = window.location.pathname;
-//         if (path_board === '/board/') {
-//             this.showColumns()
-//
-//         }
-//     }
-//
-//     showColumns() {
-//         console.log('k')
-//     }
-//
-//
-//     boardDetails() {
-//         let boardContainer = document.getElementsByName("board_col")
-//         for (let i = 0; i < boardContainer.length; i++) {
-//             // boardContainer[i].addEventListener("mouseover", (event) => {
-//             //     let selectedBoard = boardContainer[i].childNodes
-//             //     console.log(selectedBoard)
-//             // })
-//             boardContainer[i].addEventListener("click", (event) => {
-//                 console.log(boardContainer[i].id)
-//                 event.preventDefault();
-//                 document.location.href = `/board_details/${boardContainer[i].id}`
-//                 // easyHandler._getData(`/board_details/${boardContainer[i].id}`, (response) => {
-//                 //     console.log(boardContainer[i].id)
-//                 //     if(response) {
-//                 //         document.location.href = `/board_details/${boardContainer[i].id}`;
-//                 //     }
-//                 //     })
-//
-//
-//                 // easyHandler._getData(`/api/get-cards/${boardContainer[i].id}`, (cards) => {
-//                 //     console.log(boardContainer[i].id),
-//                 //     document.location.href = '/board';})
-//             })
-//         }
-//     }
-// };
-//
-// const
-//     cards = new Cards()
-//
-// cards
-//     .init()

@@ -1,8 +1,10 @@
 import {easyHandler} from "./data_handler.js";
 
 class Cards {
-    constructor() {
-        this.editFields = document.querySelectorAll('div[edit="true"]')
+
+	constructor() {
+		this.newItemField = document.querySelectorAll('.new-item');
+
 
     }
 
@@ -12,85 +14,105 @@ class Cards {
 				<span class="dropdown-item">Delete</span>
 			</div>`
 
-    init() {
-        this.displayItems()
-        this.initChangeNameListener()
-        this.initDragAndDrop()
-        this.initDropdownMenuListener()
-        this.initRemoveMenuListener()
+	init() {
+    this.displayItems()
+		this.initChangeNameListener();
+		this.initDragAndDrop();
+		this.initDropdownMenuListener();
+		this.initAddNewItemToCardListener();
 
-    }
+	}
 
-    initDropdownMenuListener() {
-        this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu))
-    }
+	initDropdownMenuListener() {
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseleave', this.removeMenu))
+	}
 
-    createDropdownMenu(event) {
-        event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
-    }
+	initAddNewItemToCardListener() {
+		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard.bind(this)))
 
+	}
 
-    initRemoveMenuListener() {
-        this.editFields.forEach(field => field.addEventListener('mouseleave', this.removeMenu))
-    }
+	createDropdownMenu(event) {
+		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
+	}
 
+	getAllEditFields() {
+		return document.querySelectorAll('div[edit="true"]');
+	}
 
-    removeMenu(event) {
-        const itemText = event.target.innerText;
+	removeMenu(event) {
+		const itemText = event.target.innerText;
 
-        if (itemText.includes('Edit\nDelete')) {
-            event.target.innerHTML = itemText.replace('Edit\nDelete', '');
-        } else {
-            event.target.innerHTML = itemText;
-        }
-    }
+		if (itemText.includes('Edit\nDelete')) {
+			event.target.innerHTML = itemText.replace('Edit\nDelete', '');
+		} else {
+			event.target.innerHTML = itemText;
+		}
+	}
 
+	initChangeNameListener() {
+		document.addEventListener('dblclick', (event) => {
+			const target = event.target;
+			if (target.getAttribute('edit') === "true") {
+				const oldValue = target.innerText;
+				target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
+				target.childNodes[0].focus();
+				target.removeEventListener('mouseleave', this.removeMenu);
+				target.removeEventListener('mouseenter', this.createDropdownMenu);
 
-    initChangeNameListener() {
-        document.addEventListener('dblclick', (event) => {
-            const target = event.target;
-            if (target.getAttribute('edit') === "true") {
-                const oldValue = target.innerText;
-                target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
-                target.childNodes[0].focus();
-                target.removeEventListener('mouseleave', this.removeMenu);
-                target.removeEventListener('mouseenter', this.createDropdownMenu);
+				document.addEventListener('click', (secondEvent) => {
+					target.addEventListener('mouseenter', this.createDropdownMenu)
+					target.addEventListener('mouseleave', this.removeMenu)
 
-                document.addEventListener('click', (secondEvent) => {
-                    target.addEventListener('mouseenter', this.createDropdownMenu)
-                    target.addEventListener('mouseleave', this.removeMenu)
+					if (secondEvent.target === target) {
+						//pass
+					} else {
+						const newValue = target.childNodes[0].value;
 
-                    if (secondEvent.target === target) {
-                        //pass
-                    } else {
-                        const newValue = target.childNodes[0].value;
+						if (newValue === '') {
+							target.innerText = oldValue;
+						} else {
+							target.innerHTML = `${newValue}`;
+						}
+					}
+				}, {once: true});
+			}
+		})
+	}
 
-                        if (newValue === '') {
-                            target.innerText = oldValue;
-                        } else {
-                            target.innerHTML = `${newValue}`;
-                        }
-                    }
-                }, {once: true});
-            }
-        })
-    }
+	initDragAndDrop() {
+		const cardsBody = document.querySelectorAll('.cardBody');
+		const allCards = document.querySelector('.allCards');
 
-    initDragAndDrop() {
-        const cardsBody = document.querySelectorAll('.cardBody');
-        const allCards = document.querySelector('.allCards');
+		cardsBody.forEach(card => {
+			new Sortable(card, {
+				group: 'shared', animation: 150, ghostClass: 'bg-warning'
+			});
+		})
 
-        cardsBody.forEach(card => {
-            new Sortable(card, {
-                group: 'shared', animation: 150, ghostClass: 'bg-warning'
-            });
-        })
+		new Sortable(allCards, {
+			swapThreshold: 1, animation: 150, ghostClass: 'bg-warning'
+		});
+	}
 
-        new Sortable(allCards, {
-            swapThreshold: 1, animation: 150, ghostClass: 'bg-warning'
-        });
-    }
+	addNewItemToCard(event) {
+		if (event.key === 'Enter') {
+			const value = event.target.value
+			const cardBody = event.path[1].previousElementSibling;
+			const newItem = document.createElement('div');
+			newItem.className = "rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1";
+			newItem.innerText = `${event.target.value}`;
+			newItem.setAttribute('edit', 'true');
+			newItem.addEventListener('mouseenter', this.createDropdownMenu);
+			newItem.addEventListener('mouseleave', this.removeMenu);
 
+			if (value !== '') {
+				cardBody.appendChild(newItem);
+				event.target.value = '';
+			}
+		}
+    
     displayItems() {
         const path = window.location.pathname;
         let board_id = path.split('/')[2];
@@ -99,9 +121,10 @@ class Cards {
         // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
         // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
     }
-
+	}
 
 }
+
 
 function showColumns(columns) {
     for (let i = 0; i < columns.length; i++) {
@@ -126,12 +149,10 @@ function showColumns(columns) {
         let parent = document.getElementById("columns_section")
         parent.insertAdjacentHTML("beforeend", outerHtml);
     }
-
-
-}
-
+  
 const cards = new Cards();
 cards.init()
+
 
 
 const new_item = document.getElementById('new-item')
