@@ -106,6 +106,7 @@ class Cards {
 			}
 		}
 	}
+
 }
 
 const cards = new Cards();
