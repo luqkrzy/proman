@@ -1,11 +1,12 @@
 from flask import jsonify
 from ProMan import db
-from ProMan.models import UsersSchema, BoardsSchema
-from ProMan.models import Users, Boards
+from ProMan.models import UsersSchema, BoardsSchema, CardsSchema
+from ProMan.models import Users, Boards, Cards
 from ProMan import bcrypt
 
 user_schema = UsersSchema()
 board_schema = BoardsSchema()
+card_schema = CardsSchema()
 
 
 def commit_to_database(data):
@@ -42,9 +43,9 @@ def find_user_by_email(email):
     return user
 
 
-def get_boards():
+def get_boards(user_id):
     try:
-        boards = Boards.query.all()
+        boards = Boards.query.filter_by(owner_id=user_id).all()
         dump_boards = [board_schema.dump(board) for board in boards]
         return jsonify(dump_boards)
     except Exception as e:
@@ -63,3 +64,18 @@ def delete_board(data):
     board_id = data.get('board_id')
     Boards.query.filter_by(id=id).delete()
     update_to_database()
+
+
+def get_cards(board_id):
+    try:
+        cards = Cards.query.filter_by(board_id=board_id).all()
+        dump_cards = [card_schema.dump(card) for card in cards]
+        return jsonify(dump_cards)
+    except Exception as e:
+        return jsonify(e)
+
+
+def get_columns(board_id):
+    board = Boards.query.filter_by(id=board_id).first()
+    columns = board['columns']
+    return columns
