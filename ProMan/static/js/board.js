@@ -98,7 +98,7 @@ class Cards {
 	addNewItemToCard(event) {
 		if (event.key === 'Enter') {
 			const value = event.target.value
-			const cardBody = event.target.previousSibling.parentElement.previousSibling.previousSibling;
+			const cardBody = event.path[1].previousElementSibling;
 			const newItem = `<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
 			if (value !== '') {
 				cardBody.insertAdjacentHTML('beforeend', newItem);
