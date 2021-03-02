@@ -1,40 +1,40 @@
 class Cards {
 	constructor() {
-		this.editFields = document.querySelectorAll('div[edit="true"]');
 		this.newItemField = document.querySelectorAll('.new-item');
-
-	}
-
-	static cardItemMenu = `<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
+		this.cardItemMenu = `<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
 			<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
 				<span class="dropdown-item">Edit</span>
 				<span class="dropdown-item">Delete</span>
 			</div>`
 
+	}
+
+
 	init() {
 		this.initChangeNameListener();
 		this.initDragAndDrop();
 		this.initDropdownMenuListener();
-		this.initRemoveMenuListener();
 		this.initAddNewItemToCardListener();
 
 	}
 
 	initDropdownMenuListener() {
-		this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu))
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu.bind(this)));
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseleave', this.removeMenu))
 	}
 
-	initRemoveMenuListener() {
-		this.editFields.forEach(field => field.addEventListener('mouseleave', this.removeMenu))
-	}
 
 	initAddNewItemToCardListener() {
-		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard))
+		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard.bind(this)))
 
 	}
 
 	createDropdownMenu(event) {
-		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
+		event.target.insertAdjacentHTML('beforeend', this.cardItemMenu)
+	}
+
+	getAllEditFields() {
+		return document.querySelectorAll('div[edit="true"]');
 	}
 
 
@@ -99,9 +99,16 @@ class Cards {
 		if (event.key === 'Enter') {
 			const value = event.target.value
 			const cardBody = event.path[1].previousElementSibling;
-			const newItem = `<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
+			const newItem = document.createElement('div');
+			newItem.className = "edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1"
+			newItem.innerText = `${event.target.value}`
+			newItem.setAttribute('edit', 'true')
+			newItem.addEventListener('mouseenter', this.createDropdownMenu.bind(this))
+			newItem.addEventListener('mouseleave', this.removeMenu.bind(this))
+
 			if (value !== '') {
-				cardBody.insertAdjacentHTML('beforeend', newItem);
+				cardBody.appendChild(newItem)
+
 				event.target.value = '';
 			}
 		}
