@@ -1,18 +1,19 @@
-import {Dom} from "./new-dom.js";
+// import {Dom} from "./new-dom.js";
 
 
 class Cards {
 	constructor() {
 		this.newItemField = document.querySelectorAll('.new-item');
 		this.allCardsContainer = document.querySelector('.allCards');
-		this.confirmDeleteBtn = document.getElementById('confirmDelete');
 
 	}
+
+	static confirmDeleteBtn = document.getElementById('confirmDelete');
 
 	static cardItemMenu = `<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
 			<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
 				<span class="dropdown-item">Edit</span>
-				<span class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
+				<span class="deleteCardItem dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 			</div>`
 
 	init() {
@@ -21,12 +22,12 @@ class Cards {
 		this.initDropdownMenuListener();
 		this.initAddNewItemToCardListener();
 		this.initDeleteCardBtnListener();
-		this.initDeleteCardItemBtnListener();
+		// this.initDeleteCardItemBtnListener();
 
 	}
 
 	initDropdownMenuListener() {
-		this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu.bind(this)));
 		this.getAllEditFields().forEach(field => field.addEventListener('mouseleave', this.removeMenu))
 	}
 
@@ -40,18 +41,9 @@ class Cards {
 
 	}
 
-	initDeleteCardItemBtnListener() {
-		this.getDeleteCardItemBtns().forEach(card => card.addEventListener('click', this.deleteCardItem));
-
-	}
 
 	getDeleteCardBtns() {
 		return document.querySelectorAll('.delete-card')
-
-	}
-
-	getDeleteCardItemBtns() {
-		return document.querySelectorAll('div[delete="true"]')
 
 	}
 
@@ -60,7 +52,9 @@ class Cards {
 	}
 
 	createDropdownMenu(event) {
-		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
+		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu);
+		const deleteCardBtn = document.querySelector('.deleteCardItem');
+		deleteCardBtn.addEventListener('click', this.deleteCardItem)
 	}
 
 	removeMenu(event) {
@@ -138,24 +132,20 @@ class Cards {
 	}
 
 	deleteCard(event) {
-		const confirmDeleteBtn = document.getElementById('confirmDelete');
 		const target = event.path[3];
-		confirmDeleteBtn.addEventListener('click', () => {
+		Cards.confirmDeleteBtn.addEventListener('click', () => {
 			target.remove()
-		})
+		}, {once: true})
 	}
 
 	deleteCardItem(event) {
-		const confirmDeleteBtn = document.getElementById('confirmDelete');
 		const target = event.path[2];
-		confirmDeleteBtn.addEventListener('click', () => {
-			console.log(target)
-			target.remove()
-		}, {once : true})
+		Cards.confirmDeleteBtn.addEventListener('click', () => {
+			target.remove();
+		}, {once: true})
 	}
 }
 
-const dom = new Dom();
 const cards = new Cards();
 cards.init()
 
