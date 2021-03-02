@@ -40,3 +40,24 @@ class Boards(db.Model):
 class BoardsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Boards
+
+
+def load_cards():
+    return Cards.query.get()
+
+
+class Cards(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    name = db.Column(db.String())
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
+    state = db.Column(db.String())
+    note = db.Column(db.String())
+
+    def __repr__(self):
+        return f'{self.id}, {self.name}, {self.owner_id}, {self.board_id}, {self.state}, {self.note}'
+
+
+class CardsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Cards
