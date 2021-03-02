@@ -1,5 +1,6 @@
 import {easyHandler} from "./data_handler.js";
 
+
 class Cards {
 
 	constructor() {
@@ -15,6 +16,7 @@ class Cards {
 			</div>`
 
 	init() {
+
     	this.displayItems()
 		this.initChangeNameListener();
 		this.initDragAndDrop();
@@ -120,38 +122,17 @@ class Cards {
         let columns = ['To do', 'In progress', 'Done', 'Testing'];
         showColumns(columns)
         // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
-        // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
+        easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
     }
 
 
 }
 
 
-function showColumns(columns) {
-    for (let i = 0; i < columns.length; i++) {
-        let name = columns[i]
-        let outerHtml =
-		`
-		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${name}"><!-- start card  -->
-			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
-				${name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-				<div class="dropdown-menu">
-					<span class="dropdown-item">Edit</span>
-					<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
-				</div>
-			</div>
-			<div class="cardBody" id="1">
-				
-			</div>
-			<div class="new-item list-group-item list-group-item-action">
-				<input type="text" class='w-100' placeholder=" + new item"></div>
-		</div><!-- end of card  -->`
 
-        let parent = document.getElementById("columns_section")
-        parent.insertAdjacentHTML("beforeend", outerHtml);
-    }
   
 const cards = new Cards();
+
 cards.init()
 
 
@@ -191,5 +172,30 @@ document.addEventListener('keydown', (event) => {
         // new_item.value = ''
 
     }
-})}
+})
+
+function showColumns(columns) {
+	for (let i = 0; i < columns.length; i++) {
+		let name = columns[i]
+		let outerHtml =
+			`
+		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${name}"><!-- start card  -->
+			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
+				${name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+				<div class="dropdown-menu">
+					<span class="dropdown-item">Edit</span>
+					<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
+				</div>
+			</div>
+			<div class="cardBody" id="1">
+				
+			</div>
+			<div class="new-item list-group-item list-group-item-action">
+				<input type="text" class='w-100' placeholder=" + new item"></div>
+		</div><!-- end of card  -->`
+
+		let parent = document.getElementById("columns_section")
+		parent.insertAdjacentHTML("beforeend", outerHtml);
+	}
+}
 
