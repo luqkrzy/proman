@@ -23,15 +23,12 @@ class UsersSchema(ma.SQLAlchemyAutoSchema):
         model = Users
 
 
-def load_boards():
-    return Boards.query.get()
-
-
 class Boards(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     name = db.Column(db.String())
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     note = db.Column(db.String())
+
 
     def __repr__(self):
         return f'{self.id}, {self.name}, {self.owner_id}, {self.note}'
@@ -42,22 +39,35 @@ class BoardsSchema(ma.SQLAlchemyAutoSchema):
         model = Boards
 
 
-def load_cards():
-    return Cards.query.get()
-
-
 class Cards(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     name = db.Column(db.String())
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
-    state = db.Column(db.String())
-    note = db.Column(db.String())
+    column_id = db.Column(db.Integer, db.ForeignKey('columns.id'))
+
+
 
     def __repr__(self):
-        return f'{self.id}, {self.name}, {self.owner_id}, {self.board_id}, {self.state}, {self.note}'
+        return f'{self.id}, {self.name}, {self.owner_id}, {self.board_id}, {self.column_id}'
 
 
 class CardsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Cards
+
+
+class Columns(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    name = db.Column(db.String())
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
+
+
+    def __repr__(self):
+        return f'{self.id}, {self.name}, {self.owner_id}, {self.board_id}'
+
+
+class ColumnsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Columns

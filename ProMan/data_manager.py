@@ -66,16 +66,16 @@ def delete_board(data):
     update_to_database()
 
 
-def get_cards(board_id):
-    try:
-        cards = Cards.query.filter_by(board_id=board_id).all()
-        dump_cards = [card_schema.dump(card) for card in cards]
-        return jsonify(dump_cards)
-    except Exception as e:
-        return jsonify(e)
-
-
-def get_columns(board_id):
-    board = Boards.query.filter_by(id=board_id).first()
-    columns = board['columns']
-    return columns
+# def get_cards(board_id):
+#     try:
+#         cards = Cards.query.filter_by(board_id=board_id).all()
+#         dump_cards = [card_schema.dump(card) for card in cards]
+#         return jsonify(dump_cards)
+#     except Exception as e:
+#         return jsonify(e)
+#
+#
+# def get_columns(board_id):
+#     board = Boards.query.filter_by(id=board_id).first()
+#     columns = board['columns']
+#     return columns

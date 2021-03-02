@@ -3,7 +3,8 @@ import {easyHandler} from "./data_handler.js";
 const name = document.getElementById('name');
 const note = document.getElementById('textAreaExample');
 const addNewBoardBtn = document.getElementById('add_board');
-const deleteBoardButton = document.getElementById('deleteBoard')
+
+
 
 function getCurrentUser() {
     let current = ''
@@ -32,6 +33,7 @@ class Boards {
         // if (path === '/') {
         this.loadBoards()
         this.addBoard();
+        this.deleteBoard()
         // }
     }
 
@@ -58,7 +60,7 @@ class Boards {
 						<div class="dropdown-menu">
 							<span class="dropdown-item">Edit name</span>
 							<span class="dropdown-item">Edit note</span>
-							<span class="dropdown-item">Delete</span>
+							<span class="dropdown-item" id="deleteBoard">Delete</span>
 						</div>
 					</div>
 				</div>
@@ -94,16 +96,20 @@ class Boards {
     }
 
     deleteBoard() {
+    	let deleteBoardButton = document.getElementById('deleteBoard')
         deleteBoardButton.addEventListener('click', (event) => {
+        	console.log(deleteBoardButton)
             event.preventDefault();
-            easyHandler.postJson('DELETE', '/api/delete_board', {
-                'board_id': 1
-            }, (response) => console.log(response))
-            if (response === true) {
-                alert('Board deleted')
-            } else {
-                alert('Failed')
-            }
+            console.log(deleteBoardButton.parentNode)
+			console.log(deleteBoardButton.parentNode)
+            // easyHandler.postJson('DELETE', '/api/delete_board', {
+            //     'board_id': 1
+            // }, (response) => console.log(response))
+            // if (response === true) {
+            //     alert('Board deleted')
+            // } else {
+            //     alert('Failed')
+            // }
         })
     }
 
