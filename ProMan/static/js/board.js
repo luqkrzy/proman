@@ -17,7 +17,6 @@ class Cards {
 		this.initChangeNameListener();
 		this.initDragAndDrop();
 		this.initDropdownMenuListener();
-		this.initRemoveMenuListener();
 		this.initAddNewItemToCardListener();
 		this.initDeleteCardBtnListener();
 		this.initDeleteCardItemBtnListener();
@@ -25,15 +24,12 @@ class Cards {
 	}
 
 	initDropdownMenuListener() {
-		this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu))
-	}
-
-	initRemoveMenuListener() {
-		this.editFields.forEach(field => field.addEventListener('mouseleave', this.removeMenu))
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
+		this.getAllEditFields().forEach(field => field.addEventListener('mouseleave', this.removeMenu))
 	}
 
 	initAddNewItemToCardListener() {
-		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard))
+		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard.bind(this)))
 
 	}
 
@@ -63,6 +59,9 @@ class Cards {
 		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
 	}
 
+	getAllEditFields() {
+		return document.querySelectorAll('div[edit="true"]');
+	}
 
 	removeMenu(event) {
 		const itemText = event.target.innerText;
@@ -123,9 +122,15 @@ class Cards {
 		if (event.key === 'Enter') {
 			const value = event.target.value
 			const cardBody = event.path[1].previousElementSibling;
-			const newItem = `<div edit="true" class="delete-card-item rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
+			const newItem = document.createElement('div');
+			newItem.className = "rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1";
+			newItem.innerText = `${event.target.value}`;
+			newItem.setAttribute('edit', 'true');
+			newItem.addEventListener('mouseenter', this.createDropdownMenu);
+			newItem.addEventListener('mouseleave', this.removeMenu);
+
 			if (value !== '') {
-				cardBody.insertAdjacentHTML('beforeend', newItem);
+				cardBody.appendChild(newItem);
 				event.target.value = '';
 			}
 		}
