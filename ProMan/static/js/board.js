@@ -2,13 +2,15 @@ class Cards {
 	constructor() {
 		this.editFields = document.querySelectorAll('div[edit="true"]');
 		this.newItemField = document.querySelectorAll('.new-item');
+		this.allCardsContainer = document.querySelector('.allCards');
+		this.confirmDeleteBtn = document.getElementById('confirmDelete');
 
 	}
 
 	static cardItemMenu = `<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
 			<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
 				<span class="dropdown-item">Edit</span>
-				<span class="dropdown-item">Delete</span>
+				<span class="dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 			</div>`
 
 	init() {
@@ -17,6 +19,8 @@ class Cards {
 		this.initDropdownMenuListener();
 		this.initRemoveMenuListener();
 		this.initAddNewItemToCardListener();
+		this.initDeleteCardBtnListener();
+		this.initDeleteCardItemBtnListener();
 
 	}
 
@@ -30,6 +34,28 @@ class Cards {
 
 	initAddNewItemToCardListener() {
 		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewItemToCard))
+
+	}
+
+	initDeleteCardBtnListener() {
+		const deleteCardBtns = this.getDeleteCardBtns();
+		deleteCardBtns.forEach(card => card.addEventListener('click', this.deleteCard));
+
+	}
+
+	initDeleteCardItemBtnListener() {
+		const deleteCardItemBtns = this.getDeleteCardItemBtns();
+		deleteCardItemBtns.forEach(card => card.addEventListener('click', this.deleteCardItem));
+
+	}
+
+	getDeleteCardBtns() {
+		return document.querySelectorAll('.delete-card')
+
+	}
+
+	getDeleteCardItemBtns() {
+		return document.querySelectorAll('.delete-card-item')
 
 	}
 
@@ -47,7 +73,6 @@ class Cards {
 			event.target.innerHTML = itemText;
 		}
 	}
-
 
 	initChangeNameListener() {
 		document.addEventListener('dblclick', (event) => {
@@ -79,10 +104,9 @@ class Cards {
 		})
 	}
 
-
 	initDragAndDrop() {
 		const cardsBody = document.querySelectorAll('.cardBody');
-		const allCards = document.querySelector('.allCards');
+		// const allCards = document.querySelector('.allCards');
 
 		cardsBody.forEach(card => {
 			new Sortable(card, {
@@ -90,7 +114,7 @@ class Cards {
 			});
 		})
 
-		new Sortable(allCards, {
+		new Sortable(this.allCardsContainer, {
 			swapThreshold: 1, animation: 150, ghostClass: 'bg-warning'
 		});
 	}
@@ -98,8 +122,8 @@ class Cards {
 	addNewItemToCard(event) {
 		if (event.key === 'Enter') {
 			const value = event.target.value
-			const cardBody = event.target.previousSibling.parentElement.previousSibling.previousSibling;
-			const newItem = `<div edit="true" class="edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
+			const cardBody = event.path[1].previousElementSibling;
+			const newItem = `<div edit="true" class="delete-card-item rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${event.target.value}</div>`;
 			if (value !== '') {
 				cardBody.insertAdjacentHTML('beforeend', newItem);
 				event.target.value = '';
@@ -107,6 +131,21 @@ class Cards {
 		}
 	}
 
+	deleteCard(event) {
+		const confirmDeleteBtn = document.getElementById('confirmDelete');
+		const target = event.path[3];
+		confirmDeleteBtn.addEventListener('click', () => {
+			target.remove()
+		})
+	}
+
+	deleteCardItem(event) {
+		const confirmDeleteBtn = document.querySelector('#confirmDelete');
+		const target = event.path[2];
+		confirmDeleteBtn.addEventListener('click', () => {
+			target.remove()
+		})
+	}
 }
 
 const cards = new Cards();
