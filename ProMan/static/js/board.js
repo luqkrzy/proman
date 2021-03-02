@@ -1,6 +1,8 @@
+import {Dom} from "./new-dom.js";
+
+
 class Cards {
 	constructor() {
-		this.editFields = document.querySelectorAll('div[edit="true"]');
 		this.newItemField = document.querySelectorAll('.new-item');
 		this.allCardsContainer = document.querySelector('.allCards');
 		this.confirmDeleteBtn = document.getElementById('confirmDelete');
@@ -34,14 +36,12 @@ class Cards {
 	}
 
 	initDeleteCardBtnListener() {
-		const deleteCardBtns = this.getDeleteCardBtns();
-		deleteCardBtns.forEach(card => card.addEventListener('click', this.deleteCard));
+		this.getDeleteCardBtns().forEach(card => card.addEventListener('click', this.deleteCard));
 
 	}
 
 	initDeleteCardItemBtnListener() {
-		const deleteCardItemBtns = this.getDeleteCardItemBtns();
-		deleteCardItemBtns.forEach(card => card.addEventListener('click', this.deleteCardItem));
+		this.getDeleteCardItemBtns().forEach(card => card.addEventListener('click', this.deleteCardItem));
 
 	}
 
@@ -51,16 +51,16 @@ class Cards {
 	}
 
 	getDeleteCardItemBtns() {
-		return document.querySelectorAll('.delete-card-item')
+		return document.querySelectorAll('div[delete="true"]')
 
-	}
-
-	createDropdownMenu(event) {
-		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
 	}
 
 	getAllEditFields() {
 		return document.querySelectorAll('div[edit="true"]');
+	}
+
+	createDropdownMenu(event) {
+		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu)
 	}
 
 	removeMenu(event) {
@@ -105,7 +105,6 @@ class Cards {
 
 	initDragAndDrop() {
 		const cardsBody = document.querySelectorAll('.cardBody');
-		// const allCards = document.querySelector('.allCards');
 
 		cardsBody.forEach(card => {
 			new Sortable(card, {
@@ -126,8 +125,10 @@ class Cards {
 			newItem.className = "rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1";
 			newItem.innerText = `${event.target.value}`;
 			newItem.setAttribute('edit', 'true');
+			newItem.setAttribute('delete', 'true');
 			newItem.addEventListener('mouseenter', this.createDropdownMenu);
 			newItem.addEventListener('mouseleave', this.removeMenu);
+			newItem.addEventListener('click', this.deleteCardItem);
 
 			if (value !== '') {
 				cardBody.appendChild(newItem);
@@ -145,14 +146,16 @@ class Cards {
 	}
 
 	deleteCardItem(event) {
-		const confirmDeleteBtn = document.querySelector('#confirmDelete');
+		const confirmDeleteBtn = document.getElementById('confirmDelete');
 		const target = event.path[2];
 		confirmDeleteBtn.addEventListener('click', () => {
+			console.log(target)
 			target.remove()
-		})
+		}, {once : true})
 	}
 }
 
+const dom = new Dom();
 const cards = new Cards();
 cards.init()
 
