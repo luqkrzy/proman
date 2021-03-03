@@ -10,13 +10,13 @@
 			</div><!-- end of new card  -->
 		</div>
 	</div><!-- end row -->
-	<div class="allCards row align-items-start">
+	<div id="allColumnsContainer" class="row align-items-start">
 		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3"><!-- start card  -->
 			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
 				To do<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 				<div class="dropdown-menu">
 					<span class="dropdown-item">Edit</span>
-					<span class="delete-card dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
+					<span class="deleteColumn dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 				</div>
 			</div>
 			<div class="cardBody" id="1">
@@ -35,7 +35,7 @@
 				In progress<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 				<div class="dropdown-menu">
 					<span class="dropdown-item">Edit</span>
-					<span class="delete-card dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
+					<span class="deleteColumn dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 				</div>
 			</div>
 			<div class="cardBody" id="2">
@@ -54,7 +54,7 @@
 				Done<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 				<div class="dropdown-menu">
 					<span class="dropdown-item">Edit</span>
-					<span class="delete-card dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
+					<span class="deleteColumn dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 				</div>
 			</div>
 			<div class="cardBody" id="3"></div>
@@ -71,7 +71,7 @@
 					<div class="modal-body"><i class="fas fa-times fa-3x text-danger"></i></div>
 					<div class="modal-footer d-flex justify-content-center">
 						<button type="button" class="btn btn-danger ripple-surface" data-mdb-dismiss="modal">No</button>
-						<button type="button" class="btn btn-outline-danger ripple-surface" data-mdb-dismiss="modal" id="confirmDelete">Yes</button>
+						<button type="button" class="btn btn-outline-danger ripple-surface" data-mdb-dismiss="modal" id="modalConfirmDelete">Yes</button>
 					</div>
 				</div>
 			</div>
