@@ -189,8 +189,6 @@ class Cards {
 const cards = new Cards();
 cards.init()
 
-
-
 const new_item = document.getElementById('new-item')
 
 document.addEventListener('keydown', (event) => {

@@ -87,7 +87,7 @@ export const easyHandler = {
 		}
 	},
 
-	async postJson(type, url, data, callback) {
+	async _postJson(type, url, data, callback) {
 
 		const settings = {
 			'method': type, 'headers': {
@@ -106,7 +106,7 @@ export const easyHandler = {
 			}
 
 		} catch (err) {
-			console.log(err)
+			console.log('my new wrror')
 		}
 	}
 

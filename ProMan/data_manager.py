@@ -43,27 +43,37 @@ def find_user_by_email(email):
     return user
 
 
-def get_boards(user_id):
+
+def get_board_owner_id(board_id):
+    try:
+        owner_id = Boards.query.filter_by(id=board_id).with_entities(Boards.owner_id).first()
+        return owner_id[0]
+    except Exception as e:
+        print(e)
+
+
+def delete_board(board_id):
+    Boards.query.filter_by(id=board_id).delete()
+    return update_to_database()
+
+
+def get_boards(user_id: int):
     try:
         boards = Boards.query.filter_by(owner_id=user_id).all()
         dump_boards = [board_schema.dump(board) for board in boards]
-        return jsonify(dump_boards)
+        return dump_boards
     except Exception as e:
-        return jsonify(e)
+        return e
 
 
-def add_new_board(data):
+def add_new_board(data, user_id):
     name = data.get('name')
     note = data.get('note')
-    owner_id = data.get('owner_id')
-    board = Boards(name=name, owner_id=owner_id, note=note)
+    board = Boards(name=name, owner_id=user_id, note=note)
     return commit_to_database(board)
 
 
-def delete_board(data):
-    board_id = data.get('board_id')
-    Boards.query.filter_by(id=id).delete()
-    update_to_database()
+
 
 
 # def get_cards(board_id):

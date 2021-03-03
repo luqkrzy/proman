@@ -1,4 +1,4 @@
-import {dataHandler, easyHandler} from "./data_handler.js";
+import {easyHandler} from "./data_handler.js";
 
 const userForms = document.getElementById('userForms')
 const feedbackStyle = 'width: 100%; margin-top: 0.25rem; font-size: 0.675em; color: #dc3545;'
@@ -60,7 +60,7 @@ function checkPasswordMatch() {
 function registerUser() {
 	if (checkPasswordMatch()) {
 		checkEmailInDatabase();
-		easyHandler.postJson('PUT', '/api/register', {'email': registerEmail.value, 'name': registerUsername.value, 'password': registerPassword.value}, (response) => {
+		easyHandler._postJson('PUT', '/api/register', {'email': registerEmail.value, 'name': registerUsername.value, 'password': registerPassword.value}, (response) => {
 			console.log(response);
 
 			if (response === true) {
@@ -111,7 +111,7 @@ function validateUser() {
 	}
 
 	if (checkEmailInput() && checkPasswordInput()) {
-		easyHandler.postJson('POST', '/api/login', {'email': emailInput.value, 'password': passwordInput.value}, (response) => {
+		easyHandler._postJson('POST', '/api/login', {'email': emailInput.value, 'password': passwordInput.value}, (response) => {
 			console.log(response)
 			if (response === true) {
 				document.location.href = "/";
@@ -121,8 +121,3 @@ function validateUser() {
 		})
 	}
 }
-
-
-
-
-

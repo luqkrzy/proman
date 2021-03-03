@@ -1,166 +1,115 @@
 import {easyHandler} from "./data_handler.js";
-
-const name = document.getElementById('name');
-const note = document.getElementById('textAreaExample');
-const addNewBoardBtn = document.getElementById('add_board');
-
-
-
-function getCurrentUser() {
-    let current = ''
-    if (user.includes('AnonymousUser')) {
-        current = 'AnonymousUser'
-    } else {
-        current = user
-    }
-    return current
-
-}
+import {getCurrentUser} from "./usr.js";
 
 const currentUser = getCurrentUser();
-const testUser = 1
-
 class Boards {
 
+	constructor() {
+		this.user = currentUser;
+		this.userID = currentUser[0];
+		this.boardName = document.querySelector('#boardName');
+		this.boardNoteArea = document.querySelector('#boardNoteArea');
+		this.addNewBoardBtn = document.querySelector('#addNewBoardBtn');
+		this.boardSection = document.querySelector("#boardSection");
+		this.confirmDeleteModalBtn = document.querySelector('#modalConfirmDelete')
+	}
 
-    constructor() {
-        this.user = currentUser
+	init() {
+		const path = window.location.pathname;
+		if (path === '/') {
+			this.loadBoards()
+			this.addBoard();
+			this.initClickListener();
+		}
+	}
 
-    }
+	initClickListener() {
+		this.boardSection.addEventListener('click', (event) => {
+			const eventTargetClassList = event.target.classList
+			const target = event.path[1]
+			if (eventTargetClassList.contains('deleteBoard')) {
+				const boardID = target.getAttribute('id');
+				this.deleteBoard(boardID)
+			}
+		},)
+	}
 
-    init() {
-        const path = window.location.pathname;
-        // if (path === '/') {
-        this.loadBoards()
-        this.addBoard();
-        this.deleteBoard()
-        // }
-    }
 
-    loadBoards() {
-        easyHandler._getData(`/api/get-boards/${testUser}`, (boards) => this.showBoards(boards))
-    }
+	loadBoards() {
+		easyHandler._getData(`/api/user/${this.userID}/boards`, (boards) => this.showBoards(boards))
+	}
 
-    showBoards(boards) {
-        console.log(this.user)
-        for (let i = 0; i < boards.length; i++) {
-            let outerHtml =
-                `
-            <a href="/board/${boards[i].id}">
-			<div class="col" id="${boards[i].id}" name="board_col"><!-- start board -->
+	showBoards(boards) {
+		console.log(this.user)
+		for (let i = 0; i < boards.length; i++) {
+			let boardBody = `
+			<div class="col" id="${boards[i].id}" name="board-col"><!-- start board -->
 				<div class="card hover-shadow border" >
-					<img src="https://mdbootstrap.com/img/new/standard/city/041.jpg" class="card-img-top" alt="pic"/>
+					<a href="/board/${boards[i].id}"><img src="/static/img/board_01.jpg" class="card-img-top" alt="pic"/></a>
 					<div class="card-body">
-						<h5 class="card-title" name="${boards[i].name}">${boards[i].name}</h5>
+						 <a href="/board/${boards[i].id}"><h5 class="card-title" name="${boards[i].name}">${boards[i].name}</h5></a>
 						<p class="card-text" name="${boards[i].note}">${boards[i].note}</p>
 					</div>
 					<div class="card-footer text-muted  d-flex justify-content-between ">2 days ago
-
 						<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-						<div class="dropdown-menu">
-							<span class="dropdown-item">Edit name</span>
-							<span class="dropdown-item">Edit note</span>
-							<span class="dropdown-item" id="deleteBoard">Delete</span>
+						<div id="${boards[i].id}" class="dropdown-menu">
+							<span class="editName dropdown-item">Edit name</span>
+							<span class="editNote dropdown-item">Edit note</span>
+							<span class="deleteBoard dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 						</div>
 					</div>
 				</div>
 			</div>
-            </a>`
-            let parent = document.getElementById("board_section")
-            parent.insertAdjacentHTML("beforeend", outerHtml);
-        }
-    }
+            `
+			this.boardSection.insertAdjacentHTML("beforeend", boardBody);
+		}
+	}
 
-    addBoard() {
-        addNewBoardBtn.addEventListener('click', (event) => {
-            let text = name.value
-            if (text == '') {
-                console.log('name = null')
-            } else {
-                event.preventDefault();
-                easyHandler.postJson('PUT', '/api/add_board', {
-                    'name': name.value, 'owner_id': 1, 'note': note.value
-                }, (response) => {
-                    if(response == true){
-                        document.location.href = "/";
-                    } else{
-                        document.location.href = "/";
-                        alert('Failed')
-                    }
+	addBoard() {
+		this.addNewBoardBtn.addEventListener('click', (event) => {
+			let text = this.boardName.value
+			if (text === '') {
+				console.log('name = null')
+			} else {
+				event.preventDefault();
+				easyHandler._postJson('POST', `/api/user/${this.userID}/boards`, {
+					'name': this.boardName.value, 'note': this.boardNoteArea.value
+				}, (response) => {
+					console.log(response)
+					if (response === true) {
+						document.location.href = "/";
+					} else {
+						document.location.href = "/";
+						alert('Failed')
+					}
+				})
+			}
+		})
+	}
 
+	deleteBoard(boardID) {
+		this.confirmDeleteModalBtn.addEventListener('click', () => {
+			easyHandler._postJson('DELETE', `/api/user/${this.userID}/boards/${boardID}`, {}, (response) => {
 
-                })
-            }
+				if (response === 'unauthorized') {
+					console.log('unauthorized')
+				}
 
-        })
-    }
+				if (response === true) {
+					document.location.href = "/";
 
-    deleteBoard() {
-    	let deleteBoardButton = document.getElementById('deleteBoard')
-        deleteBoardButton.addEventListener('click', (event) => {
-        	console.log(deleteBoardButton)
-            event.preventDefault();
-            console.log(deleteBoardButton.parentNode)
-			console.log(deleteBoardButton.parentNode)
-            // easyHandler.postJson('DELETE', '/api/delete_board', {
-            //     'board_id': 1
-            // }, (response) => console.log(response))
-            // if (response === true) {
-            //     alert('Board deleted')
-            // } else {
-            //     alert('Failed')
-            // }
-        })
-    }
+				} else {
+					console.log('can\'t delete')
 
+				}
+
+			})
+
+		}, {once: true})
+
+	}
 
 }
 
-const
-    boards = new Boards()
-
-boards
-    .init()
-
-
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-const
-    forms = document.querySelectorAll('.needs-validation');
-
-// Loop over them and prevent submission
-Array
-    .prototype
-    .slice
-    .call(forms)
-
-    .forEach(
-        (
-            form
-        ) => {
-            form
-                .addEventListener(
-                    'submit'
-                    , (
-                        event
-                    ) => {
-                        if (
-
-                            !
-                                form
-                                    .checkValidity()
-
-                        ) {
-                            event
-                                .preventDefault();
-
-                            event
-                                .stopPropagation();
-                        }
-
-                        form.classList.add('was-validated');
-                    },
-                    false
-                )
-            ;
-        })
-;
+const boards = new Boards()
+boards.init()

@@ -1,4 +1,5 @@
 from flask import render_template, request, Blueprint, jsonify, session, flash, redirect, url_for
+from flask_login import login_required
 from ProMan import data_manager
 
 
@@ -6,6 +7,7 @@ main = Blueprint('main', __name__)
 
 
 @main.route("/", methods=['GET', 'POST'])
+@login_required
 def route_home():
     # flash('some message', 'danger')
 
