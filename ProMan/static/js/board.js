@@ -21,6 +21,9 @@ class Cards {
 		this.initAddNewItemToCardListener();
 		this.initClickListener();
 
+		this.add_column();
+		this.addNewItemToCard()
+
 	}
 
 	initDropdownMenuListener() {
@@ -174,13 +177,75 @@ class Cards {
 		}
 	}
 
+        addNewItemToCard2() {
+
+        document.addEventListener('keydown', (event) => {
+            const target = event.target;
+            if (event.key === 'Enter') {
+                let column = target.parentNode.parentNode
+                let cardDiv = column.querySelector(".cardBody")
+                let columnId = cardDiv.getAttribute('name')
+                let addCard = document.createElement('div')
+                addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
+                addCard.setAttribute('edit', 'true')
+                addCard.innerText = target.value
+                const path = window.location.pathname;
+                let board_id = path.split('/')[2];
+
+                easyHandler.postJson('PUT', '/api/add_card', {
+                    'name': target.value, 'owner_id': 1, 'board_id': board_id,
+                    'column_id': columnId,
+                }, (response) => {
+                    if (response == true) {
+                        document.location.href = path;
+                    } else {
+                        document.location.href = path;
+                        alert('Failed')
+                    }
+                })
+
+                cardDiv.appendChild(addCard)
+                target.value = ''
+            }
+        })
+    }
+
+
     displayItems() {
         const path = window.location.pathname;
         let board_id = path.split('/')[2];
-        let columns = ['To do', 'In progress', 'Done', 'Testing'];
-        showColumns(columns)
-        // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
-        easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
+        easyHandler._getData(`/api/get-cols/${board_id}`, (columns) => {
+            if (columns) {
+                showColumns(columns);
+            } else {
+                document.location.href = "/";
+                alert('Failed')
+            }
+        })
+
+    }
+
+    add_column() {
+        addNewColumn.addEventListener('click', (event) => {
+            const path = window.location.pathname;
+            let board_id = path.split('/')[2];
+            event.preventDefault();
+            easyHandler.postJson('PUT', '/api/add_column', {
+                'name': 'New Board', 'owner_id': 1, 'board_id': board_id
+            }, (response) => {
+                // if (response == true) {
+                //     document.location.href = path;
+                // } else {
+                //     document.location.href = path;
+                //     alert('Failed')
+                // }
+            })
+
+        })
+    }
+
+    edit_column() {
+
     }
 
 
@@ -212,42 +277,64 @@ document.addEventListener('keydown', (event) => {
         parentDiv.insertBefore(addCard, sp2)
         target.value = ''
 
-        // let addCard = document.createElement('div')
-        // addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
-        // addCard.setAttribute('edit', 'true')
-        // addCard.innerText = new_item.value
-        // // document.getElementById('column').appendChild(addCard)
-        //
-        // let sp2 = document.getElementById('new-item-div')
-        // let parentDiv = sp2.parentNode
-        // parentDiv.insertBefore(addCard, sp2)
-        // new_item.value = ''
 
     }
 })
 
 function showColumns(columns) {
-	for (let i = 0; i < columns.length; i++) {
-		let name = columns[i]
-		let outerHtml =
-			`
-		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${name}"><!-- start card  -->
-			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
-				${name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-				<div class="dropdown-menu">
-					<span class="dropdown-item">Edit</span>
-					<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
-				</div>
-			</div>
-			<div class="cardBody" id="1">
-				
-			</div>
-			<div class="new-item list-group-item list-group-item-action">
-				<input type="text" class='w-100' placeholder=" + new item"></div>
-		</div><!-- end of card  -->`
+    for (let i = 0; i < columns.length; i++) {
+        let outerHtml =
+            `
+    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${columns[i].id}" "><!-- start card  -->
+    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
+    			${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+    			<div class="dropdown-menu">
+    				<span class="dropdown-item">Edit</span>
+    				<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
+    			</div>
+    		</div>
+    		<div class="cardBody" name="${columns[i].id}">
 
-		let parent = document.getElementById("columns_section")
-		parent.insertAdjacentHTML("beforeend", outerHtml);
-	}
+    		</div>
+    		<div class="new-item list-group-item list-group-item-action" name="new-item">
+    			<input type="text" class='w-100' placeholder=" + new item"></div>
+    	</div><!-- end of card  -->`
+
+        let parent = document.getElementById("columns_section")
+        parent.insertAdjacentHTML("beforeend", outerHtml);
+
+        easyHandler._getData(`/api/get-cards${columns[i].id}`, (cards) => {
+            if (cards) {
+                showCards(cards);
+            } else {
+                document.location.href = "/";
+                alert('Failed')
+            }
+        })
+    }
+}
+
+function showCards(cards){
+    if(cards.length > 0){
+    let cardBody = document.getElementsByClassName('.cardBody')
+        console.log(cardBody)
+    for(let elem of cardBody){
+        let parent = elem.getAttribute('name')
+        for(let i = 0; i < cards.length; i++){
+            if(parent = cards[i].column_id){
+                let addCard = document.createElement('div')
+                addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
+                addCard.setAttribute('edit', 'true')
+                addCard.setAttribute('id', parent)
+                addCard.innerText = cards[i].name
+
+            }
+
+        }
+
+    }
+
+
+    }
 }
 
