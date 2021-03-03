@@ -1,12 +1,13 @@
 from flask import jsonify
 from ProMan import db
-from ProMan.models import UsersSchema, BoardsSchema, CardsSchema
-from ProMan.models import Users, Boards, Cards
+from ProMan.models import UsersSchema, BoardsSchema, CardsSchema, ColumnsSchema
+from ProMan.models import Users, Boards, Cards, Columns
 from ProMan import bcrypt
 
 user_schema = UsersSchema()
 board_schema = BoardsSchema()
 card_schema = CardsSchema()
+column_schema = ColumnsSchema()
 
 
 def commit_to_database(data):
@@ -66,16 +67,36 @@ def delete_board(data):
     update_to_database()
 
 
-# def get_cards(board_id):
-#     try:
-#         cards = Cards.query.filter_by(board_id=board_id).all()
-#         dump_cards = [card_schema.dump(card) for card in cards]
-#         return jsonify(dump_cards)
-#     except Exception as e:
-#         return jsonify(e)
-#
-#
-# def get_columns(board_id):
-#     board = Boards.query.filter_by(id=board_id).first()
-#     columns = board['columns']
-#     return columns
+def get_cols(board_id):
+    try:
+        columns = Columns.query.filter_by(board_id=board_id).all()
+        dump_cols = [column_schema.dump(column) for column in columns]
+        return jsonify(dump_cols)
+    except Exception as e:
+        return jsonify(e)
+
+
+def add_new_column(data):
+    name = data.get('name')
+    owner_id = data.get('owner_id')
+    board_id = data.get('board_id')
+    column = Columns(name=name, owner_id=owner_id, board_id=board_id)
+    return commit_to_database(column)
+
+
+def add_new_card(data):
+    name = data.get('name')
+    owner_id = data.get('owner_id')
+    board_id = data.get('board_id')
+    column_id = data.get('column_id')
+    card = Cards(name=name, owner_id=owner_id, board_id=board_id, column_id=column_id)
+    return commit_to_database(card)
+
+
+def get_cards(column_id):
+    try:
+        cards = Cards.query.filter_by(column_id=column_id).all()
+        dump_cards = [card_schema.dump(card) for card in cards]
+        return jsonify(dump_cards)
+    except Exception as e:
+        return jsonify(e)
