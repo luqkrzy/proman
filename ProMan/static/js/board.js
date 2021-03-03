@@ -1,4 +1,4 @@
-// import {Dom} from "./new-dom.js";
+import {easyHandler} from "./data_handler.js";
 
 
 class Cards {
@@ -22,7 +22,6 @@ class Cards {
 		this.initClickListener();
 
 	}
-
 
 	initDropdownMenuListener() {
 		this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
@@ -116,7 +115,6 @@ class Cards {
 	initChangeNameListener() {
 		this.allCardsContainer.addEventListener('dblclick', (event) => {
 			const target = event.target;
-			console.log(target)
 			if (target.getAttribute('edit') === "true") {
 				const oldValue = target.innerText;
 				target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
@@ -166,7 +164,6 @@ class Cards {
 			newItem.className = "rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1";
 			newItem.innerText = `${event.target.value}`;
 			newItem.setAttribute('edit', 'true');
-			newItem.setAttribute('delete', 'true');
 			newItem.addEventListener('mouseenter', this.createDropdownMenu);
 			newItem.addEventListener('mouseleave', this.hideDropdownMenu);
 
@@ -177,8 +174,82 @@ class Cards {
 		}
 	}
 
+    displayItems() {
+        const path = window.location.pathname;
+        let board_id = path.split('/')[2];
+        let columns = ['To do', 'In progress', 'Done', 'Testing'];
+        showColumns(columns)
+        // easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
+        easyHandler._getData(`/api/get-columns/${board_id}`, (columns) => console.log(columns))
+    }
+
+
 }
 
 const cards = new Cards();
 cards.init()
+
+
+
+const new_item = document.getElementById('new-item')
+
+document.addEventListener('keydown', (event) => {
+    const target = event.target;
+    console.log(target)
+    if (event.key === 'Enter') {
+
+        let addCard = document.createElement('div')
+        addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
+        addCard.setAttribute('edit', 'true')
+        addCard.innerText = target.value
+
+        let event_id = event.target
+        console.log(event_id.id)
+        let sp2 = document.getElementById(event_id.id).parentElement
+        // let sp2 = document.getElementById(sp1).parentElement
+        console.log('halooo')
+        let parentDiv = sp2.parentNode
+        console.log(sp2)
+        console.log(parentDiv)
+        parentDiv.insertBefore(addCard, sp2)
+        target.value = ''
+
+        // let addCard = document.createElement('div')
+        // addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
+        // addCard.setAttribute('edit', 'true')
+        // addCard.innerText = new_item.value
+        // // document.getElementById('column').appendChild(addCard)
+        //
+        // let sp2 = document.getElementById('new-item-div')
+        // let parentDiv = sp2.parentNode
+        // parentDiv.insertBefore(addCard, sp2)
+        // new_item.value = ''
+
+    }
+})
+
+function showColumns(columns) {
+	for (let i = 0; i < columns.length; i++) {
+		let name = columns[i]
+		let outerHtml =
+			`
+		<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${name}"><!-- start card  -->
+			<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
+				${name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+				<div class="dropdown-menu">
+					<span class="dropdown-item">Edit</span>
+					<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
+				</div>
+			</div>
+			<div class="cardBody" id="1">
+				
+			</div>
+			<div class="new-item list-group-item list-group-item-action">
+				<input type="text" class='w-100' placeholder=" + new item"></div>
+		</div><!-- end of card  -->`
+
+		let parent = document.getElementById("columns_section")
+		parent.insertAdjacentHTML("beforeend", outerHtml);
+	}
+}
 
