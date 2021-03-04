@@ -28,7 +28,6 @@ def api_delete_board(user_id:int, board_id: int) -> Response:
     return jsonify('unauthorized')
 
 
-
 @boards.route("/board/<int:board_id>", methods=["GET", "POST"])
 def route_board(board_id:int):
     return render_template('board.html')

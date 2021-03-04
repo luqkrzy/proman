@@ -106,7 +106,18 @@ def add_new_card(data):
 def get_cards(column_id):
     try:
         cards = Cards.query.filter_by(column_id=column_id).all()
-        dump_cards = [card_schema.dump(card) for card in cards]
-        return jsonify(dump_cards)
+        response = []
+        card = {}
+
+        for item in cards:
+            card['id'] = item.id
+            card['name'] = item.name
+            card['board_id'] = item.board_id
+            card['column_id'] = item.column_id
+            card['owner_id'] = item.owner_id
+            response.append(card)
+
+        # dump_cards = [card_schema.dump(card) for card in cards]
+        return jsonify(response)
     except Exception as e:
         return jsonify(e)
