@@ -59,3 +59,12 @@ def api_get_cards(column_id):
     return items
 
 
+@boards.route("/api/update-card/<card_id>", methods=['PATCH'])
+def api_update_card(card_id):
+    new_column_id = request.get_json()
+    resp = data_manager.update_card(card_id, new_column_id)
+    return jsonify(resp)
+
+
+
+

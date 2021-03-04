@@ -113,7 +113,6 @@ def get_cards(column_id: int):
 
     try:
         cards = Cards.query.filter_by(column_id=column_id).all()
-        # print(cards)
         # response = []
         # card = {}
         #
@@ -129,3 +128,10 @@ def get_cards(column_id: int):
         return jsonify(dump_cards)
     except Exception as e:
         return jsonify(e)
+
+
+def update_card(card_id, column_id):
+
+    card = Cards.query.filter_by(id=card_id).first()
+    card['column_id'] = column_id
+    return commit_to_database(card)

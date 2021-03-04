@@ -8,6 +8,7 @@ class Cards {
         this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
         this.addNewColumn = document.getElementById('add-new-card-button');
 
+
     }
 
     static cardItemMenu = `<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
@@ -17,15 +18,17 @@ class Cards {
 			</div>`
 
     init() {
+        this.displayItems()
         this.initChangeNameListener();
 
         this.initDropdownMenuListener();
         this.initAddNewItemToCardListener();
         this.initClickListener();
-        this.displayItems()
+
         this.add_column();
         this.addNewItemToCard2()
-        this.initDragAndDrop();
+        this.onMouseUpListner()
+
 
     }
 
@@ -41,8 +44,12 @@ class Cards {
 
 
     initClickListener() {
+
         this.allCardsContainer.addEventListener('click', (event) => {
             const target = event.target
+            this.initDragAndDrop();
+            // dragAndDrop()
+            // console.log(target)
 
             if ((target.classList.contains('deleteColumn'))) {
                 let elementToDelete = event.path[3]
@@ -83,8 +90,15 @@ class Cards {
 
             }
 
+
         })
     }
+
+    // onMouseUpListner(){
+    //     this.allCardsContainer.addEventListener('click', (event) => {
+    //     console.log(event)
+    //     })
+    // }
 
     getAllEditFields() {
         return document.querySelectorAll('div[edit="true"]');
@@ -149,18 +163,40 @@ class Cards {
     }
 
     initDragAndDrop() {
-        const cardsBody = document.querySelectorAll('.cardBody');
+        let cardsBody = document.querySelectorAll('.cardBody')
 
         cardsBody.forEach(card => {
             new Sortable(card, {
                 group: 'shared', animation: 150, ghostClass: 'bg-warning'
             });
+            card.addEventListener('dragend', (event) => {
+                event.preventDefault()
+                let parentDiv = event.path[2]
+                let columnId = parentDiv.getAttribute('name')
+                let target = event.target
+                let cardId = target.getAttribute('itemid')
+                easyHandler._postJson('PATCH', `/api/update-card/${cardId}`, {
+                    'column_id': columnId
+                }, (response) => {
+                    if (response == true) {
+                        document.location.href = path;
+                    } else {
+                        document.location.href = path;
+                        alert('Failed')
+                    }
+                })
+                }
+            )
         })
 
         new Sortable(this.allCardsContainer, {
-            swapThreshold: 1, animation: 150, ghostClass: 'bg-warning'
+            handle: '.bg-transparent', // handle's class
+            animation: 150
         });
+
+
     }
+
 
     addNewItemToCard(event) {
         if (event.key === 'Enter') {
@@ -186,14 +222,15 @@ class Cards {
             const target = event.target;
             if (event.key === 'Enter') {
                 let column = target.parentNode.parentNode
-                console.log(column)
+                // console.log(column)
                 let cardDiv = column.querySelector(".cardBody")
-                console.log(cardDiv)
+                // console.log(cardDiv)
                 let columnId = cardDiv.getAttribute('name')
-                console.log(columnId)
+                // console.log(columnId)
                 let addCard = document.createElement('div')
                 addCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
                 addCard.setAttribute('edit', 'true')
+                addCard.setAttribute('name', columnId)
                 addCard.innerText = target.value
                 const path = window.location.pathname;
                 let board_id = path.split('/')[2];
@@ -248,7 +285,7 @@ class Cards {
 
         })
     }
-    
+
 }
 
 const cards = new Cards();
@@ -258,13 +295,13 @@ const new_item = document.getElementById('new-item')
 
 
 function showColumns(columns) {
-    console.log(columns)
+    // console.log(columns)
     for (let i = 0; i < columns.length; i++) {
         let outerHtml = `
     	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${columns[i].id}" "><!-- start card  -->
-    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1">
+    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
     			${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-    			<div class="dropdown-menu">
+    			<div class="dropdown-menu handle">
     				<span class="dropdown-item">Edit</span>
     				<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
     			</div>
@@ -283,27 +320,30 @@ function showColumns(columns) {
 
         easyHandler._getData(`/api/get-cards/${columnId}`, (cards) => {
             if (cards.length > 0) {
-                console.log(cards)
-                console.log(columnId)
-                showCards(cards, columnId);}
+                showCards(cards, columnId);
+            }
             // } else {
             //     document.location.href = "/";
             //     alert('Failed')
             // }
         })
     }
+
 }
 
 function showCards(cards, columnId) {
     let cardBody = document.querySelectorAll('.cardBody')
     for (let i = 0; i < cardBody.length; i++) {
-            let currentCardBody = cardBody[i].getAttribute('name')
-        if(columnId == currentCardBody){
-            for(let j = 0; j < cards.length; j++) {
-                let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1">${cards[j].name}</div>`
+        let currentCardBody = cardBody[i].getAttribute('name')
+        if (columnId == currentCardBody) {
+            for (let j = 0; j < cards.length; j++) {
+                let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" itemid="${cards[j].id}" name="${columnId}">${cards[j].name}</div>`
                 cardBody[i].insertAdjacentHTML("beforeend", outerHtml);
             }
         }
     }
 }
 
+function updateCard(event) {
+
+}
