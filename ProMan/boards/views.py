@@ -53,20 +53,9 @@ def api_add_card():
     return jsonify(resp)
 
 
-@boards.route("/api/get-cards<column_id>", methods=['GET'])
+@boards.route("/api/get-cards/<column_id>", methods=['GET'])
 def api_get_cards(column_id):
     items = data_manager.get_cards(column_id)
     return items
 
-# @boards.route("/api/get-cards/<board_id>", methods=['GET'])
-# def api_get_cards(board_id):
-#     cards = data_manager.get_cards(board_id)
-#     return cards
-#
-#
-# @boards.route("/api/get-columns/<board_id>", methods=['GET'])
-# def api_get_columns(board_id):
-#     columns = data_manager.get_columns(board_id)
-#     return columns
-#
 

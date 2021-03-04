@@ -103,21 +103,29 @@ def add_new_card(data):
     return commit_to_database(card)
 
 
-def get_cards(column_id):
+def get_cards(column_id: int):
+    # try:
+    #     cards = Cards.query.filter_by(column_id=column_id).all()
+    #     dump_cards = card_schema.dump(cards)
+    #     return dump_cards
+    # except Exception as e:
+    #     return e
+
     try:
         cards = Cards.query.filter_by(column_id=column_id).all()
-        response = []
-        card = {}
+        # print(cards)
+        # response = []
+        # card = {}
+        #
+        # for item in cards:
+        #     card['id'] = item.id
+        #     card['name'] = item.name
+        #     card['board_id'] = item.board_id
+        #     card['column_id'] = item.column_id
+        #     card['owner_id'] = item.owner_id
+        #     response.append(card)
 
-        for item in cards:
-            card['id'] = item.id
-            card['name'] = item.name
-            card['board_id'] = item.board_id
-            card['column_id'] = item.column_id
-            card['owner_id'] = item.owner_id
-            response.append(card)
-
-        # dump_cards = [card_schema.dump(card) for card in cards]
-        return jsonify(response)
+        dump_cards = [card_schema.dump(card) for card in cards]
+        return jsonify(dump_cards)
     except Exception as e:
         return jsonify(e)
