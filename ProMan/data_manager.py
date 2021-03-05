@@ -74,9 +74,6 @@ def add_new_board(data, user_id):
     return commit_to_database(board)
 
 
-
-
-
 def get_cols(board_id):
     try:
         columns = Columns.query.filter_by(board_id=board_id).all()
@@ -104,34 +101,31 @@ def add_new_card(data):
 
 
 def get_cards(column_id: int):
-    # try:
-    #     cards = Cards.query.filter_by(column_id=column_id).all()
-    #     dump_cards = card_schema.dump(cards)
-    #     return dump_cards
-    # except Exception as e:
-    #     return e
-
     try:
         cards = Cards.query.filter_by(column_id=column_id).all()
-        # response = []
-        # card = {}
-        #
-        # for item in cards:
-        #     card['id'] = item.id
-        #     card['name'] = item.name
-        #     card['board_id'] = item.board_id
-        #     card['column_id'] = item.column_id
-        #     card['owner_id'] = item.owner_id
-        #     response.append(card)
-
         dump_cards = [card_schema.dump(card) for card in cards]
         return jsonify(dump_cards)
     except Exception as e:
         return jsonify(e)
 
 
-def update_card(card_id, column_id):
+def delete_column(column_id):
+    Columns.query.filter_by(id=column_id).delete()
+    return update_to_database()
 
+
+def update_card(card_id, column_id):
+    # przekazane poprawne dane
+    # nie chcą updatować się do bazy
     card = Cards.query.filter_by(id=card_id).first()
-    card['column_id'] = column_id
+    print(column_id['column_id'])
+    card['column_id'] = int(column_id['column_id'])
+    return commit_to_database(card)
+
+
+def update_card_name(card_id, new_name):
+    # przekazane poprawne dane
+    # nie chcą updatować się do bazy
+    card = Cards.query.filter_by(id=card_id).first()
+    card['name'] = new_name['name']
     return commit_to_database(card)

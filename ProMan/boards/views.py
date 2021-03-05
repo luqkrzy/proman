@@ -1,12 +1,12 @@
 from flask import render_template, request, Blueprint, jsonify, Response
 from ProMan import data_manager
 
-
 boards = Blueprint('boards', __name__)
-cards =Blueprint('cards', __name__)
+cards = Blueprint('cards', __name__)
+
 
 @boards.route("/api/user/<int:user_id>/boards", methods=['GET'])
-def api_get_boards(user_id:int) -> Response:
+def api_get_boards(user_id: int) -> Response:
     resp = data_manager.get_boards(user_id)
     return jsonify(resp)
 
@@ -20,7 +20,7 @@ def api_add_board(user_id: int) -> Response:
 
 
 @boards.route("/api/user/<int:user_id>/boards/<int:board_id>", methods=["DELETE"])
-def api_delete_board(user_id:int, board_id: int) -> Response:
+def api_delete_board(user_id: int, board_id: int) -> Response:
     owner_id = data_manager.get_board_owner_id(board_id)
     if owner_id == user_id:
         resp = data_manager.delete_board(board_id)
@@ -29,7 +29,7 @@ def api_delete_board(user_id:int, board_id: int) -> Response:
 
 
 @boards.route("/board/<int:board_id>", methods=["GET", "POST"])
-def route_board(board_id:int):
+def route_board(board_id: int):
     return render_template('board.html')
 
 
@@ -59,12 +59,22 @@ def api_get_cards(column_id):
     return items
 
 
-@boards.route("/api/update-card/<card_id>", methods=['PATCH'])
+@boards.route("/api/update-card/<card_id>", methods=['POST'])
 def api_update_card(card_id):
+    print(card_id)
     new_column_id = request.get_json()
     resp = data_manager.update_card(card_id, new_column_id)
     return jsonify(resp)
 
 
+@boards.route("/api/delete-column/<column_id>", methods=["DELETE"])
+def api_delete_column(column_id) -> Response:
+    resp = data_manager.delete_column(column_id)
+    return jsonify(resp)
 
 
+@boards.route("/api/update-card-name/<card_id>", methods=['POST'])
+def api_update_card_name(card_id):
+    new_name = request.get_json()
+    resp = data_manager.update_card_name(card_id, new_name)
+    return jsonify(resp)

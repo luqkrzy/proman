@@ -19,15 +19,13 @@ class Cards {
 
     init() {
         this.displayItems()
+        this.add_column();
+        this.addNewItemToCard2()
         this.initChangeNameListener();
-
-        this.initDropdownMenuListener();
         this.initAddNewItemToCardListener();
         this.initClickListener();
 
-        this.add_column();
-        this.addNewItemToCard2()
-        this.onMouseUpListner()
+        this.initDropdownMenuListener();
 
 
     }
@@ -51,11 +49,15 @@ class Cards {
             // dragAndDrop()
             // console.log(target)
 
-            if ((target.classList.contains('deleteColumn'))) {
-                let elementToDelete = event.path[3]
-                this.deleteColumn(elementToDelete)
+            if ((target.classList.contains('delete-column'))) {
+                let idToDetete = target.getAttribute('name')
+                this.deleteColumn(idToDetete)
             }
+            if ((target.classList.contains('edit-column-name'))) {
+                let idToEdit = target.getAttribute('name')
 
+                this.editColumn(idToEdit, newName)
+            }
             if ((target.classList.contains('deleteCardItem'))) {
                 let elementToDelete = event.path[2]
                 this.deleteCard(elementToDelete)
@@ -94,21 +96,16 @@ class Cards {
         })
     }
 
-    // onMouseUpListner(){
-    //     this.allCardsContainer.addEventListener('click', (event) => {
-    //     console.log(event)
-    //     })
-    // }
 
     getAllEditFields() {
         return document.querySelectorAll('div[edit="true"]');
     }
 
-    deleteColumn(element) {
-        // console.log(this.modalConfirmDeleteBtn)
-        this.modalConfirmDeleteBtn.addEventListener('click', () => {
-            element.remove()
-        }, {once: true})
+    deleteColumn(columnId) {
+        easyHandler._postJson('DELETE', `/api/delete-column/${columnId}`, {}, (response) => {
+            console.log(response)
+        })
+
     }
 
     deleteCard(element) {
@@ -143,6 +140,7 @@ class Cards {
                 target.removeEventListener('mouseenter', this.createDropdownMenu);
 
                 document.addEventListener('click', (secondEvent) => {
+
                     target.addEventListener('mouseenter', this.createDropdownMenu)
                     target.addEventListener('mouseleave', this.hideDropdownMenu)
 
@@ -154,12 +152,17 @@ class Cards {
                         if (newValue === '') {
                             target.innerText = oldValue;
                         } else {
-                            target.innerHTML = `${newValue}`;
+                            target.innerHTML = `${newValue}`
+                            updateCardName(target, newValue)
                         }
                     }
                 }, {once: true});
             }
         })
+    }
+
+    editColumn(column_id){
+
     }
 
     initDragAndDrop() {
@@ -170,21 +173,22 @@ class Cards {
                 group: 'shared', animation: 150, ghostClass: 'bg-warning'
             });
             card.addEventListener('dragend', (event) => {
-                event.preventDefault()
-                let parentDiv = event.path[2]
-                let columnId = parentDiv.getAttribute('name')
-                let target = event.target
-                let cardId = target.getAttribute('itemid')
-                easyHandler._postJson('PATCH', `/api/update-card/${cardId}`, {
-                    'column_id': columnId
-                }, (response) => {
-                    if (response == true) {
-                        document.location.href = path;
-                    } else {
-                        document.location.href = path;
-                        alert('Failed')
-                    }
-                })
+                    event.preventDefault()
+                    let parentDiv = event.path[2]
+                    let columnId = parentDiv.getAttribute('name')
+                    let target = event.target
+                    let cardId = target.getAttribute('itemid')
+                    const path = window.location.pathname;
+                    easyHandler._postJson('POST', `/api/update-card/${cardId}`, {
+                        'column_id': columnId
+                    }, (response) => {
+                        if (response == true) {
+                            document.location.href = path;
+                        } else {
+                            document.location.href = path;
+                            alert('Failed')
+                        }
+                    })
                 }
             )
         })
@@ -302,8 +306,8 @@ function showColumns(columns) {
     		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
     			${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
     			<div class="dropdown-menu handle">
-    				<span class="dropdown-item">Edit</span>
-    				<span class="dropdown-item" onclick="return this.parentNode.parentNode.parentNode.remove();">Delete</span>
+    				<span class="dropdown-item edit-column-name">Edit</span>
+    				<span class="dropdown-item delete-column" onclick="return this.parentNode.parentNode.parentNode.remove();" name="${columns[i].id}">Delete</span>
     			</div>
     		</div>
     		<div class="cardBody" name="${columns[i].id}">
@@ -344,6 +348,12 @@ function showCards(cards, columnId) {
     }
 }
 
-function updateCard(event) {
 
+function updateCardName(cardDiv, newName) {
+    let cardId = cardDiv.getAttribute('itemid')
+    easyHandler._postJson('POST', `/api/update-card-name/${cardId}`, {
+        'name': newName
+    }, (response) => {
+        console.log(response)
+    })
 }
