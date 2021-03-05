@@ -18,31 +18,24 @@ class Cards {
 			</div>`
 
 	init() {
-		this.displayItems();
-		this.add_column();
+		this.initColumns();
+		this.initAddColumnListener();
 		this.addNewCardToColumn()
 		this.initChangeNameListener();
 		this.initAddNewItemToCardListener();
 		this.initClickListener();
 		this.initDropdownMenuListener();
-		// this.initDragAndDrop();
-
-
 	}
 
 	initDropdownMenuListener() {
 		this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
 		this.editFields.forEach(field => field.addEventListener('mouseleave', this.hideDropdownMenu()));
-
-		// this.getAllEditFields().forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
-		// this.getAllEditFields().forEach(field => field.addEventListener('mouseleave', this.hideDropdownMenu))
 	}
 
 	initAddNewItemToCardListener() {
 		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewCardToColumn.bind(this)))
 
 	}
-
 
 	initClickListener() {
 		this.allColumnsContainer.addEventListener('click', (event) => {
@@ -92,26 +85,6 @@ class Cards {
 				}, {once: true});
 			}
 		})
-	}
-
-	initMouseEnterLeaveListener() {
-		this.allColumnsContainer.addEventListener('mouseenter', (event) => {
-			const target = event.path
-			console.log(target)
-
-		});
-		this.allColumnsContainer.addEventListener('mouseleave', (event) => {
-			const target = event.target
-			console.log(target)
-
-		});
-
-
-	}
-
-
-	getAllEditFields() {
-		return document.querySelectorAll('div[edit="true"]');
 	}
 
 	deleteColumn(columnId, element) {
@@ -168,7 +141,7 @@ class Cards {
 							target.innerText = oldValue;
 						} else {
 							target.innerHTML = `${newValue}`
-							updateCardName(target, newValue)
+							this.updateCardName(target, newValue)
 						}
 					}
 				}, {once: true});
@@ -272,12 +245,12 @@ class Cards {
 	}
 
 
-	displayItems() {
+	initColumns() {
 		const path = window.location.pathname;
 		let board_id = path.split('/')[2];
 		easyHandler._getData(`/api/get-cols/${board_id}`, (columns) => {
 			if (columns) {
-				showColumns(columns);
+				this.insertColumns(columns);
 			} else {
 				document.location.href = "/";
 				alert('Failed')
@@ -286,7 +259,7 @@ class Cards {
 
 	}
 
-	add_column() {
+	initAddColumnListener() {
 		this.addNewColumn.addEventListener('click', (event) => {
 			const path = window.location.pathname;
 			let board_id = path.split('/')[2];
@@ -304,14 +277,10 @@ class Cards {
 
 		})
 	}
-}
 
-const cards = new Cards();
-cards.init()
-
-function showColumns(columns) {
-	for (let i = 0; i < columns.length; i++) {
-		let outerHtml = `
+	insertColumns(columns) {
+		for (let i = 0; i < columns.length; i++) {
+			let outerHtml = `
     	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${columns[i].id}" "><!-- start card  -->
     		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
     			${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
@@ -327,43 +296,46 @@ function showColumns(columns) {
     			<input type="text" class='w-100' placeholder=" + new item"></div>
     	</div><!-- end of card  -->`
 
-		let parent = document.getElementById("allColumnsContainer")
-		parent.insertAdjacentHTML("beforeend", outerHtml);
+			let parent = document.getElementById("allColumnsContainer")
+			parent.insertAdjacentHTML("beforeend", outerHtml);
 
-		let columnId = columns[i].id
+			let columnId = columns[i].id
 
-		easyHandler._getData(`/api/get-cards/${columnId}`, (cards) => {
-			if (cards.length > 0) {
-				showCards(cards, columnId);
+			easyHandler._getData(`/api/get-cards/${columnId}`, (cards) => {
+				if (cards.length > 0) {
+					this.initCards(cards, columnId);
+				}
+				// } else {
+				//     document.location.href = "/";
+				//     alert('Failed')
+				// }
+			})
+		}
+	}
+
+	initCards(cards, columnId) {
+		let cardBody = document.querySelectorAll('.cardBody')
+		for (let i = 0; i < cardBody.length; i++) {
+			let currentCardBody = cardBody[i].getAttribute('name')
+			if (columnId === currentCardBody) {
+				for (let j = 0; j < cards.length; j++) {
+					let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" itemid="${cards[j].id}" name="${columnId}">${cards[j].name}</div>`
+					cardBody[i].insertAdjacentHTML("beforeend", outerHtml);
+				}
 			}
-			// } else {
-			//     document.location.href = "/";
-			//     alert('Failed')
-			// }
+		}
+	}
+
+	updateCardName(cardDiv, newName) {
+		let cardId = cardDiv.getAttribute('itemid')
+		easyHandler._postJson('POST', `/api/update-card-name/${cardId}`, {
+			'name': newName
+		}, (response) => {
+			console.log(response)
 		})
 	}
 
 }
 
-function showCards(cards, columnId) {
-	let cardBody = document.querySelectorAll('.cardBody')
-	for (let i = 0; i < cardBody.length; i++) {
-		let currentCardBody = cardBody[i].getAttribute('name')
-		if (columnId === currentCardBody) {
-			for (let j = 0; j < cards.length; j++) {
-				let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" itemid="${cards[j].id}" name="${columnId}">${cards[j].name}</div>`
-				cardBody[i].insertAdjacentHTML("beforeend", outerHtml);
-			}
-		}
-	}
-}
-
-
-function updateCardName(cardDiv, newName) {
-	let cardId = cardDiv.getAttribute('itemid')
-	easyHandler._postJson('POST', `/api/update-card-name/${cardId}`, {
-		'name': newName
-	}, (response) => {
-		console.log(response)
-	})
-}
+const cards = new Cards();
+cards.init()
