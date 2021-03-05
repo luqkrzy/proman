@@ -5,9 +5,9 @@ from ProMan.models import Users, Boards, Cards, Columns
 from ProMan import bcrypt
 
 user_schema = UsersSchema()
-board_schema = BoardsSchema()
-card_schema = CardsSchema()
-column_schema = ColumnsSchema()
+board_schema = BoardsSchema(many=True)
+card_schema = CardsSchema(many=True)
+column_schema = ColumnsSchema(many=True)
 
 
 def commit_to_database(data):
@@ -61,7 +61,7 @@ def delete_board(board_id):
 def get_boards(user_id: int):
     try:
         boards = Boards.query.filter_by(owner_id=user_id).all()
-        dump_boards = [board_schema.dump(board) for board in boards]
+        dump_boards = board_schema.dump(boards)
         return dump_boards
     except Exception as e:
         return e
@@ -77,7 +77,7 @@ def add_new_board(data, user_id):
 def get_cols(board_id):
     try:
         columns = Columns.query.filter_by(board_id=board_id).all()
-        dump_cols = [column_schema.dump(column) for column in columns]
+        dump_cols = column_schema.dump(columns)
         return jsonify(dump_cols)
     except Exception as e:
         return jsonify(e)
@@ -103,7 +103,7 @@ def add_new_card(data):
 def get_cards(column_id: int):
     try:
         cards = Cards.query.filter_by(column_id=column_id).all()
-        dump_cards = [card_schema.dump(card) for card in cards]
+        dump_cards = card_schema.dump(cards)
         return jsonify(dump_cards)
     except Exception as e:
         return jsonify(e)
