@@ -199,31 +199,38 @@ class Cards {
 				const column = target.parentNode.parentNode
 				const cardDiv = column.querySelector(".cardBody")
 				const columnId = cardDiv.getAttribute('id')
-				console.log(columnId)
 				const newCard = document.createElement('div')
 				newCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
 				newCard.setAttribute('edit', 'true')
 				newCard.setAttribute('id', columnId)
 				newCard.innerText = target.value
-				this.editFields.push(newCard)
-				newCard.addEventListener('mouseenter', this.createDropdownMenu);
-				newCard.addEventListener('mouseleave', this.hideDropdownMenu);
-				const path = window.location.pathname;
-				const board_id = path.split('/')[2];
+				console.log(target.value)
 
-				easyHandler._postJson('POST', '/api/add-card', {
-					'name': target.value, 'owner_id': userID, 'board_id': board_id, 'column_id': columnId,
-				}, (response) => {
-					// if (response === true) {
-					//     document.location.href = path;
-					// } else {
-					//     document.location.href = path;
-					//     alert('Failed')
-					// }
-				})
+				if (target.value !== '') {
 
-				cardDiv.appendChild(newCard)
-				target.value = ''
+					this.editFields.push(newCard)
+					newCard.addEventListener('mouseenter', this.createDropdownMenu);
+					newCard.addEventListener('mouseleave', this.hideDropdownMenu);
+					const path = window.location.pathname;
+					const board_id = path.split('/')[2];
+					cardDiv.appendChild(newCard)
+					target.value = ''
+
+					easyHandler._postJson('POST', '/api/add-card', {
+						'name': target.value, 'owner_id': userID, 'board_id': board_id, 'column_id': columnId,
+					}, (response) => {
+						// if (response === true) {
+						//     document.location.href = path;
+						// } else {
+						//     document.location.href = path;
+						//     alert('Failed')
+						// }
+					})
+
+
+				}
+
+
 			}
 		})
 	}
