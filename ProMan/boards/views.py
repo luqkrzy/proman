@@ -1,11 +1,21 @@
 from flask import render_template, request, Blueprint, jsonify, Response
+from flask_login import current_user
 from ProMan import data_manager
 
 boards = Blueprint('boards', __name__)
 cards = Blueprint('cards', __name__)
 
+def is_authorized(func):
+    def c(*args, **kwargs):
+        if not current_user.is_authenticated:
+            return jsonify({'message': 'Unauthorized access'})
+        return func(*args, **kwargs)
+
+    return check_user_authenticated
+
 
 @boards.route("/api/user/<int:user_id>/boards", methods=['GET'])
+@is_authorized
 def api_get_boards(user_id: int) -> Response:
     resp = data_manager.get_boards(user_id)
     return jsonify(resp)
@@ -13,7 +23,7 @@ def api_get_boards(user_id: int) -> Response:
 
 @boards.route("/api/user/<int:user_id>/boards", methods=['POST'])
 def api_add_board(user_id: int) -> Response:
-    print(type(user_id))
+    print(current_user)
     new_board = request.get_json()
     resp = data_manager.add_new_board(new_board, user_id)
     return jsonify(resp)
@@ -39,14 +49,14 @@ def api_get_cols(user_id):
     return columns
 
 
-@boards.route("/api/add_column", methods=['PUT'])
+@boards.route("/api/add-column", methods=['POST'])
 def api_add_column():
     new_column = request.get_json()
     resp = data_manager.add_new_column(new_column)
     return jsonify(resp)
 
 
-@boards.route("/api/add_card", methods=['PUT'])
+@boards.route("/api/add-card", methods=['POST'])
 def api_add_card():
     new_card = request.get_json()
     resp = data_manager.add_new_card(new_card)

@@ -1,5 +1,8 @@
 import {easyHandler} from "./data_handler.js";
+import {getCurrentUser} from "./usr.js";
 
+const user = getCurrentUser()
+const userID = user[0]
 
 class Cards {
 	constructor() {
@@ -44,11 +47,11 @@ class Cards {
 
 			if ((target.classList.contains('delete-column'))) {
 				let elementToDelete = event.path[3]
-				let idToDetete = target.getAttribute('name')
+				let idToDetete = target.getAttribute('id')
 				this.deleteColumn(idToDetete, elementToDelete)
 			}
 			if ((target.classList.contains('edit-column-name'))) {
-				let idToEdit = target.getAttribute('name')
+				let idToEdit = target.getAttribute('id')
 
 				this.editColumn(idToEdit, newName)
 			}
@@ -163,9 +166,10 @@ class Cards {
 			card.addEventListener('dragend', (event) => {
 				event.preventDefault()
 				let parentDiv = event.path[2]
-				let columnId = parentDiv.getAttribute('name')
+				let columnId = parentDiv.getAttribute('id')
 				let target = event.target
-				let cardId = target.getAttribute('itemid')
+				console.log(target)
+				let cardId = target.getAttribute('id')
 				const path = window.location.pathname;
 				easyHandler._postJson('POST', `/api/update-card/${cardId}`, {
 					'column_id': columnId
@@ -188,47 +192,27 @@ class Cards {
 	}
 
 
-	addNewItemToCard(event) {
-		if (event.key === 'Enter') {
-			const value = event.target.value
-			const cardBody = event.path[1].previousElementSibling;
-			const newItem = document.createElement('div');
-			newItem.className = "rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1";
-			newItem.innerText = `${event.target.value}`;
-			newItem.setAttribute('edit', 'true');
-			newItem.addEventListener('mouseenter', this.createDropdownMenu);
-			newItem.addEventListener('mouseleave', this.hideDropdownMenu);
-
-			if (value !== '') {
-				cardBody.appendChild(newItem);
-				event.target.value = '';
-			}
-		}
-	}
-
 	addNewCardToColumn() {
 		document.addEventListener('keydown', (event) => {
 			const target = event.target;
 			if (event.key === 'Enter') {
-				let column = target.parentNode.parentNode
-				// console.log(column)
-				let cardDiv = column.querySelector(".cardBody")
-				// console.log(cardDiv)
-				let columnId = cardDiv.getAttribute('name')
-				// console.log(columnId)
-				let newCard = document.createElement('div')
+				const column = target.parentNode.parentNode
+				const cardDiv = column.querySelector(".cardBody")
+				const columnId = cardDiv.getAttribute('id')
+				console.log(columnId)
+				const newCard = document.createElement('div')
 				newCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
 				newCard.setAttribute('edit', 'true')
-				newCard.setAttribute('name', columnId)
+				newCard.setAttribute('id', columnId)
 				newCard.innerText = target.value
 				this.editFields.push(newCard)
 				newCard.addEventListener('mouseenter', this.createDropdownMenu);
 				newCard.addEventListener('mouseleave', this.hideDropdownMenu);
 				const path = window.location.pathname;
-				let board_id = path.split('/')[2];
+				const board_id = path.split('/')[2];
 
-				easyHandler._postJson('PUT', '/api/add_card', {
-					'name': target.value, 'owner_id': 1, 'board_id': board_id, 'column_id': columnId,
+				easyHandler._postJson('POST', '/api/add-card', {
+					'name': target.value, 'owner_id': userID, 'board_id': board_id, 'column_id': columnId,
 				}, (response) => {
 					// if (response === true) {
 					//     document.location.href = path;
@@ -264,8 +248,8 @@ class Cards {
 			const path = window.location.pathname;
 			let board_id = path.split('/')[2];
 			event.preventDefault();
-			easyHandler._postJson('PUT', '/api/add_column', {
-				'name': 'New Board', 'owner_id': 1, 'board_id': board_id
+			easyHandler._postJson('POST', '/api/add-column', {
+				'name': 'New Board', 'owner_id': userID, 'board_id': board_id
 			}, (response) => {
 				if (response === true) {
 					document.location.href = path;
@@ -281,18 +265,18 @@ class Cards {
 	insertColumns(columns) {
 		for (let i = 0; i < columns.length; i++) {
 			let outerHtml = `
-    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" name="${columns[i].id}" "><!-- start card  -->
+    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${columns[i].id}" "><!-- start card  -->
     		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
     			${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
     			<div class="dropdown-menu handle">
     				<span class="dropdown-item edit-column-name">Edit</span>
-    				<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" name="${columns[i].id}">Delete</span>
+    				<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${columns[i].id}">Delete</span>
     			</div>
     		</div>
-    		<div class="cardBody" name="${columns[i].id}">
+    		<div class="cardBody" id="${columns[i].id}">
 
     		</div>
-    		<div class="newItem list-group-item list-group-item-action" name="newItem">
+    		<div class="newItem list-group-item list-group-item-action" id="newItem">
     			<input type="text" class='w-100' placeholder=" + new item"></div>
     	</div><!-- end of card  -->`
 
@@ -316,10 +300,10 @@ class Cards {
 	initCards(cards, columnId) {
 		let cardBody = document.querySelectorAll('.cardBody')
 		for (let i = 0; i < cardBody.length; i++) {
-			let currentCardBody = cardBody[i].getAttribute('name')
+			let currentCardBody = cardBody[i].getAttribute('id')
 			if (columnId === currentCardBody) {
 				for (let j = 0; j < cards.length; j++) {
-					let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" itemid="${cards[j].id}" name="${columnId}">${cards[j].name}</div>`
+					let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" itemId="${cards[j].id}" id="${columnId}">${cards[j].name}</div>`
 					cardBody[i].insertAdjacentHTML("beforeend", outerHtml);
 				}
 			}
@@ -327,7 +311,9 @@ class Cards {
 	}
 
 	updateCardName(cardDiv, newName) {
-		let cardId = cardDiv.getAttribute('itemid')
+		console.log(cardDiv)
+		let cardId = cardDiv.getAttribute('itemId')
+
 		easyHandler._postJson('POST', `/api/update-card-name/${cardId}`, {
 			'name': newName
 		}, (response) => {
