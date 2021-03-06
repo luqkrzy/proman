@@ -6,7 +6,7 @@ boards = Blueprint('boards', __name__)
 cards = Blueprint('cards', __name__)
 
 def is_authorized(func):
-    def c(*args, **kwargs):
+    def check_user_authenticated(*args, **kwargs):
         if not current_user.is_authenticated:
             return jsonify({'message': 'Unauthorized access'})
         return func(*args, **kwargs)
