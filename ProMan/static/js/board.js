@@ -24,8 +24,8 @@ class Dom {
     		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
     			New Column<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
     			<div class="dropdown-menu handle">
-    				<span class="dropdown-item edit-column-name">Edit</span>
-    				<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
+    				<span class="dropdown-item editColumnName">Edit</span>
+    				<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
     			</div>
     		</div>
     		<div class="cardBody" id="">
@@ -37,14 +37,13 @@ class Dom {
 
 	initNewCard(value) {
 		const newCard = document.createElement('div');
-		newCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
+		newCard.className = ('rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
 		newCard.setAttribute('edit', 'true')
 		newCard.innerText = value
 		newCard.addEventListener('mouseenter', cards.createDropdownMenu);
 		newCard.addEventListener('mouseleave', cards.hideDropdownMenu);
 		return newCard
 	}
-
 }
 
 
@@ -55,7 +54,6 @@ class Cards {
 		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
 		this.addNewColumnBtn = document.querySelector('#addNewColumnBtn');
 		this.editFields = [];
-
 	}
 
 	init() {
@@ -75,7 +73,6 @@ class Cards {
 
 	initNewCardToColumnListener() {
 		document.addEventListener('keydown', this.addNewCardToColumn.bind(this))
-
 	}
 
 	initDropdownMenuListener() {
@@ -89,12 +86,12 @@ class Cards {
 			const target = event.target
 			this.initDragAndDrop();
 
-			if ((target.classList.contains('delete-column'))) {
+			if ((target.classList.contains('deleteColumn'))) {
 				const elementToDelete = event.path[3]
 				const idToDetete = target.getAttribute('id')
 				this.deleteColumn(idToDetete, elementToDelete)
 			}
-			if ((target.classList.contains('edit-column-name'))) {
+			if ((target.classList.contains('editColumnName'))) {
 				let idToEdit = target.getAttribute('id')
 
 				this.editColumn(idToEdit, newName)
@@ -147,7 +144,6 @@ class Cards {
 		this.modalConfirmDeleteBtn.addEventListener('click', () => {
 			element.remove()
 		}, {once: true})
-
 	}
 
 	createDropdownMenu(event) {
@@ -195,7 +191,6 @@ class Cards {
 	}
 
 	editColumn(column_id) {
-
 	}
 
 	initDragAndDrop() {
@@ -230,7 +225,6 @@ class Cards {
 			handle: '.bg-transparent', // handle's class
 			animation: 150, ghostClass: 'bg-warning'
 		});
-
 	}
 
 	addNewCardToColumn(event) {
@@ -270,7 +264,6 @@ class Cards {
 				alert('Failed')
 			}
 		})
-
 	}
 
 	addNewColumn(event) {
@@ -278,7 +271,6 @@ class Cards {
 		easyHandler._postJson('POST', '/api/columns', {
 			'name': 'New Column', 'owner_id': userID, 'board_id': this.boardId
 		}, (newColumn) => {
-
 			if (newColumn.id) {
 				this.allColumnsContainer.insertAdjacentHTML("beforeend", dom.initNewColumn(newColumn));
 
@@ -300,8 +292,8 @@ class Cards {
 		// 	<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
 		// 		${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 		// 		<div class="dropdown-menu handle">
-		// 			<span class="dropdown-item edit-column-name">Edit</span>
-		// 			<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${columns[i].id}">Delete</span>
+		// 			<span class="dropdown-item editColumnName">Edit</span>
+		// 			<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${columns[i].id}">Delete</span>
 		// 		</div>
 		// 	</div>
 		// 	<div class="cardBody" id="${columns[i].id}">
