@@ -24,11 +24,15 @@ class Cards {
 	init() {
 		// this.initColumns();
 		this.initAddColumnListener();
-		this.addNewCardToColumn()
+		this.addNewCardToColumnListener()
 		this.initChangeNameListener();
-		this.initAddNewItemToCardListener();
 		this.initClickListener();
 		this.initDropdownMenuListener();
+	}
+
+	addNewCardToColumnListener() {
+		document.addEventListener('keydown', this.addNewCardToColumn.bind(this))
+
 	}
 
 	initDropdownMenuListener() {
@@ -36,10 +40,6 @@ class Cards {
 		this.editFields.forEach(field => field.addEventListener('mouseleave', this.hideDropdownMenu()));
 	}
 
-	initAddNewItemToCardListener() {
-		this.newItemField.forEach(item => item.addEventListener('keydown', this.addNewCardToColumn.bind(this)))
-
-	}
 
 	initClickListener() {
 		this.allColumnsContainer.addEventListener('click', (event) => {
@@ -192,8 +192,8 @@ class Cards {
 
 	}
 
-	addNewCardToColumn() {
-		document.addEventListener('keydown', (event) => {
+	addNewCardToColumn(event) {
+		// document.addEventListener('keydown', (event) => {
 			const target = event.target;
 			if (event.key === 'Enter') {
 				const column = target.parentNode.parentNode
@@ -232,7 +232,7 @@ class Cards {
 
 
 			}
-		})
+		// })
 	}
 
 
