@@ -45,10 +45,11 @@ class Cards(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
     column_id = db.Column(db.Integer, db.ForeignKey('columns.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    index = db.Column(db.Integer)
 
 
     def __repr__(self):
-        return f'{self.id}, {self.name}, {self.board_id}, {self.column_id}, {self.owner_id}'
+        return f'{self.id}, {self.name}, {self.board_id}, {self.column_id}, {self.owner_id}, {self.index}'
 
 
 class CardsSchema(ma.SQLAlchemyAutoSchema):
@@ -61,11 +62,10 @@ class Columns(db.Model):
     name = db.Column(db.String())
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     board_id = db.Column(db.Integer, db.ForeignKey('boards.id'))
-
-
+    index = db.Column(db.Integer)
 
     def __repr__(self):
-        return f'{self.id}, {self.name}, {self.owner_id}, {self.board_id}'
+        return f'{self.id}, {self.name}, {self.owner_id}, {self.board_id}, {self.index}'
 
 
 class ColumnsSchema(ma.SQLAlchemyAutoSchema):

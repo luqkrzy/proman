@@ -107,8 +107,9 @@ def add_new_card(data):
     owner_id = data.get('owner_id')
     board_id = data.get('board_id')
     column_id = data.get('column_id')
-    card = Cards(name=name, owner_id=owner_id, board_id=board_id, column_id=column_id)
-    return commit_to_database(card)
+    index = data.get('index')
+    card = Cards(name=name, owner_id=owner_id, board_id=board_id, column_id=column_id, index=index)
+    return commit_and_return_id(card)
 
 
 def get_cards(column_id: int):

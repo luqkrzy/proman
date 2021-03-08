@@ -38,18 +38,18 @@ def api_delete_board(user_id: int, board_id: int) -> Response:
     return jsonify('unauthorized')
 
 
-@boards.route("/board/<int:board_id>", methods=["GET", "POST"])
+@boards.route("/board/<int:board_id>", methods=["GET"])
 def route_board(board_id: int):
     return render_template('board.html')
 
 
-@boards.route("/api/get-cols/<user_id>", methods=['GET'])
-def api_get_cols(user_id):
-    columns = data_manager.get_cols(user_id)
+@boards.route("/api/columns/<int:board_id>", methods=['GET'])
+def api_get_cols(board_id):
+    columns = data_manager.get_cols(board_id)
     return columns
 
 
-@boards.route("/api/column", methods=['POST'])
+@boards.route("/api/columns", methods=['POST'])
 def api_add_column():
     new_column = request.get_json()
     resp = data_manager.add_new_column(new_column)

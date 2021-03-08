@@ -4,33 +4,76 @@ import {getCurrentUser} from "./usr.js";
 const user = getCurrentUser()
 const userID = user[0]
 
-class Cards {
+
+class Dom {
 	constructor() {
-		this.boardId = window.location.pathname.split('/')[2];
-		this.newItemField = document.querySelectorAll('.newItem');
-		this.allColumnsContainer = document.querySelector('#allColumnsContainer');
-		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
-		this.addNewColumn = document.querySelector('#addNewColumnBtn');
-		this.editFields = []
 
 	}
 
-	static cardItemMenu = `<span class="dropdown-toggle" data-mdb-toggle="dropdown" id="dropDownCardItem-1"></span>
-			<div class="dropdown-menu" aria-labelledby="dropDownCardTitle-1">
+	initDropDownMenu() {
+		return `<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
+			<div class="dropdown-menu" aria-labelledby="dropDownCardTitle">
 				<span class="editCardItem dropdown-item">Edit</span>
 				<span class="deleteCardItem dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 			</div>`
+	}
+
+	initNewColumn(data) {
+		return `
+    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${data.id}"><!-- start column  -->
+    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
+    			New Column<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+    			<div class="dropdown-menu handle">
+    				<span class="dropdown-item edit-column-name">Edit</span>
+    				<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
+    			</div>
+    		</div>
+    		<div class="cardBody" id="">
+    		</div>
+    		<div class="newItem list-group-item list-group-item-action" id="newItem">
+    			<input type="text" class='w-100' placeholder=" + new item"></div>
+    	</div><!-- end of column  -->`
+	}
+
+	initNewCard(value) {
+		const newCard = document.createElement('div');
+		newCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
+		newCard.setAttribute('edit', 'true')
+		newCard.innerText = value
+		newCard.addEventListener('mouseenter', cards.createDropdownMenu);
+		newCard.addEventListener('mouseleave', cards.hideDropdownMenu);
+		return newCard
+	}
+
+}
+
+
+class Cards {
+	constructor() {
+		this.boardId = window.location.pathname.split('/')[2];
+		this.allColumnsContainer = document.querySelector('#allColumnsContainer');
+		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
+		this.addNewColumnBtn = document.querySelector('#addNewColumnBtn');
+		this.editFields = [];
+
+	}
 
 	init() {
-		// this.initColumns();
+		this.initColumns();
 		this.initAddColumnListener();
-		this.addNewCardToColumnListener()
+		this.initNewCardToColumnListener()
 		this.initChangeNameListener();
 		this.initClickListener();
 		this.initDropdownMenuListener();
 	}
 
-	addNewCardToColumnListener() {
+	initAddColumnListener() {
+		this.addNewColumnBtn.addEventListener('click', this.addNewColumn.bind(this))
+
+	}
+
+
+	initNewCardToColumnListener() {
 		document.addEventListener('keydown', this.addNewCardToColumn.bind(this))
 
 	}
@@ -108,7 +151,7 @@ class Cards {
 	}
 
 	createDropdownMenu(event) {
-		event.target.insertAdjacentHTML('beforeend', Cards.cardItemMenu);
+		event.target.insertAdjacentHTML('beforeend', dom.initDropDownMenu());
 	}
 
 	hideDropdownMenu(event) {
@@ -130,9 +173,7 @@ class Cards {
 				target.childNodes[0].focus();
 				target.removeEventListener('mouseleave', this.hideDropdownMenu);
 				target.removeEventListener('mouseenter', this.createDropdownMenu);
-
 				document.addEventListener('click', (secondEvent) => {
-
 					target.addEventListener('mouseenter', this.createDropdownMenu)
 					target.addEventListener('mouseleave', this.hideDropdownMenu)
 
@@ -193,51 +234,36 @@ class Cards {
 	}
 
 	addNewCardToColumn(event) {
-		// document.addEventListener('keydown', (event) => {
+
+		if (event.key === 'Enter') {
 			const target = event.target;
-			if (event.key === 'Enter') {
-				const column = target.parentNode.parentNode
-				const cardDiv = column.querySelector(".cardBody")
-				const columnId = cardDiv.getAttribute('id')
-				const newCard = document.createElement('div')
-				newCard.className = ('edit rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
-				newCard.setAttribute('edit', 'true')
-				newCard.setAttribute('id', columnId)
-				newCard.innerText = target.value
+			const column = event.path[2];
+			const columnId = column.getAttribute('id');
+			const cardBody = column.querySelector(".cardBody");
+			const name = target.value
 
+			if (name !== '') {
+				const newCard = dom.initNewCard(target.value)
+				const cardIndex = Array.prototype.indexOf.call(cardBody.children, newCard)
+				cardBody.appendChild(newCard)
+				target.value = ''
+				easyHandler._postJson('POST', '/api/card', {
+					'name': name, 'owner_id': userID, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
+				}, (response) => {
+					if (response.id) {
+						// console.log('jest')
 
-				if (target.value !== '') {
-					console.log(target.value)
-					newCard.addEventListener('mouseenter', this.createDropdownMenu);
-					newCard.addEventListener('mouseleave', this.hideDropdownMenu);
-					const path = window.location.pathname;
-					// const board_id = path.split('/')[2];
-					cardDiv.appendChild(newCard)
-					target.value = ''
-
-
-					// easyHandler._postJson('POST', '/api/card', {
-					// 	'name': target.value, 'owner_id': userID, 'board_id': board_id, 'column_id': columnId,
-					// }, (response) => {
-					// if (response === true) {
-					//     document.location.href = path;
-					// } else {
-					//     document.location.href = path;
-					//     alert('Failed')
-					// }
-					// })
-
-
-				}
-
-
+					} else {
+						alert('Failed')
+					}
+				})
 			}
-		// })
+		}
 	}
 
 
 	initColumns() {
-		easyHandler._getData(`/api/get-cols/${this.boardId}`, (columns) => {
+		easyHandler._getData(`/api/columns/${this.boardId}`, (columns) => {
 			if (columns) {
 				this.insertColumns(columns);
 			} else {
@@ -247,78 +273,62 @@ class Cards {
 
 	}
 
-	initAddColumnListener() {
-		this.addNewColumn.addEventListener('click', (event) => {
-			event.preventDefault();
-			easyHandler._postJson('POST', '/api/column', {
-				'name': 'New Column', 'owner_id': userID, 'board_id': this.boardId
-			}, (response) => {
+	addNewColumn(event) {
+		event.preventDefault();
+		easyHandler._postJson('POST', '/api/columns', {
+			'name': 'New Column', 'owner_id': userID, 'board_id': this.boardId
+		}, (newColumn) => {
 
-				if (response.id) {
-					console.log(response.id)
+			if (newColumn.id) {
+				this.allColumnsContainer.insertAdjacentHTML("beforeend", dom.initNewColumn(newColumn));
 
-					const outerHtml = `
-    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${response.id}"><!-- start card  -->
-    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
-    			New Column<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-    			<div class="dropdown-menu handle">
-    				<span class="dropdown-item edit-column-name">Edit</span>
-    				<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${response.id}">Delete</span>
-    			</div>
-    		</div>
-    		<div class="cardBody" id="">
-    		</div>
-    		<div class="newItem list-group-item list-group-item-action" id="newItem">
-    			<input type="text" class='w-100' placeholder=" + new item"></div>
-    	</div><!-- end of card  -->`
-					const parent = document.getElementById("allColumnsContainer")
-					parent.insertAdjacentHTML("beforeend", outerHtml);
-
-
-				} else {
-					alert('Failed')
-				}
-			})
-
+			} else {
+				alert('Failed')
+			}
 		})
 	}
 
 	insertColumns(columns) {
-		for (let i = 0; i < columns.length; i++) {
-			const outerHtml = `
-    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${columns[i].id}" "><!-- start card  -->
-    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
-    			${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-    			<div class="dropdown-menu handle">
-    				<span class="dropdown-item edit-column-name">Edit</span>
-    				<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${columns[i].id}">Delete</span>
-    			</div>
-    		</div>
-    		<div class="cardBody" id="${columns[i].id}">
+		columns.forEach(column => {
+			this.allColumnsContainer.insertAdjacentHTML('beforeend', dom.initNewColumn(column))
+		})
 
-    		</div>
-    		<div class="newItem list-group-item list-group-item-action" id="newItem">
-    			<input type="text" class='w-100' placeholder=" + new item"></div>
-    	</div><!-- end of card  -->`
 
-			const parent = document.getElementById("allColumnsContainer")
-			parent.insertAdjacentHTML("beforeend", outerHtml);
-
-			const columnId = columns[i].id
-
-			easyHandler._getData(`/api/get-cards/${columnId}`, (cards) => {
-				if (cards.length > 0) {
-					this.initCards(cards, columnId);
-				}
-				// } else {
-				//     document.location.href = "/";
-				//     alert('Failed')
-				// }
-			})
-		}
+		// for (let i = 0; i < columns.length; i++) {
+		// 	const outerHtml = `
+		// <div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${columns[i].id}" "><!-- start card  -->
+		// 	<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
+		// 		${columns[i].name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+		// 		<div class="dropdown-menu handle">
+		// 			<span class="dropdown-item edit-column-name">Edit</span>
+		// 			<span class="dropdown-item delete-column" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${columns[i].id}">Delete</span>
+		// 		</div>
+		// 	</div>
+		// 	<div class="cardBody" id="${columns[i].id}">
+		//
+		// 	</div>
+		// 	<div class="newItem list-group-item list-group-item-action" id="newItem">
+		// 		<input type="text" class='w-100' placeholder=" + new item"></div>
+		// </div><!-- end of card  -->`
+		//
+		// 	const parent = document.getElementById("allColumnsContainer")
+		// 	parent.insertAdjacentHTML("beforeend", outerHtml);
+		//
+		// 	const columnId = columns[i].id
+		//
+		// 	easyHandler._getData(`/api/get-cards/${columnId}`, (cards) => {
+		// 		if (cards.length > 0) {
+		// 			this.insertCards(cards, columnId);
+		// 		}
+		// } else {
+		//     document.location.href = "/";
+		//     alert('Failed')
+		// }
+		// })
+		// }
 	}
 
-	initCards(cards, columnId) {
+	insertCards(cards, columnId) {
 		let cardBody = document.querySelectorAll('.cardBody')
 		for (let i = 0; i < cardBody.length; i++) {
 			let currentCardBody = cardBody[i].getAttribute('id')
@@ -343,5 +353,6 @@ class Cards {
 
 }
 
+const dom = new Dom()
 const cards = new Cards();
 cards.init()
