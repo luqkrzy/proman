@@ -1,12 +1,12 @@
 import {easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
 
-const currentUser = getCurrentUser();
-class Boards {
 
+const currentUser = getCurrentUser();
+const userID = user[0]
+
+class Boards {
 	constructor() {
-		this.user = currentUser;
-		this.userID = currentUser[0];
 		this.boardName = document.querySelector('#boardName');
 		this.boardNoteArea = document.querySelector('#boardNoteArea');
 		this.addNewBoardBtn = document.querySelector('#addNewBoardBtn');
@@ -36,15 +36,14 @@ class Boards {
 
 
 	loadBoards() {
-		easyHandler._getData(`/api/user/1/boards`, (boards) => this.showBoards(boards))
+		easyHandler._getData(`/api/user/${userID}/boards`, (boards) => this.showBoards(boards))
 	}
 
 	showBoards(boards) {
-		console.log(this.user)
 		for (let i = 0; i < boards.length; i++) {
 			let boardBody = `
 			<div class="col" id="${boards[i].id}" name="board-col"><!-- start board -->
-				<div class="card hover-shadow border" >
+				<div class="card hover-shadow border">
 					<a href="/board/${boards[i].id}"><img src="/static/img/board_01.jpg" class="card-img-top" alt="pic"/></a>
 					<div class="card-body">
 						 <a href="/board/${boards[i].id}"><h5 class="card-title" name="${boards[i].name}">${boards[i].name}</h5></a>
@@ -72,7 +71,7 @@ class Boards {
 				console.log('name = null')
 			} else {
 				event.preventDefault();
-				easyHandler._postJson('POST', `/api/user/${this.userID}/boards`, {
+				easyHandler._postJson('POST', `/api/user/${userID}/boards`, {
 					'name': this.boardName.value, 'note': this.boardNoteArea.value
 				}, (response) => {
 					console.log(response)
@@ -89,7 +88,7 @@ class Boards {
 
 	deleteBoard(boardID) {
 		this.confirmDeleteModalBtn.addEventListener('click', () => {
-			easyHandler._postJson('DELETE', `/api/user/${this.userID}/boards/${boardID}`, {}, (response) => {
+			easyHandler._postJson('DELETE', `/api/user/${userID}/boards/${boardID}`, {}, (response) => {
 
 				if (response === 'unauthorized') {
 					console.log('unauthorized')

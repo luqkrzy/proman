@@ -49,14 +49,14 @@ def api_get_cols(user_id):
     return columns
 
 
-@boards.route("/api/add-column", methods=['POST'])
+@boards.route("/api/column", methods=['POST'])
 def api_add_column():
     new_column = request.get_json()
     resp = data_manager.add_new_column(new_column)
     return jsonify(resp)
 
 
-@boards.route("/api/add-card", methods=['POST'])
+@boards.route("/api/card", methods=['POST'])
 def api_add_card():
     new_card = request.get_json()
     resp = data_manager.add_new_card(new_card)

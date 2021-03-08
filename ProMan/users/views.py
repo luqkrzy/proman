@@ -6,7 +6,7 @@ users_schema = UsersSchema()
 users = Blueprint('users', __name__)
 
 
-@users.route("/login", methods=['GET', 'POST'])
+@users.route("/login", methods=['GET'])
 def route_login():
     return render_template('login.html')
 

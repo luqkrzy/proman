@@ -20,6 +20,17 @@ def commit_to_database(data):
         db.session.rollback()
         return False
 
+def commit_and_return_id(data):
+    try:
+        db.session.add(data)
+        db.session.commit()
+        return {'id' : data.id}
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        return False
+
+
 
 def update_to_database():
     try:
@@ -88,7 +99,7 @@ def add_new_column(data):
     owner_id = data.get('owner_id')
     board_id = data.get('board_id')
     column = Columns(name=name, owner_id=owner_id, board_id=board_id)
-    return commit_to_database(column)
+    return commit_and_return_id(column)
 
 
 def add_new_card(data):
