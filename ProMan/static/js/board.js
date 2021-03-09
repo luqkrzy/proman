@@ -205,7 +205,6 @@ class Cards {
 				let parentDiv = event.path[2]
 				let columnId = parentDiv.getAttribute('id')
 				let target = event.target
-				console.log(target)
 				let cardId = target.getAttribute('id')
 				const path = window.location.pathname;
 				easyHandler._postJson('POST', `/api/update-card/${cardId}`, {
@@ -339,7 +338,7 @@ class Cards {
 		easyHandler._postJson('POST', `/api/update-card-name/${cardId}`, {
 			'name': newName
 		}, (response) => {
-			console.log(response)
+			// console.log(response)
 		})
 	}
 

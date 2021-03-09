@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, request, jsonify
+from flask import Blueprint, render_template, url_for, redirect, request, jsonify, Response
 from flask_login import current_user, login_user, logout_user
 from ProMan import  bcrypt
 from ProMan.users import data_handler
@@ -6,7 +6,6 @@ from ProMan.models import UsersSchema
 
 users_schema = UsersSchema()
 users = Blueprint('users', __name__)
-
 
 @users.route("/login", methods=['GET'])
 def route_login():
@@ -20,7 +19,7 @@ def route_logout():
 
 
 @users.route("/api/login", methods=['POST'])
-def api_check_user_login_details():
+def api_check_user_login_details() -> Response:
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -37,14 +36,14 @@ def api_check_user_login_details():
 
 
 @users.route("/api/register", methods=['PUT'])
-def api_register_user():
+def api_register_user() -> Response:
     data = request.get_json()
     resp = data_handler.register_new_user(data)
     return jsonify(resp)
 
 
 @users.route('/api/user/<email>', methods=['GET'])
-def api_check_user_in_database(email):
+def api_check_user_in_database(email: str) -> Response:
     try:
         user = data_handler.find_user_by_email(email)
         if user:
@@ -56,7 +55,7 @@ def api_check_user_in_database(email):
 
 
 @users.route('/api/current-user/', methods=['GET'])
-def api_get_current():
+def api_get_current() -> Response:
     if current_user.is_authenticated:
         return jsonify(users_schema.dump(current_user))
     else:

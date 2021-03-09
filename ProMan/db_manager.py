@@ -1,5 +1,5 @@
+from typing import Dict
 from ProMan import db
-
 
 def commit_to_database(data):
     try:
@@ -11,8 +11,7 @@ def commit_to_database(data):
         db.session.rollback()
         return False
 
-
-def commit_and_return_id(data):
+def commit_and_return_id(data: dict) -> Dict or bool:
     try:
         db.session.add(data)
         db.session.commit()
@@ -23,7 +22,7 @@ def commit_and_return_id(data):
         return False
 
 
-def update_to_database():
+def update_to_database() -> bool:
     try:
         db.session.commit()
         return True
