@@ -31,4 +31,4 @@ def create_app(config_class=DevelopmentConfig):
     login_manager.init_app(app)
     return app
 
-from ProMan import data_manager
+from ProMan import db_manager

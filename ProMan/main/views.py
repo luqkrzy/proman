@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, jsonify, session, flash, redirect, url_for
 from flask_login import login_required
-from ProMan import data_manager
+from ProMan import db_manager
 
 
 main = Blueprint('main', __name__)
