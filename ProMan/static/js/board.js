@@ -238,18 +238,18 @@ class Cards {
 
 			if (name !== '') {
 				const newCard = dom.initNewCard(target.value)
-				const cardIndex = Array.prototype.indexOf.call(cardBody.children, newCard)
 				cardBody.appendChild(newCard)
+				const cardIndex = Array.prototype.indexOf.call(cardBody.children, newCard)
 				target.value = ''
 				easyHandler._postJson('POST', '/api/card', {
 					'name': name, 'owner_id': userID, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
 				}, (response) => {
 					if (response.id) {
-						// console.log('jest')
+				// console.log('jest')
 
-					} else {
-						alert('Failed')
-					}
+				} else {
+					alert('Failed')
+				}
 				})
 			}
 		}
