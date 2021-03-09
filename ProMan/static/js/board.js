@@ -37,12 +37,12 @@ class Dom {
 
 	initNewCard(value) {
 		const newCard = document.createElement('div');
-		newCard.className = ('rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1')
-		newCard.setAttribute('edit', 'true')
-		newCard.innerText = value
+		newCard.className = ('cardItem rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1');
+		newCard.setAttribute('edit', 'true');
+		newCard.innerText = value;
 		newCard.addEventListener('mouseenter', cards.createDropdownMenu);
 		newCard.addEventListener('mouseleave', cards.hideDropdownMenu);
-		return newCard
+		return newCard;
 	}
 }
 
@@ -86,25 +86,27 @@ class Cards {
 			const target = event.target
 			this.initDragAndDrop();
 
-			if ((target.classList.contains('deleteColumn'))) {
+			if (target.classList.contains('deleteColumn')) {
 				const elementToDelete = event.path[3]
 				const idToDetete = target.getAttribute('id')
 				this.deleteColumn(idToDetete, elementToDelete)
 			}
-			if ((target.classList.contains('editColumnName'))) {
+			if (target.classList.contains('editColumnName')) {
 				let idToEdit = target.getAttribute('id')
 
-				this.editColumn(idToEdit, newName)
+				// this.editColumn(idToEdit, newName)
 			}
-			if ((target.classList.contains('deleteCardItem'))) {
-				let elementToDelete = event.path[2]
-				this.deleteCard(elementToDelete)
+			if (target.classList.contains('deleteCardItem')) {
+				const elementToDelete = event.path[2];
+				const cardId = elementToDelete.getAttribute('id');
+				console.log(cardId)
+
+				this.deleteCard(elementToDelete, cardId)
 			}
 
-			if ((target.classList.contains('editCardItem'))) {
+			if (target.classList.contains('editCardItem')) {
 				const target = event.path[2]
 				const oldValue = target.innerText.replace('Edit\nDelete', '');
-				// console.log(oldValue)
 
 				target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
 				target.childNodes[0].focus();
@@ -133,17 +135,18 @@ class Cards {
 
 	deleteColumn(columnId, element) {
 		this.modalConfirmDeleteBtn.addEventListener('click', () => {
-			easyHandler._postJson('DELETE', `/api/delete-column/${columnId}`, {}, (response) => {
+			easyHandler._postJson('DELETE', `/api/columns/${columnId}`, {}, () => {
 				element.remove();
-				console.log(response)
 			}, {once: true})
 		})
 	}
 
-	deleteCard(element) {
+	deleteCard(element, cardId) {
 		this.modalConfirmDeleteBtn.addEventListener('click', () => {
-			element.remove()
-		}, {once: true})
+			easyHandler._postJson('DELETE', `/api/cards/${cardId}`, {}, () => {
+				element.remove()
+			}, {once: true})
+		})
 	}
 
 	createDropdownMenu(event) {
@@ -244,11 +247,10 @@ class Cards {
 					'name': name, 'owner_id': userID, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
 				}, (response) => {
 					if (response.id) {
-				// console.log('jest')
-
-				} else {
-					alert('Failed')
-				}
+						newCard.setAttribute('id', response.id);
+					} else {
+						alert('Failed')
+					}
 				})
 			}
 		}
