@@ -38,9 +38,10 @@ def delete_column(column_id: int) -> bool:
     return db_manager.update_to_database()
 
 
-def get_cards(column_id: int) -> List[Dict]:
+def get_cards(column_id: int):
     try:
-        cards = Cards.query.filter_by(column_id=column_id).all()
+        cards = Cards.query.filter_by(column_id=column_id).order_by(Cards.index.asc()).all()
+        print(cards[0].column_id)
         dump_cards = card_schema.dump(cards)
         return dump_cards
     except Exception as e:
@@ -66,7 +67,7 @@ def update_card(card_id: int, column_id: int) -> bool:
 
 def update_card_name(card_id: int, new_name: int) -> bool:
     card = Cards.query.filter_by(id=card_id).first()
-    card['name'] = new_name['name']
+    card.name = new_name['name']
     return db_manager.commit_to_database(card)
 
 

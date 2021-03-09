@@ -33,17 +33,17 @@ def api_delete_column(column_id: int) -> Response:
     return jsonify(resp)
 
 
+@board.route("/api/cards/<int:column_id>", methods=['GET'])
+def api_get_cards(column_id: int) -> Response:
+    items = data_handler.get_cards(column_id)
+    return jsonify(items)
+
+
 @board.route("/api/card", methods=['POST'])
 def api_add_card() -> Response:
     new_card = request.get_json()
     resp = data_handler.add_new_card(new_card)
     return jsonify(resp)
-
-
-@board.route("/api/get-cards/<column_id>", methods=['GET'])
-def api_get_cards(column_id: int) -> Response:
-    items = data_handler.get_cards(column_id)
-    return jsonify(items)
 
 
 @board.route("/api/update-card/<card_id>", methods=['POST'])
@@ -54,7 +54,7 @@ def api_update_card(card_id) -> Response:
     return jsonify(resp)
 
 
-@board.route("/api/update-card-name/<card_id>", methods=['POST'])
+@board.route("/api/card/<int:card_id>", methods=['PATCH'])
 def api_update_card_name(card_id: int) -> Response:
     new_name = request.get_json()
     resp = data_handler.update_card_name(card_id, new_name)

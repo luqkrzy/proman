@@ -51,7 +51,7 @@ class Cards(db.Model):
 
 class CardsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = Cards
+        fields = ('id', 'name', 'board_id', 'column_id', 'owner_id', 'index')
 
 
 class Columns(db.Model):
