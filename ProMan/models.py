@@ -1,4 +1,3 @@
-from datetime import datetime
 from ProMan import db, login_manager, ma
 from flask_login import UserMixin
 
@@ -11,7 +10,7 @@ def load_user(user_id):
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    name= db.Column(db.String())
+    name = db.Column(db.String())
     password = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
@@ -29,7 +28,6 @@ class Boards(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     note = db.Column(db.String())
 
-
     def __repr__(self):
         return f'{self.id}, {self.name}, {self.owner_id}, {self.note}'
 
@@ -46,7 +44,6 @@ class Cards(db.Model):
     column_id = db.Column(db.Integer, db.ForeignKey('columns.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     index = db.Column(db.Integer)
-
 
     def __repr__(self):
         return f'{self.id}, {self.name}, {self.board_id}, {self.column_id}, {self.owner_id}, {self.index}'

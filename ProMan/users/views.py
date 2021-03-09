@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, url_for, redirect, request, jsonify, Response
 from flask_login import current_user, login_user, logout_user
-from ProMan import  bcrypt
+from ProMan import bcrypt
 from ProMan.users import data_handler
 from ProMan.models import UsersSchema
 
 users_schema = UsersSchema()
 users = Blueprint('users', __name__)
+
 
 @users.route("/login", methods=['GET'])
 def route_login():
@@ -15,7 +16,7 @@ def route_login():
 @users.route("/logout")
 def route_logout():
     logout_user()
-    return redirect(url_for('main.route_home'))
+    return redirect(url_for('boards.route_home'))
 
 
 @users.route("/api/login", methods=['POST'])
@@ -60,7 +61,3 @@ def api_get_current() -> Response:
         return jsonify(users_schema.dump(current_user))
     else:
         return jsonify('anonymous')
-
-
-
-

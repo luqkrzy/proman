@@ -17,9 +17,9 @@ ALTER TABLE public.users
     OWNER to luq;
 
 
--- Table: public.boards
+-- Table: public.boards_single
 
--- DROP TABLE public.boards;
+-- DROP TABLE public.boards_single;
 
 CREATE TABLE public.boards
 (
