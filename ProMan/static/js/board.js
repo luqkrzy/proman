@@ -1,51 +1,9 @@
 import {easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
+import {Dom} from "./dom.js";
 
 const user = getCurrentUser()
 const userID = user[0]
-
-
-class Dom {
-	constructor() {
-
-	}
-
-	initDropDownMenu() {
-		return `<span class="dropdown-toggle" data-mdb-toggle="dropdown"></span>
-			<div class="dropdown-menu" aria-labelledby="dropDownCardTitle">
-				<span class="editCardItem dropdown-item">Edit</span>
-				<span class="deleteCardItem dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
-			</div>`
-	}
-
-	initNewColumn(data) {
-		return `
-    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${data.id}"><!-- start column  -->
-    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
-    			New Column<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-    			<div class="dropdown-menu handle">
-    				<span class="dropdown-item editColumnName">Edit</span>
-    				<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
-    			</div>
-    		</div>
-    		<div class="cardBody" id="">
-    		</div>
-    		<div class="newItem list-group-item list-group-item-action" id="newItem">
-    			<input type="text" class='w-100' placeholder=" + new item"></div>
-    	</div><!-- end of column  -->`
-	}
-
-	initNewCard(value) {
-		const newCard = document.createElement('div');
-		newCard.className = ('cardItem rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1');
-		newCard.setAttribute('edit', 'true');
-		newCard.innerText = value;
-		newCard.addEventListener('mouseenter', cards.createDropdownMenu);
-		newCard.addEventListener('mouseleave', cards.hideDropdownMenu);
-		return newCard;
-	}
-}
-
 
 class Cards {
 	constructor() {
@@ -70,7 +28,6 @@ class Cards {
 
 	}
 
-
 	initNewCardToColumnListener() {
 		document.addEventListener('keydown', this.addNewCardToColumn.bind(this))
 	}
@@ -79,7 +36,6 @@ class Cards {
 		this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
 		this.editFields.forEach(field => field.addEventListener('mouseleave', this.hideDropdownMenu()));
 	}
-
 
 	initClickListener() {
 		this.allColumnsContainer.addEventListener('click', (event) => {
@@ -196,9 +152,6 @@ class Cards {
 		})
 	}
 
-	editColumn(column_id) {
-	}
-
 	initDragAndDrop() {
 		let cardsBody = document.querySelectorAll('.cardBody')
 
@@ -233,7 +186,6 @@ class Cards {
 	}
 
 	addNewCardToColumn(event) {
-
 		if (event.key === 'Enter') {
 			const target = event.target;
 			const column = event.path[2];
@@ -259,7 +211,6 @@ class Cards {
 		}
 	}
 
-
 	initColumns() {
 		easyHandler._getData(`/api/columns/${this.boardId}`, (columns) => {
 			if (columns) {
@@ -268,17 +219,6 @@ class Cards {
 				alert('Failed')
 			}
 		})
-	}
-
-	initCards(columnId) {
-		easyHandler._getData(`/api/cards/${columnId}`, (cards) => {
-			if (cards) {
-				this.insertCards(cards);
-			} else {
-				alert('Failed')
-			}
-		})
-
 	}
 
 	addNewColumn(event) {
@@ -298,20 +238,28 @@ class Cards {
 	insertColumns(columns) {
 		columns.forEach(column => {
 			this.allColumnsContainer.insertAdjacentHTML('beforeend', dom.initNewColumn(column));
-			this.initCards(column.id);
 		})
+
+		this.insertCards(columns)
 
 	}
 
-	insertCards(cards) {
-		let cardBody = document.querySelector('.cardBody');
-		console.log(cards)
-
-		cards.forEach(card => {
-			let outerHtml = `<div edit="true"  class="rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1" itemId="${card.id}">${card.name}</div>`
-			cardBody.insertAdjacentHTML('beforeend', outerHtml)
+	insertCards(columns) {
+		const allColumnsBody = document.querySelectorAll('.cardBody')
+		columns.forEach(column => {
+			easyHandler._getData(`/api/cards/${column.id}`, (cardsData) => {
+				cardsData.forEach(card => {
+					allColumnsBody.forEach(body => {
+						const columnBodyId = parseInt(body.getAttribute('id'))
+						const newCard = dom.initNewCard(card.name)
+						newCard.setAttribute('id', card.id)
+						if (card.column_id === columnBodyId) {
+							body.appendChild(newCard)
+						}
+					})
+				})
+			})
 		})
-
 	}
 
 	updateCardName(cardId, newName) {
@@ -326,5 +274,5 @@ class Cards {
 }
 
 const dom = new Dom()
-const cards = new Cards();
+export const cards = new Cards();
 cards.init()
