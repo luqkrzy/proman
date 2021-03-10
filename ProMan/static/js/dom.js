@@ -14,26 +14,35 @@ export class Dom {
 	}
 
 	initNewColumn(data) {
-		return `
-    	<div class="col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3" id="${data.id}"><!-- start column  -->
-    		<div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">
-    			New Column<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-    			<div class="dropdown-menu handle">
-    				<span class="dropdown-item editColumnName">Edit</span>
-    				<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
-    			</div>
-    		</div>
-    		<div class="cardBody" id="${data.id}">
-    		</div>
-    		<div class="newItem list-group-item list-group-item-action" id="newItem">
-    			<input type="text" class='w-100' placeholder=" + new item"></div>
-    	</div><!-- end of column  -->`
+		const column = document.createElement('div');
+		column.className = 'col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3';
+		column.setAttribute('id', data.id);
+		column.innerHTML = `
+		 <div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">New Column<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+		 	<div class="dropdown-menu handle">
+		 		<span class="dropdown-item editColumnName">Edit</span>
+		 		<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
+		 	</div>
+		 </div>
+		 <div class="cardBody" id="${data.id}"></div>`
+
+
+		const newItem = document.createElement('div');
+		newItem.className = 'newItem list-group-item list-group-item-action';
+		newItem.setAttribute('id', 'newItem');
+		const inputItem = document.createElement('input');
+		inputItem.setAttribute('type', 'text');
+		inputItem.setAttribute('class', 'w-100');
+		inputItem.setAttribute('placeholder', ' + new item');
+		inputItem.addEventListener('keydown', cards.addNewCardToColumn.bind(cards))
+		newItem.appendChild(inputItem);
+		column.appendChild(newItem);
+		return column
 	}
 
 	initNewCard(value) {
 		const newCard = document.createElement('div');
-		newCard.className = ('cardItem rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1');
-		newCard.setAttribute('edit', 'true');
+		newCard.className = 'edit cardItem rounded-3 list-group-item list-group-item-action d-flex justify-content-between mb-1';
 		newCard.innerText = value;
 		newCard.addEventListener('mouseenter', cards.createDropdownMenu);
 		newCard.addEventListener('mouseleave', cards.hideDropdownMenu);

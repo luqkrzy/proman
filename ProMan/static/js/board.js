@@ -1,6 +1,6 @@
+import {Dom} from "./dom.js";
 import {easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
-import {Dom} from "./dom.js";
 
 const user = getCurrentUser()
 const userID = user[0]
@@ -17,7 +17,6 @@ class Cards {
 	init() {
 		this.initColumns();
 		this.initAddColumnListener();
-		this.initNewCardToColumnListener()
 		this.initChangeNameListener();
 		this.initClickListener();
 		this.initDropdownMenuListener();
@@ -28,9 +27,6 @@ class Cards {
 
 	}
 
-	initNewCardToColumnListener() {
-		document.addEventListener('keydown', this.addNewCardToColumn.bind(this))
-	}
 
 	initDropdownMenuListener() {
 		this.editFields.forEach(field => field.addEventListener('mouseenter', this.createDropdownMenu));
@@ -56,37 +52,43 @@ class Cards {
 				const elementToDelete = event.path[2];
 				const cardId = elementToDelete.getAttribute('id');
 				console.log(cardId)
-
 				this.deleteCard(elementToDelete, cardId)
 			}
 
 			if (target.classList.contains('editCardItem')) {
 				const target = event.path[2]
-				const oldValue = target.innerText.replace('Edit\nDelete', '');
-
-				target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
-				target.childNodes[0].focus();
-				target.removeEventListener('mouseleave', this.hideDropdownMenu);
-				target.removeEventListener('mouseenter', this.createDropdownMenu);
-
-				document.addEventListener('click', (secondEvent) => {
-					target.addEventListener('mouseenter', this.createDropdownMenu)
-					target.addEventListener('mouseleave', this.hideDropdownMenu)
-
-					if (secondEvent.target === target) {
-						//pass
-					} else {
-						const newValue = target.childNodes[0].value;
-
-						if (newValue === '') {
-							target.innerText = oldValue;
-						} else {
-							target.innerHTML = `${newValue}`;
-						}
-					}
-				}, {once: true});
+				this.initClickOutListener(target)
 			}
-		})
+
+		},)
+
+	}
+
+	initClickOutListener(target) {
+		const oldValue = target.innerText.replace('Edit\nDelete', '');
+		target.innerHTML = `<input type="text" class="w-100" onclick="${target.childNodes[0].value}" placeholder=${oldValue}>`;
+		target.childNodes[0].focus();
+		target.removeEventListener('mouseleave', this.hideDropdownMenu);
+		target.removeEventListener('mouseenter', this.createDropdownMenu);
+		const that = this;
+		document.addEventListener('click', function clickOut(secondEvent) {
+			if (secondEvent.target === target) {
+				console.log(target)
+			} else {
+				const newValue = target.childNodes[0].value;
+				if (newValue !== '') {
+					console.log()
+					const cardId = target.getAttribute('id');
+					target.innerHTML = newValue;
+					that.updateCardName(cardId, newValue)
+
+					document.removeEventListener("click", clickOut, false);
+					target.addEventListener('mouseenter', that.createDropdownMenu)
+					target.addEventListener('mouseleave', that.hideDropdownMenu)
+				}
+			}
+		}, false);
+
 	}
 
 	deleteColumn(columnId, element) {
@@ -111,7 +113,6 @@ class Cards {
 
 	hideDropdownMenu(event) {
 		const itemText = event.target.innerText;
-
 		if (itemText.includes('Edit\nDelete')) {
 			event.target.innerHTML = itemText.replace('Edit\nDelete', '');
 		} else {
@@ -122,7 +123,7 @@ class Cards {
 	initChangeNameListener() {
 		this.allColumnsContainer.addEventListener('dblclick', (event) => {
 			const target = event.target;
-			if (target.getAttribute('edit') === "true") {
+			if (target.classList.contains('edit')) {
 				const oldValue = target.innerText;
 				target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
 				target.childNodes[0].focus();
@@ -141,9 +142,7 @@ class Cards {
 							target.innerText = oldValue;
 						} else {
 							const cardId = target.getAttribute('id');
-							target.innerHTML = `${newValue}`
-							console.log(cardId)
-
+							target.innerHTML = newValue
 							this.updateCardName(cardId, newValue)
 						}
 					}
@@ -154,7 +153,6 @@ class Cards {
 
 	initDragAndDrop() {
 		let cardsBody = document.querySelectorAll('.cardBody')
-
 		cardsBody.forEach(card => {
 			new Sortable(card, {
 				group: 'shared', animation: 150, ghostClass: 'bg-warning'
@@ -198,6 +196,7 @@ class Cards {
 				cardBody.appendChild(newCard)
 				const cardIndex = Array.prototype.indexOf.call(cardBody.children, newCard)
 				target.value = ''
+				console.log(this)
 				easyHandler._postJson('POST', '/api/card', {
 					'name': name, 'owner_id': userID, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
 				}, (response) => {
@@ -221,25 +220,11 @@ class Cards {
 		})
 	}
 
-	addNewColumn(event) {
-		event.preventDefault();
-		easyHandler._postJson('POST', '/api/columns', {
-			'name': 'New Column', 'owner_id': userID, 'board_id': this.boardId
-		}, (newColumn) => {
-			if (newColumn.id) {
-				this.allColumnsContainer.insertAdjacentHTML("beforeend", dom.initNewColumn(newColumn));
-
-			} else {
-				alert('Failed')
-			}
-		})
-	}
 
 	insertColumns(columns) {
 		columns.forEach(column => {
-			this.allColumnsContainer.insertAdjacentHTML('beforeend', dom.initNewColumn(column));
+			this.allColumnsContainer.appendChild(dom.initNewColumn(column))
 		})
-
 		this.insertCards(columns)
 
 	}
@@ -259,6 +244,20 @@ class Cards {
 					})
 				})
 			})
+		})
+	}
+
+	addNewColumn(event) {
+		event.preventDefault();
+		easyHandler._postJson('POST', '/api/columns', {
+			'name': 'New Column', 'owner_id': userID, 'board_id': this.boardId
+		}, (newColumn) => {
+			if (newColumn.id) {
+				this.allColumnsContainer.appendChild(dom.initNewColumn(newColumn));
+
+			} else {
+				alert('Failed')
+			}
 		})
 	}
 
