@@ -1,9 +1,10 @@
 import {easyHandler} from "./data_handler.js";
-import {getCurrentUser} from "./usr.js";
+import {getCurrentUser, getUser} from "./usr.js";
 
 
 const currentUser = getCurrentUser();
-const userID = user[0]
+const userID = currentUser[0]
+
 
 class Boards {
 	constructor() {

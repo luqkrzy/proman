@@ -6,12 +6,13 @@ from ProMan import db
 
 
 def is_authorized(func):
-    def check_user_authenticated(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         if not current_user.is_authenticated:
             return jsonify({'message': 'Unauthorized access'})
         return func(*args, **kwargs)
 
-    return check_user_authenticated
+    wrapper.__name__ = func.__name__
+    return wrapper
 
 
 def commit_to_database(data):

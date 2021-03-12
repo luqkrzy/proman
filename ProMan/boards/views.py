@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request, Response, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from ProMan.boards import data_handler
 from ProMan.db_manager import is_authorized
 
@@ -20,14 +20,15 @@ def api_get_boards(user_id: int) -> Response:
 
 
 @boards.route("/api/user/<int:user_id>/boards", methods=['POST'])
+@is_authorized
 def api_add_board(user_id: int) -> Response:
     new_board = request.get_json()
-    print(type(new_board))
     resp = data_handler.add_new_board(new_board, user_id)
     return jsonify(resp)
 
 
 @boards.route("/api/user/<int:user_id>/boards/<int:board_id>", methods=["DELETE"])
+@is_authorized
 def api_delete_board(user_id: int, board_id: int) -> Response:
     owner_id = data_handler.get_board_owner_id(board_id)
     if owner_id == user_id:

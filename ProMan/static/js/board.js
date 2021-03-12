@@ -1,12 +1,14 @@
 import {Dom} from "./dom.js";
-import {dataHandler, easyHandler} from "./data_handler.js";
+import {easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
 
 const user = getCurrentUser()
 const userID = user[0]
 
+
+
 class Cards {
-	constructor() {
+	constructor(id) {
 		this.boardId = window.location.pathname.split('/')[2];
 		this.allColumnsContainer = document.querySelector('#allColumnsContainer');
 		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
@@ -14,6 +16,7 @@ class Cards {
 		this.editFields = [];
 		this.target = ''
 		this.oldValue = ''
+		this.userId = id
 	}
 
 	init() {
@@ -27,7 +30,6 @@ class Cards {
 
 	initAddColumnListener() {
 		this.addNewColumnBtn.addEventListener('click', this.addNewColumn.bind(this))
-
 	}
 
 
@@ -84,7 +86,6 @@ class Cards {
 					const cardId = target.getAttribute('id');
 					target.innerHTML = newValue;
 					that.updateCardName(cardId, newValue)
-
 					document.removeEventListener("click", clickOut, false);
 					target.addEventListener('mouseenter', that.createDropdownMenu)
 					target.addEventListener('mouseleave', that.hideDropdownMenu)
@@ -165,7 +166,6 @@ class Cards {
 
 	clickOutChangeName(secondEvent) {
 		const target = this.target
-
 		target.addEventListener('mouseenter', this.createDropdownMenu)
 		target.addEventListener('mouseleave', this.hideDropdownMenu)
 
@@ -231,7 +231,7 @@ class Cards {
 				const cardIndex = Array.prototype.indexOf.call(cardBody.children, newCard)
 				target.value = ''
 				easyHandler._postJson('POST', '/api/card', {
-					'name': name, 'owner_id': userID, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
+					'name': name, 'owner_id': this.userId, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
 				}, (response) => {
 					if (response.id) {
 						newCard.setAttribute('id', response.id);
@@ -283,7 +283,7 @@ class Cards {
 	addNewColumn(event) {
 		event.preventDefault();
 		easyHandler._postJson('POST', '/api/columns', {
-			'name': 'New Column', 'owner_id': userID, 'board_id': this.boardId
+			'name': 'New Column', 'owner_id': this.userId, 'board_id': this.boardId
 		}, (newColumn) => {
 			if (newColumn.id) {
 				this.allColumnsContainer.appendChild(dom.initNewColumn(newColumn));
@@ -306,5 +306,6 @@ class Cards {
 }
 
 const dom = new Dom()
-export const cards = new Cards();
+export const cards = new Cards(userID);
 cards.init()
+

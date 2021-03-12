@@ -45,7 +45,7 @@ def change_column_name(column_id: int, data) -> bool:
     return db_manager.update_to_database()
 
 
-def get_cards(column_id: int):
+def get_cards(column_id: int) -> Dict:
     try:
         cards = Cards.query.filter_by(column_id=column_id).order_by(Cards.index.asc()).all()
         dump_cards = card_schema.dump(cards)
