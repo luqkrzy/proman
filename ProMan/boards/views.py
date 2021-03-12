@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request, Response, jsonify
-from flask_login import login_required, current_user
+from flask_login import login_required
 from ProMan.boards import data_handler
 from ProMan.db_manager import is_authorized
 

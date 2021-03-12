@@ -10,6 +10,7 @@ const userID = user[0]
 class Cards {
 	constructor(id) {
 		this.boardId = window.location.pathname.split('/')[2];
+		this.boardName = document.querySelector('#boardName')
 		this.allColumnsContainer = document.querySelector('#allColumnsContainer');
 		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
 		this.addNewColumnBtn = document.querySelector('#addNewColumnBtn');
@@ -20,12 +21,19 @@ class Cards {
 	}
 
 	init() {
+		this.initBoardName()
 		this.initColumns();
 		this.initAddColumnListener();
 		this.initChangeNameListener();
 		this.initClickListener();
 		this.initDropdownMenuListener();
 		this.initDragAndDrop();
+	}
+
+	initBoardName() {
+		easyHandler._getData(`/api/board/${this.boardId}/name`, boardName => {
+			this.boardName.innerText = boardName[0]
+		})
 	}
 
 	initAddColumnListener() {
@@ -282,11 +290,12 @@ class Cards {
 
 	addNewColumn(event) {
 		event.preventDefault();
+		const columnName = document.querySelector('#columnName');
 		easyHandler._postJson('POST', '/api/columns', {
-			'name': 'New Column', 'owner_id': this.userId, 'board_id': this.boardId
+			'name': columnName.value, 'owner_id': this.userId, 'board_id': this.boardId
 		}, (newColumn) => {
 			if (newColumn.id) {
-				this.allColumnsContainer.appendChild(dom.initNewColumn(newColumn));
+				this.allColumnsContainer.appendChild(dom.initNewColumn(newColumn, columnName.value));
 
 			} else {
 				alert('Failed')

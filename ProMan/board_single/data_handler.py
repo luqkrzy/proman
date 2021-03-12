@@ -16,6 +16,14 @@ def get_board_by_id(board_id: int) -> int or None:
         print(e)
 
 
+def get_board_name_by_id(board_id: int) -> int or None:
+    try:
+        board_name = Boards.query.filter_by(id=board_id).with_entities(Boards.name).first()
+        return board_name
+    except Exception as e:
+        print(e)
+
+
 def get_columns(board_id: int) -> List[Dict]:
     try:
         columns = Columns.query.filter_by(board_id=board_id).all()

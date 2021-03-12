@@ -22,12 +22,12 @@ export class Dom {
 	}
 
 
-	initNewColumn(data) {
+	initNewColumn(data, name = null) {
 		const column = document.createElement('div');
 		column.className = 'col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3';
 		column.setAttribute('id', data.id);
 		column.innerHTML = `
-		 <div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">${data.name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+		 <div class="bg-transparent border-0 list-group-item d-flex justify-content-between fw-bold mb-1 ">${name ? name : data.name}<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
 		 	<div class="dropdown-menu handle">
 		 		<span class="dropdown-item editColumnName">Edit</span>
 		 		<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>

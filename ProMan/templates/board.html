@@ -2,43 +2,48 @@
 {% block title %} Board {% endblock %}
 
 {% block content %}
-    <div class="row"><!-- start row -->
-        <div class="col-md-10 text-center"><h2 class="text-center mb-3">Board Name </h2></div>
-        <div class="col-auto mb-3">
-            <button type="button" class="btn btn-primary btn-floating" onclick="location.reload();">
-                <i class="fas fa-sync"></i>
-            </button>
-            <div class="col-md d-inline-flex align-content-end"><!-- start new column  -->
-                <span class="text-primary btn" id="addNewColumnBtn"><i
-                        class="fas fa-plus"></i> Add new column</span>
-            </div><!-- end of new column  -->
+	<div class="row"><!-- start row -->
+		<div class="col-md-10 text-center"><h2 class="text-center mb-3" id="boardName"></h2></div>
+		<div class="col-auto mb-3"> <!-- start new column  -->
+			<div class="dropdown">
+				<button class="btn btn-outline-primary dropdown-toggle" type="button" data-mdb-toggle="dropdown" aria-expanded="false">Add new column</button>
+				<div class="dropdown-menu">
+					<div class="px-4 py-3">
+						<div class="form-outline mb-3">
+							<input type="text" id="columnName" class="form-control" maxlength="20" required>
+							<label class="form-label" for="columnName">Column name</label>
+						</div>
+						<button type="submit" class="btn btn-primary btn-block" id="addNewColumnBtn">Add</button>
+					</div>
+				</div>
+			</div><!-- end of new column  -->
 
-        </div>
-    </div><!-- end row -->
-    <div id="allColumnsContainer" class="row align-items-start">
+		</div>
+	</div><!-- end row -->
+	<div id="allColumnsContainer" class="row align-items-start">
 
-        <div class="modal top fade" id="deleteModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true"
-             data-mdb-backdrop="true" data-mdb-keyboard="true">
-            <div class="modal-dialog modal-sm ">
-                <div class="modal-content text-center">
-                    <div class="modal-header bg-danger text-white d-flex justify-content-center">
-                        <h5 class="modal-title" id="ModalLabel">Are you sure?</h5>
-                    </div>
-                    <div class="modal-body"><i class="fas fa-times fa-3x text-danger"></i></div>
-                    <div class="modal-footer d-flex justify-content-center">
-                        <button type="button" class="btn btn-danger ripple-surface" data-mdb-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-outline-danger ripple-surface" data-mdb-dismiss="modal"
-                                id="modalConfirmDelete">Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="modal top fade" id="deleteModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true"
+		     data-mdb-backdrop="true" data-mdb-keyboard="true">
+			<div class="modal-dialog modal-sm ">
+				<div class="modal-content text-center">
+					<div class="modal-header bg-danger text-white d-flex justify-content-center">
+						<h5 class="modal-title" id="ModalLabel">Are you sure?</h5>
+					</div>
+					<div class="modal-body"><i class="fas fa-times fa-3x text-danger"></i></div>
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="button" class="btn btn-danger ripple-surface" data-mdb-dismiss="modal">No</button>
+						<button type="button" class="btn btn-outline-danger ripple-surface" data-mdb-dismiss="modal"
+						        id="modalConfirmDelete">Yes
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.10.2/Sortable.min.js"
-            integrity="sha512-ELgdXEUQM5x+vB2mycmnSCsiDZWQYXKwlzh9+p+Hff4f5LA+uf0w2pOp3j7UAuSAajxfEzmYZNOOLQuiotrt9Q=="
-            crossorigin="anonymous"></script>
-    <script type="module" src="{{ url_for('static', filename='./js/board.js') }}"></script>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.10.2/Sortable.min.js"
+	        integrity="sha512-ELgdXEUQM5x+vB2mycmnSCsiDZWQYXKwlzh9+p+Hff4f5LA+uf0w2pOp3j7UAuSAajxfEzmYZNOOLQuiotrt9Q=="
+	        crossorigin="anonymous"></script>
+	<script type="module" src="{{ url_for('static', filename='./js/board.js') }}"></script>
 
 {% endblock %}

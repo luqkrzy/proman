@@ -15,6 +15,11 @@ def route_board(board_id: int):
 
     return render_template('board.html')
 
+@board.route("/api/board/<int:board_id>/name", methods=['GET'])
+@is_authorized
+def api_get_board_name(board_id: int) -> Response:
+    board_name = data_handler.get_board_name_by_id(board_id)
+    return jsonify(board_name)
 
 @board.route("/api/columns/<int:board_id>", methods=['GET'])
 @is_authorized
