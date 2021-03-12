@@ -38,6 +38,13 @@ def delete_column(column_id: int) -> bool:
     return db_manager.update_to_database()
 
 
+def change_column_name(column_id: int, data) -> bool:
+    new_name = data['name']
+    column = Columns.query.filter_by(id=column_id).first()
+    column.name = new_name
+    return db_manager.update_to_database()
+
+
 def get_cards(column_id: int):
     try:
         cards = Cards.query.filter_by(column_id=column_id).order_by(Cards.index.asc()).all()
@@ -57,9 +64,9 @@ def add_new_card(data: dict) -> Dict or bool:
     return db_manager.commit_and_return_id(card)
 
 
-def update_card(card_id: int, column_id: int) -> bool:
+def update_card_column(card_id: int, column_id: int) -> bool:
     card = Cards.query.filter_by(id=card_id).first()
-    card['column_id'] = int(column_id['column_id'])
+    card.column_id = int(column_id['column_id'])
     return db_manager.commit_to_database(card)
 
 

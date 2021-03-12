@@ -32,6 +32,12 @@ def api_delete_column(column_id: int) -> Response:
     resp = data_handler.delete_column(column_id)
     return jsonify(resp)
 
+@board.route("/api/columns/<int:column_id>/name", methods=["PATCH"])
+def api_edit_column_name(column_id: int) -> Response:
+    data = request.get_json()
+    resp = data_handler.change_column_name(column_id, data)
+    return jsonify(resp)
+
 
 @board.route("/api/cards/<int:column_id>", methods=['GET'])
 def api_get_cards(column_id: int) -> Response:
@@ -46,15 +52,14 @@ def api_add_card() -> Response:
     return jsonify(resp)
 
 
-@board.route("/api/update-card/<card_id>", methods=['POST'])
+@board.route("/api/card/<int:card_id>/column", methods=['PATCH'])
 def api_update_card(card_id) -> Response:
-    print(card_id)
     new_column_id = request.get_json()
-    resp = data_handler.update_card(card_id, new_column_id)
+    resp = data_handler.update_card_column(card_id, new_column_id)
     return jsonify(resp)
 
 
-@board.route("/api/card/<int:card_id>", methods=['PATCH'])
+@board.route("/api/card/<int:card_id>/name", methods=['PATCH'])
 def api_update_card_name(card_id: int) -> Response:
     new_name = request.get_json()
     resp = data_handler.update_card_name(card_id, new_name)

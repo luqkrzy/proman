@@ -1,5 +1,5 @@
 import {Dom} from "./dom.js";
-import {easyHandler} from "./data_handler.js";
+import {dataHandler, easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
 
 const user = getCurrentUser()
@@ -46,10 +46,12 @@ class Cards {
 				const idToDetete = target.getAttribute('id')
 				this.deleteColumn(idToDetete, elementToDelete)
 			}
-			if (target.classList.contains('editColumnName')) {
-				let idToEdit = target.getAttribute('id')
 
-				// this.editColumn(idToEdit, newName)
+			if (target.classList.contains('editColumnName')) {
+				const idToEdit = event.path[3].getAttribute('id');
+				const columnToEdit = event.path[2];
+				this.changeColumnName(idToEdit, columnToEdit)
+
 			}
 			if (target.classList.contains('deleteCardItem')) {
 				const elementToDelete = event.path[2];
@@ -58,8 +60,8 @@ class Cards {
 			}
 
 			if (target.classList.contains('editCardItem')) {
-				const target = event.path[2]
-				this.initClickOutListener(target)
+				const editTarget = event.path[2]
+				this.initClickOutListener(editTarget)
 			}
 
 		},)
@@ -75,7 +77,7 @@ class Cards {
 		const that = this;
 		document.addEventListener('click', function clickOut(secondEvent) {
 			if (secondEvent.target === target) {
-			//	pass
+				//	pass
 			} else {
 				const newValue = target.childNodes[0].value;
 				if (newValue !== '') {
@@ -89,7 +91,29 @@ class Cards {
 				}
 			}
 		}, false);
+	}
 
+	changeColumnName(id, columnToEdit) {
+		const oldName = columnToEdit.innerText.replace('Edit\nDelete', '');
+		columnToEdit.innerHTML = `<input class="w-100" type="text" placeholder=${oldName}>`;
+		document.addEventListener('click', function out(event) {
+
+			if (event.target === columnToEdit.childNodes[0]) {
+			//	pass
+			} else {
+				const newName = columnToEdit.childNodes[0].value;
+				if (newName !== '') {
+					columnToEdit.innerHTML = dom.initColumnMenu(newName, id);
+					easyHandler._postJson('PATCH', `/api/columns/${id}/name`, {
+						'name' : newName
+					}, response => {
+
+					})
+					document.removeEventListener('click', out, false);
+				}
+			}
+
+		}, false)
 	}
 
 	deleteColumn(columnId, element) {
@@ -146,7 +170,7 @@ class Cards {
 		target.addEventListener('mouseleave', this.hideDropdownMenu)
 
 		if (secondEvent.target === target) {
-		//	pass
+			//	pass
 		} else {
 			const newValue = target.childNodes[0].value;
 
@@ -161,7 +185,6 @@ class Cards {
 
 	}
 
-
 	initDragAndDrop() {
 		let cardsBody = document.querySelectorAll('.cardBody')
 		cardsBody.forEach(card => {
@@ -175,13 +198,13 @@ class Cards {
 				let target = event.target
 				let cardId = target.getAttribute('id')
 				const path = window.location.pathname;
-				easyHandler._postJson('POST', `/api/update-card/${cardId}`, {
+				easyHandler._postJson('PATCH', `/api/card/${cardId}/column`, {
 					'column_id': columnId
 				}, (response) => {
 					if (response === true) {
-						document.location.href = path;
+						// document.location.href = path;
 					} else {
-						document.location.href = path;
+						// document.location.href = path;
 						alert('Failed')
 					}
 				})
@@ -273,7 +296,7 @@ class Cards {
 
 	updateCardName(cardId, newName) {
 
-		easyHandler._postJson('PATCH', `/api/card/${cardId}`, {
+		easyHandler._postJson('PATCH', `/api/card/${cardId}/name`, {
 			'name': newName
 		}, (response) => {
 			// console.log(response)
