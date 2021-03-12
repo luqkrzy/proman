@@ -3,6 +3,7 @@ from flask_login import current_user, login_user, logout_user
 from ProMan import bcrypt
 from ProMan.users import data_handler
 from ProMan.models import UsersSchema
+from ProMan.db_manager import is_authorized
 
 users_schema = UsersSchema()
 users = Blueprint('users', __name__)
@@ -22,8 +23,8 @@ def route_logout():
 @users.route("/api/login", methods=['POST'])
 def api_check_user_login_details() -> Response:
     data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    email = data['email']
+    password = data['password']
     user = data_handler.find_user_by_email(email)
     try:
         if user and bcrypt.check_password_hash(pw_hash=user.password, password=password):
@@ -44,6 +45,7 @@ def api_register_user() -> Response:
 
 
 @users.route('/api/user/<email>', methods=['GET'])
+@is_authorized
 def api_check_user_in_database(email: str) -> Response:
     try:
         user = data_handler.find_user_by_email(email)
@@ -56,6 +58,7 @@ def api_check_user_in_database(email: str) -> Response:
 
 
 @users.route('/api/current-user/', methods=['GET'])
+@is_authorized
 def api_get_current() -> Response:
     if current_user.is_authenticated:
         return jsonify(users_schema.dump(current_user))

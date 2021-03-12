@@ -41,28 +41,28 @@ class Boards {
 	}
 
 	showBoards(boards) {
-		for (let i = 0; i < boards.length; i++) {
-			let boardBody = `
-			<div class="col" id="${boards[i].id}" name="board-col"><!-- start board -->
+		boards.forEach(board => {
+			const boardBody = `
+			<div class="col" id="${board.id}" name="board-col"><!-- start board -->
 				<div class="card hover-shadow border">
-					<a href="/board/${boards[i].id}"><img src="/static/img/board_01.jpg" class="card-img-top" alt="pic"/></a>
+					<a href="/board/${board.id}"><img src="/static/img/board_01.jpg" class="card-img-top" alt="pic"/></a>
 					<div class="card-body">
-						 <a href="/board/${boards[i].id}"><h5 class="card-title" name="${boards[i].name}">${boards[i].name}</h5></a>
-						<p class="card-text" name="${boards[i].note}">${boards[i].note}</p>
+						 <a href="/board/${board.id}"><h5 class="card-title" name="${board.name}">${board.name}</h5></a>
+						<p class="card-text" name="${board.note}">${board.note}</p>
 					</div>
 					<div class="card-footer text-muted  d-flex justify-content-between ">2 days ago
 						<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
-						<div id="${boards[i].id}" class="dropdown-menu">
+						<div id="${board.id}" class="dropdown-menu">
 							<span class="editName dropdown-item">Edit name</span>
 							<span class="editNote dropdown-item">Edit note</span>
 							<span class="deleteBoard dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
 						</div>
 					</div>
 				</div>
-			</div>
-            `
+			</div><!-- send board -->`
+
 			this.boardSection.insertAdjacentHTML("beforeend", boardBody);
-		}
+		})
 	}
 
 	addBoard() {
@@ -110,6 +110,6 @@ class Boards {
 	}
 
 }
+const boards = new Boards();
+boards.init();
 
-const boards = new Boards()
-boards.init()

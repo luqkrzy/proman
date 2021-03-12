@@ -44,11 +44,11 @@
 				<div class="modal-body">
 					<form>
 						<div class="form-outline mb-4">
-							<input type="text" id="boardName" class="form-control" required/>
+							<input type="text" id="boardName" class="form-control" required maxlength="20">
 							<label class="form-label" for="boardName" name="boardName">Name</label>
 						</div>
 						<div class="form-outline mb-4">
-							<textarea class="form-control" id="boardNoteArea" rows="4" name="note"></textarea>
+							<textarea class="form-control" id="boardNoteArea" rows="4" name="note" maxlength="30"></textarea>
 							<label class="form-label" for="boardNoteArea">Note</label>
 						</div>
 						<button type="submit" class="btn btn-primary btn-block mb-4" id="addNewBoardBtn">Save board</button>

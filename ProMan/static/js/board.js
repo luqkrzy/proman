@@ -1,4 +1,4 @@
-import {Dom} from "./dom.js";
+import {dom} from "./dom.js";
 import {easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
 
@@ -314,7 +314,6 @@ class Cards {
 
 }
 
-const dom = new Dom()
 export const cards = new Cards(userID);
 cards.init()
 

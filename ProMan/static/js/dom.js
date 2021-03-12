@@ -21,7 +21,6 @@ export class Dom {
 		 	</div>`;
 	}
 
-
 	initNewColumn(data, name = null) {
 		const column = document.createElement('div');
 		column.className = 'col-md-auto rounded-3 p-1 alert-dark hover-shadow me-3 mb-3';
@@ -34,7 +33,6 @@ export class Dom {
 		 	</div>
 		 </div>
 		 <div class="cardBody" id="${data.id}"></div>`
-
 		const newItem = document.createElement('div');
 		newItem.className = 'newItem list-group-item list-group-item-action';
 		newItem.setAttribute('id', 'newItem');
@@ -56,4 +54,27 @@ export class Dom {
 		newCard.addEventListener('mouseleave', cards.hideDropdownMenu);
 		return newCard;
 	}
+
+	initNewBoard(board) {
+			return `
+			<div class="col" id="${board.id}" name="board-col"><!-- start board -->
+				<div class="card hover-shadow border">
+					<a href="/board/${board.id}"><img src="/static/img/board_01.jpg" class="card-img-top" alt="pic"/></a>
+					<div class="card-body">
+						 <a href="/board/${board.id}"><h5 class="card-title" name="${board.name}">${board.name}</h5></a>
+						<p class="card-text" name="${board.note}">${board.note}</p>
+					</div>
+					<div class="card-footer text-muted  d-flex justify-content-between ">2 days ago
+						<i class="fas fa-ellipsis-h" data-mdb-toggle="dropdown"></i>
+						<div id="${board.id}" class="dropdown-menu">
+							<span class="editName dropdown-item">Edit name</span>
+							<span class="editNote dropdown-item">Edit note</span>
+							<span class="deleteBoard dropdown-item" data-mdb-toggle="modal" data-mdb-target="#deleteModal">Delete</span>
+						</div>
+					</div>
+				</div>
+			</div><!-- send board -->`
+	}
 }
+
+export const dom = new Dom();
