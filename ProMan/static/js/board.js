@@ -12,6 +12,8 @@ class Cards {
 		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
 		this.addNewColumnBtn = document.querySelector('#addNewColumnBtn');
 		this.editFields = [];
+		this.target = ''
+		this.oldValue = ''
 	}
 
 	init() {
@@ -20,6 +22,7 @@ class Cards {
 		this.initChangeNameListener();
 		this.initClickListener();
 		this.initDropdownMenuListener();
+		this.initDragAndDrop();
 	}
 
 	initAddColumnListener() {
@@ -51,7 +54,6 @@ class Cards {
 			if (target.classList.contains('deleteCardItem')) {
 				const elementToDelete = event.path[2];
 				const cardId = elementToDelete.getAttribute('id');
-				console.log(cardId)
 				this.deleteCard(elementToDelete, cardId)
 			}
 
@@ -73,11 +75,10 @@ class Cards {
 		const that = this;
 		document.addEventListener('click', function clickOut(secondEvent) {
 			if (secondEvent.target === target) {
-				console.log(target)
+			//	pass
 			} else {
 				const newValue = target.childNodes[0].value;
 				if (newValue !== '') {
-					console.log()
 					const cardId = target.getAttribute('id');
 					target.innerHTML = newValue;
 					that.updateCardName(cardId, newValue)
@@ -123,33 +124,43 @@ class Cards {
 	initChangeNameListener() {
 		this.allColumnsContainer.addEventListener('dblclick', (event) => {
 			const target = event.target;
+			const oldValue = target.innerText;
 			if (target.classList.contains('edit')) {
-				const oldValue = target.innerText;
+
 				target.innerHTML = `<input class="w-100" type="text" placeholder=${oldValue}>`;
 				target.childNodes[0].focus();
 				target.removeEventListener('mouseleave', this.hideDropdownMenu);
 				target.removeEventListener('mouseenter', this.createDropdownMenu);
-				document.addEventListener('click', (secondEvent) => {
-					target.addEventListener('mouseenter', this.createDropdownMenu)
-					target.addEventListener('mouseleave', this.hideDropdownMenu)
-
-					if (secondEvent.target === target) {
-						//pass
-					} else {
-						const newValue = target.childNodes[0].value;
-
-						if (newValue === '') {
-							target.innerText = oldValue;
-						} else {
-							const cardId = target.getAttribute('id');
-							target.innerHTML = newValue
-							this.updateCardName(cardId, newValue)
-						}
-					}
-				}, {once: true});
+				this.target = target;
+				this.oldValue = oldValue;
+				document.addEventListener('click', this.clickOutChangeName.bind(this), {once: true})
 			}
 		})
 	}
+
+
+	clickOutChangeName(secondEvent) {
+		const target = this.target
+
+		target.addEventListener('mouseenter', this.createDropdownMenu)
+		target.addEventListener('mouseleave', this.hideDropdownMenu)
+
+		if (secondEvent.target === target) {
+		//	pass
+		} else {
+			const newValue = target.childNodes[0].value;
+
+			if (newValue === '') {
+				target.innerText = this.oldValue;
+			} else {
+				const cardId = target.getAttribute('id');
+				target.innerHTML = newValue
+				this.updateCardName(cardId, newValue)
+			}
+		}
+
+	}
+
 
 	initDragAndDrop() {
 		let cardsBody = document.querySelectorAll('.cardBody')
@@ -196,7 +207,6 @@ class Cards {
 				cardBody.appendChild(newCard)
 				const cardIndex = Array.prototype.indexOf.call(cardBody.children, newCard)
 				target.value = ''
-				console.log(this)
 				easyHandler._postJson('POST', '/api/card', {
 					'name': name, 'owner_id': userID, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
 				}, (response) => {

@@ -25,7 +25,7 @@ def commit_to_database(data):
         return False
 
 
-def commit_and_return_id(data: dict) -> Dict or bool:
+def commit_and_return_id(data) -> Dict or bool:
     try:
         db.session.add(data)
         db.session.commit()

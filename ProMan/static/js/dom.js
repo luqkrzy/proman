@@ -26,7 +26,6 @@ export class Dom {
 		 </div>
 		 <div class="cardBody" id="${data.id}"></div>`
 
-
 		const newItem = document.createElement('div');
 		newItem.className = 'newItem list-group-item list-group-item-action';
 		newItem.setAttribute('id', 'newItem');

@@ -41,7 +41,6 @@ def delete_column(column_id: int) -> bool:
 def get_cards(column_id: int):
     try:
         cards = Cards.query.filter_by(column_id=column_id).order_by(Cards.index.asc()).all()
-        print(cards[0].column_id)
         dump_cards = card_schema.dump(cards)
         return dump_cards
     except Exception as e:
@@ -60,7 +59,6 @@ def add_new_card(data: dict) -> Dict or bool:
 
 def update_card(card_id: int, column_id: int) -> bool:
     card = Cards.query.filter_by(id=card_id).first()
-    print(column_id['column_id'])
     card['column_id'] = int(column_id['column_id'])
     return db_manager.commit_to_database(card)
 
