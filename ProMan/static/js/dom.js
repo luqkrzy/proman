@@ -32,7 +32,7 @@ export class Dom {
 		 		<span class="dropdown-item deleteColumn" data-mdb-toggle="modal" data-mdb-target="#deleteModal" id="${data.id}">Delete</span>
 		 	</div>
 		 </div>
-		 <div class="cardBody" id="${data.id}"></div>`
+		 <div class="columnBody" id="${data.id}"></div>`
 		const newItem = document.createElement('div');
 		newItem.className = 'newItem list-group-item list-group-item-action';
 		newItem.setAttribute('id', 'newItem');

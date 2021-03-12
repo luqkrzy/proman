@@ -27,6 +27,12 @@ def api_get_cols(board_id: int) -> Response:
     columns = data_handler.get_columns(board_id)
     return jsonify(columns)
 
+@board.route("/api/columns/<int:column_id>/index", methods=['PATCH'])
+def api_update_column_index(column_id: int) -> Response:
+    index = request.get_json()
+    resp = data_handler.update_column_index(column_id, index)
+    return jsonify(resp)
+
 
 @board.route("/api/columns", methods=['POST'])
 @is_authorized
@@ -66,8 +72,8 @@ def api_add_card() -> Response:
 @board.route("/api/card/<int:card_id>/column", methods=['PATCH'])
 @is_authorized
 def api_update_card(card_id) -> Response:
-    new_column_id = request.get_json()
-    resp = data_handler.update_card_column(card_id, new_column_id)
+    data = request.get_json()
+    resp = data_handler.update_card_column(card_id, data)
     return jsonify(resp)
 
 
