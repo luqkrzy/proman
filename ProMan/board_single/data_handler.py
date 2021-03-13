@@ -26,7 +26,7 @@ def get_board_name_by_id(board_id: int) -> int or None:
 
 def get_columns(board_id: int) -> List[Dict]:
     try:
-        columns = Columns.query.filter_by(board_id=board_id).all()
+        columns = Columns.query.filter_by(board_id=board_id).order_by(Columns.index.asc()).all()
         dump_cols = column_schema.dump(columns)
         return dump_cols
     except Exception as e:
