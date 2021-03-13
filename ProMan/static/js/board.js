@@ -2,14 +2,15 @@ import {dom} from "./dom.js";
 import {easyHandler} from "./data_handler.js";
 import {getCurrentUser} from "./usr.js";
 
-const user = getCurrentUser()
-const userID = user[0]
+const user = getCurrentUser();
+const userID = user[0];
 
 
 class Cards {
 	constructor(id) {
 		this.boardId = window.location.pathname.split('/')[2];
-		this.boardName = document.querySelector('#boardName')
+		this.boardName = document.querySelector('#boardName');
+		this.columnNameInput = document.querySelector('#columnName')
 		this.allColumnsContainer = document.querySelector('#allColumnsContainer');
 		this.modalConfirmDeleteBtn = document.querySelector('#modalConfirmDelete');
 		this.addNewColumnBtn = document.querySelector('#addNewColumnBtn');
@@ -20,7 +21,7 @@ class Cards {
 	}
 
 	init() {
-		this.initBoardName()
+		this.initBoardName();
 		this.initColumns();
 		this.initAddColumnListener();
 		this.initChangeNameListener();
@@ -36,7 +37,10 @@ class Cards {
 	}
 
 	initAddColumnListener() {
-		this.addNewColumnBtn.addEventListener('click', this.addNewColumn.bind(this))
+
+
+		this.addNewColumnBtn.addEventListener('click', this.addNewColumn.bind(this));
+		this.columnNameInput.addEventListener('keydown', this.addNewColumn.bind(this));
 	}
 
 
@@ -47,30 +51,30 @@ class Cards {
 
 	initClickListener() {
 		this.allColumnsContainer.addEventListener('click', (event) => {
-			const target = event.target
+			const target = event.target;
 			this.initDragAndDrop();
 
 			if (target.classList.contains('deleteColumn')) {
-				const elementToDelete = event.path[3]
-				const idToDetete = target.getAttribute('id')
-				this.deleteColumn(idToDetete, elementToDelete)
+				const elementToDelete = event.path[3];
+				const idToDetete = target.getAttribute('id');
+				this.deleteColumn(idToDetete, elementToDelete);
 			}
 
 			if (target.classList.contains('editColumnName')) {
 				const idToEdit = event.path[3].getAttribute('id');
 				const columnToEdit = event.path[2];
-				this.changeColumnName(idToEdit, columnToEdit)
+				this.changeColumnName(idToEdit, columnToEdit);
 
 			}
 			if (target.classList.contains('deleteCardItem')) {
 				const elementToDelete = event.path[2];
 				const cardId = elementToDelete.getAttribute('id');
-				this.deleteCard(elementToDelete, cardId)
+				this.deleteCard(elementToDelete, cardId);
 			}
 
 			if (target.classList.contains('editCardItem')) {
-				const editTarget = event.path[2]
-				this.initClickOutListener(editTarget)
+				const editTarget = event.path[2];
+				this.initClickOutListener(editTarget);
 			}
 
 		},)
@@ -92,10 +96,10 @@ class Cards {
 				if (newValue !== '') {
 					const cardId = target.getAttribute('id');
 					target.innerHTML = newValue;
-					that.updateCardName(cardId, newValue)
+					that.updateCardName(cardId, newValue);
 					document.removeEventListener("click", clickOut, false);
-					target.addEventListener('mouseenter', that.createDropdownMenu)
-					target.addEventListener('mouseleave', that.hideDropdownMenu)
+					target.addEventListener('mouseenter', that.createDropdownMenu);
+					target.addEventListener('mouseleave', that.hideDropdownMenu);
 				}
 			}
 		}, false);
@@ -135,7 +139,7 @@ class Cards {
 	deleteCard(element, cardId) {
 		this.modalConfirmDeleteBtn.addEventListener('click', () => {
 			easyHandler._postJson('DELETE', `/api/cards/${cardId}`, {}, () => {
-				element.remove()
+				element.remove();
 			}, {once: true})
 		})
 	}
@@ -173,8 +177,8 @@ class Cards {
 
 	clickOutChangeName(secondEvent) {
 		const target = this.target
-		target.addEventListener('mouseenter', this.createDropdownMenu)
-		target.addEventListener('mouseleave', this.hideDropdownMenu)
+		target.addEventListener('mouseenter', this.createDropdownMenu);
+		target.addEventListener('mouseleave', this.hideDropdownMenu);
 
 		if (secondEvent.target === target) {
 			//	pass
@@ -185,8 +189,8 @@ class Cards {
 				target.innerText = this.oldValue;
 			} else {
 				const cardId = target.getAttribute('id');
-				target.innerHTML = newValue
-				this.updateCardName(cardId, newValue)
+				target.innerHTML = newValue;
+				this.updateCardName(cardId, newValue);
 			}
 		}
 
@@ -199,19 +203,19 @@ class Cards {
 			new Sortable(card, {
 				group: 'shared', animation: 150, ghostClass: 'bg-warning'
 			});
-			card.addEventListener('dragend', this.moveCardUpdateIndex)
+			card.addEventListener('dragend', this.moveCardUpdateIndex);
 		})
 
 		new Sortable(this.allColumnsContainer, {
 			handle: '.bg-transparent', animation: 150, ghostClass: 'bg-warning'
 		});
 
-		this.allColumnsContainer.addEventListener('dragend', this.moveColumnUpdateIndex.bind(this))
+		this.allColumnsContainer.addEventListener('dragend', this.moveColumnUpdateIndex.bind(this));
 
 	}
 
 	moveColumnUpdateIndex(event) {
-		event.preventDefault()
+		event.preventDefault();
 		this.allColumnsContainer.children.forEach(column => {
 			const columnId = column.getAttribute('id');
 			const columnIndex = Array.prototype.indexOf.call(this.allColumnsContainer.children, column);
@@ -229,12 +233,12 @@ class Cards {
 	}
 
 	moveCardUpdateIndex(event) {
-		event.preventDefault()
-		const columnId = event.path[2].getAttribute('id')
-		const allCardsCollection = event.target.parentNode.children
+		event.preventDefault();
+		const columnId = event.path[2].getAttribute('id');
+		const allCardsCollection = event.target.parentNode.children;
 		allCardsCollection.forEach(card => {
-			const cardId = card.getAttribute('id')
-			const cardIndex = Array.prototype.indexOf.call(allCardsCollection, card)
+			const cardId = card.getAttribute('id');
+			const cardIndex = Array.prototype.indexOf.call(allCardsCollection, card);
 			easyHandler._postJson('PATCH', `/api/card/${cardId}/column`, {
 				'column_id': columnId, index: cardIndex
 			}, (response) => {
@@ -254,12 +258,12 @@ class Cards {
 			const column = event.path[2];
 			const columnId = column.getAttribute('id');
 			const columnBody = column.querySelector(".columnBody");
-			const name = target.value
+			const name = target.value;
 
 			if (name !== '') {
-				const newCard = dom.initNewCard(target.value)
-				columnBody.appendChild(newCard)
-				const cardIndex = Array.prototype.indexOf.call(columnBody.children, newCard)
+				const newCard = dom.initNewCard(target.value);
+				columnBody.appendChild(newCard);
+				const cardIndex = Array.prototype.indexOf.call(columnBody.children, newCard);
 				target.value = ''
 				easyHandler._postJson('POST', '/api/card', {
 					'name': name, 'owner_id': this.userId, 'board_id': this.boardId, 'column_id': columnId, 'index': cardIndex,
@@ -267,7 +271,7 @@ class Cards {
 					if (response.id) {
 						newCard.setAttribute('id', response.id);
 					} else {
-						alert('Failed')
+						alert('Failed');
 					}
 				})
 			}
@@ -279,7 +283,7 @@ class Cards {
 			if (columns) {
 				this.insertColumns(columns);
 			} else {
-				alert('Failed')
+				alert('Failed');
 			}
 		})
 	}
@@ -287,23 +291,23 @@ class Cards {
 
 	insertColumns(columns) {
 		columns.forEach(column => {
-			this.allColumnsContainer.appendChild(dom.initNewColumn(column))
+			this.allColumnsContainer.appendChild(dom.initNewColumn(column));
 		})
-		this.insertCards(columns)
+		this.insertCards(columns);
 
 	}
 
 	insertCards(columns) {
-		const allColumnsBody = document.querySelectorAll('.columnBody')
+		const allColumnsBody = document.querySelectorAll('.columnBody');
 		columns.forEach(column => {
 			easyHandler._getData(`/api/cards/${column.id}`, (cardsData) => {
 				cardsData.forEach(card => {
 					allColumnsBody.forEach(body => {
-						const columnBodyId = parseInt(body.getAttribute('id'))
-						const newCard = dom.initNewCard(card.name)
+						const columnBodyId = parseInt(body.getAttribute('id'));
+						const newCard = dom.initNewCard(card.name);
 						newCard.setAttribute('id', card.id)
 						if (card.column_id === columnBodyId) {
-							body.appendChild(newCard)
+							body.appendChild(newCard);
 						}
 					})
 				})
@@ -312,18 +316,19 @@ class Cards {
 	}
 
 	addNewColumn(event) {
-		event.preventDefault();
-		const columnName = document.querySelector('#columnName');
-		easyHandler._postJson('POST', '/api/columns', {
-			'name': columnName.value, 'owner_id': this.userId, 'board_id': this.boardId
-		}, (newColumn) => {
-			if (newColumn.id) {
-				this.allColumnsContainer.appendChild(dom.initNewColumn(newColumn, columnName.value));
+		if (event.type === 'click' || event.key === 'Enter') {
+			easyHandler._postJson('POST', '/api/columns', {
+				'name': this.columnNameInput.value, 'owner_id': this.userId, 'board_id': this.boardId
+			}, (newColumn) => {
+				if (newColumn.id) {
+					this.allColumnsContainer.appendChild(dom.initNewColumn(newColumn, this.columnNameInput.value));
+					columnName.value = ''
+				} else {
+					alert('Failed');
+				}
+			})
 
-			} else {
-				alert('Failed')
-			}
-		})
+		}
 	}
 
 	updateCardName(cardId, newName) {
@@ -338,5 +343,5 @@ class Cards {
 }
 
 export const cards = new Cards(userID);
-cards.init()
+cards.init();
 
