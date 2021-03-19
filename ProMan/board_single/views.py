@@ -18,8 +18,8 @@ def route_board(board_id: int):
 @board.route("/api/board/<int:board_id>/name", methods=['GET'])
 @is_authorized
 def api_get_board_name(board_id: int) -> Response:
-    board_name = data_handler.get_board_name_by_id(board_id)
-    return jsonify(board_name)
+    board_name = data_handler.get_board_name_by_id(board_id)[0]
+    return jsonify({'name': board_name})
 
 @board.route("/api/columns/<int:board_id>", methods=['GET'])
 @is_authorized

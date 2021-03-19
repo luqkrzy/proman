@@ -13,7 +13,7 @@ login_manager.login_view = 'users.route_login'
 login_manager.login_message_category = 'info'
 
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class=ProductionConfig):
     app = Flask(__name__)
     app.config.from_object(DevelopmentConfig)
     app.url_map.strict_slashes = False
