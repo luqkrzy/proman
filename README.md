@@ -40,3 +40,5 @@ This is a project management tool similar to Trello. You can make boards with co
 ## Live
 
 https://cc-proman-heroku.herokuapp.com/
+user: demo@demo.com
+pass: Demo1234
