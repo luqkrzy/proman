@@ -30,12 +30,12 @@ This is a project management tool similar to Trello. You can make boards with co
 
 ## Technologies
 
-- Python
+- Flask
 - JavaScript
 - Ajax
 - HTML
-- SQL
-- MDB (bootstrap)
+- Postgresql
+- MDB (Bootstrap)
 
 ## Live
 
